@@ -90,6 +90,7 @@ h1{ font-weight:900; letter-spacing:1.2px; margin:4px 0 8px; text-shadow:0 4px 6
 @media (min-width: 861px){
   .menu{ display:none; }
 }
+<<<<<<< HEAD
 
 /* ===== Radial menu (double ring) ===== */
 .radial-wrap{ position:relative; width:min(780px, 92vw); height:min(780px, 92vw); margin:24px auto 18px; }
@@ -183,3 +184,5 @@ h1{ font-weight:900; letter-spacing:1.2px; margin:4px 0 8px; text-shadow:0 4px 6
   filter: drop-shadow(0 8px 20px rgba(0,0,0,.35));
 }
 @keyframes fadeBall { from{ opacity:0; transform:translateX(-50%) scale(.92);} to{ opacity:.75; transform:translateX(-50%) scale(1);} }
+=======
+>>>>>>> parent of 68b64fb (radial e scroll test 13)
