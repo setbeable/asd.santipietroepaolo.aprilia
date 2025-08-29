@@ -1,28 +1,11 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" href="../assets/favicon.png" type="image/png" />
-  <link rel="stylesheet" href="../styles/styles.css" />
-  <title>Contatti — ASD Santi Pietro e Paolo</title>
-</head>
-<body>
+<!DOCTYPE html><html lang="it"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="icon" href="../assets/favicon.png" type="image/png"/><link rel="stylesheet" href="../styles/styles.css"/><title>Contatti — ASD</title></head><body>
   <div class="page">
     <a class="back" href="../index.html">← Torna alla home</a>
-    <h1 style="text-align:center">Contattaci</h1>
-
-    <div class="card">
-      <p>Modulo contatti tramite <strong>Formspree</strong>. Registrati su <a href="https://formspree.io" target="_blank" rel="noopener">formspree.io</a> e sostituisci l'URL dell'attributo <code>action</code> con il tuo endpoint personale.</p>
-      <form id="contact-form" action="https://formspree.io/f/your_form_id" method="POST" novalidate>
-        <label>Nome<br><input type="text" name="nome" required></label><br><br>
-        <label>Email<br><input type="email" name="_replyto" required></label><br><br>
-        <label>Messaggio<br><textarea name="messaggio" rows="5" required></textarea></label><br><br>
-        <button type="submit" class="btn">Invia</button>
-        <p id="form-msg" style="margin-top:10px"></p>
-      </form>
+    <div class="brand">
+      <img class="brand-logo" src="../assets/logo.png" alt="Logo ASD Santi Pietro e Paolo" />
+      <div class="brand-title">
+        <h1>Contatti</h1>
+        <div class="brand-sub">ASD Santi Pietro e Paolo</div>
+      </div>
     </div>
-  </div>
-  <script src="../js/contatti.js"></script>
-</body>
-</html>
+<div class="card"><form id="contact-form" action="https://formspree.io/f/your_form_id" method="POST" novalidate><label>Nome<br><input type="text" name="nome" required></label><br><br><label>Email<br><input type="email" name="_replyto" required></label><br><br><label>Messaggio<br><textarea name="messaggio" rows="5" required></textarea></label><br><br><button type="submit" class="btn">Invia</button><p id="form-msg" style="margin-top:10px"></p></form></div></div><script src="../js/contatti.js"></script></body></html>

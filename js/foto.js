@@ -1,9 +1,1 @@
-const IMMAGINI = ["partita1.jpg","partita2.jpg","premiazione.jpg"];
-const gal = document.getElementById('galleria');
-gal.classList.add('gallery');
-IMMAGINI.forEach(name => {
-  const img = document.createElement('img');
-  img.src = "../documenti/foto/" + name;
-  img.alt = name;
-  gal.appendChild(img);
-});
+const IMMAGINI=["partita1.jpg","premiazione.jpg"];const gal=document.getElementById('galleria');gal.classList.add('gallery');IMMAGINI.forEach(n=>{const i=document.createElement('img');i.src="../documenti/foto/"+n;i.alt=n;gal.appendChild(i);});

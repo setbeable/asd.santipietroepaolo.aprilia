@@ -1,15 +1,1 @@
-const COMUNICATI = [
-  { titolo: "Comunicato n.1", file: "../documenti/comunicati/comunicato1.pdf" },
-  { titolo: "Comunicato n.2", file: "../documenti/comunicati/comunicato2.pdf" }
-];
-const co = document.getElementById('comunicati-list');
-co.innerHTML = "<h2>📣 Comunicati</h2>";
-COMUNICATI.forEach(c => {
-  const a = document.createElement('a');
-  a.href = c.file;
-  a.target = '_blank';
-  a.textContent = c.titolo;
-  a.style.display = 'block';
-  a.style.margin = '6px 0';
-  co.appendChild(a);
-});
+const COMUNICATI=[{titolo:"Comunicato n.1 (PDF)",file:"../documenti/comunicati/comunicato1.pdf"},{titolo:"Comunicato n.2 (PDF)",file:"../documenti/comunicati/comunicato2.pdf"}];const co=document.getElementById('comunicati-list');co.innerHTML="<h2>📣 Comunicati</h2>";COMUNICATI.forEach(c=>{const a=document.createElement('a');a.href=c.file;a.target='_blank';a.textContent=c.titolo;a.style.display='block';a.style.margin='6px 0';co.appendChild(a);});
