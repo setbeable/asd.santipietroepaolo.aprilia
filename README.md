@@ -1,3 +1,3 @@
-# Spring Cup 2025 — Sito statico
+# ASD Santi Pietro e Paolo 
 
 Carica questa cartella su GitHub Pages per pubblicare il sito.
