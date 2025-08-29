@@ -1,0 +1,22 @@
+body{
+  margin:0;
+  background:linear-gradient(135deg,#d64150,#0f67d8);
+  font-family:sans-serif;
+  color:white;
+  text-align:center;
+}
+.container{padding:40px}
+.mascot{width:120px;margin:20px auto;display:block}
+h1{font-size:40px;margin:10px 0}
+.menu{display:flex;flex-direction:column;gap:15px;margin:20px 0}
+.btn{
+  display:inline-block;
+  padding:15px;
+  border-radius:12px;
+  background:linear-gradient(90deg,#cd3f4a,#1b62cf);
+  color:white;
+  font-weight:bold;
+  text-decoration:none;
+}
+.cta{background:linear-gradient(90deg,orange,red)}
+.dot{width:10px;height:10px;border-radius:50%;background:red;display:inline-block;margin-left:6px}
