@@ -64,3 +64,10 @@ h1{
   .mascot{width:100px; height:100px}
   h1{font-size:26px}
 }
+
+
+/* alternate CTA (Iscrizioni) */
+.cta.alt{
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  margin-top: 12px;
+}
