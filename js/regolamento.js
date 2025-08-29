@@ -1,0 +1,7 @@
+const REGOLAMENTO_PDF = "../documenti/regolamento/regolamento.pdf";
+const box = document.getElementById('regolamento-box');
+box.innerHTML = `
+  <h2>Regolamento</h2>
+  <p>Scarica il documento ufficiale:</p>
+  <a target="_blank" href="${REGOLAMENTO_PDF}">📄 Regolamento (PDF)</a>
+`;
