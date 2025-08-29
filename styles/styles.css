@@ -153,3 +153,33 @@ h1{ font-weight:900; letter-spacing:1.2px; margin:4px 0 8px; text-shadow:0 4px 6
   border-radius:10px; border:1px solid rgba(255,255,255,.25);
   background: rgba(255,255,255,.08); color:#fff; cursor:pointer;
 }
+
+
+/* Ball under logo */
+.center-circle #ball {
+  position:absolute; bottom:4%; left:50%; transform:translateX(-50%);
+  width:28%; opacity:0;
+  animation: fadeBall 4s ease-in-out infinite alternate;
+}
+@keyframes fadeBall {
+  0% { opacity:0; transform:translateX(-50%) scale(.9); }
+  100% { opacity:.7; transform:translateX(-50%) scale(1); }
+}
+
+/* Lock button */
+.lock-layout{
+  display:inline-block; margin: 4px 6px; padding:6px 10px; font-weight:700; font-size:12px;
+  border-radius:10px; border:1px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.08); color:#fff; cursor:pointer;
+}
+
+
+/* Ball under logo (fade in/out) */
+.center-circle{ position:relative; }
+.center-circle #ball{
+  position:absolute; bottom:6%; left:50%; transform:translateX(-50%);
+  width:28%; opacity:0; pointer-events:none;
+  animation: fadeBall 4s ease-in-out infinite alternate;
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,.35));
+}
+@keyframes fadeBall { from{ opacity:0; transform:translateX(-50%) scale(.92);} to{ opacity:.75; transform:translateX(-50%) scale(1);} }
