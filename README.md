@@ -7,7 +7,7 @@ Per aggiornare i contenuti, modifica i file in `js/` (es. `torneo.js`, `foto.js`
 1. Carica questa cartella nel repo `setbeable/ASD_Santi_Pietro_e_Paolo` (branch `main`).
 2. Abilita **Settings → Pages → Deploy from a branch → main / (root)**.
 3. Il sito sarà disponibile in HTTPS su:
-   https://setbeable.github.io/ASD_Santi_Pietro_e_Paolo/
+   https://setbeable.github.io/asd.santipietroepaolo.aprilia/
 
 ## Aggiornamenti contenuti
 - Classifiche: metti i PDF in `documenti/classifiche/` e aggiorna la lista in `js/torneo.js`.
