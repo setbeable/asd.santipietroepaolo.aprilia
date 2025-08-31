@@ -1,0 +1,13 @@
+/* Patch: icons + lightbox + sponsor grid */
+.btn .icon{ width:18px; height:18px; display:inline-block; margin-right:8px; filter: drop-shadow(0 1px 0 rgba(0,0,0,.25)); vertical-align:-3px; }
+.btn span{ display:inline-block; }
+
+.lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:9999; }
+.lightbox.open{ display:flex; }
+.lightbox img{ max-width:92vw; max-height:88vh; border-radius:12px; box-shadow:0 20px 40px rgba(0,0,0,.5); }
+.lightbox .close{ position:absolute; top:18px; right:22px; font-size:28px; color:#fff; cursor:pointer; }
+.lightbox .nav{ position:absolute; top:50%; transform:translateY(-50%); font-size:42px; color:#fff; cursor:pointer; padding:10px 16px; user-select:none; }
+.lightbox .prev{ left:10px; } .lightbox .next{ right:10px; }
+
+.grid-sponsor{ display:grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap:16px; align-items:center; }
+.grid-sponsor img{ width:100%; max-height:90px; object-fit:contain; background:#fff; border-radius:12px; padding:10px; box-shadow:0 6px 16px rgba(0,0,0,.25); }
