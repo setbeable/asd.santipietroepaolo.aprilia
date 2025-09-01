@@ -1,14 +1,10 @@
-/* Video — griglia + filtri + player in modale
- * Manifest esterno: <BASE>/_videos.json
- * Ogni item può avere:
- *   - file: percorso relativo (mp4/webm/ogg) sotto BASE
- *   - url : link YouTube/Vimeo/altro
- *   - title, category, year, date, thumb (opzionale)
- */
+/* Video — griglia + filtri + player in modale (v2 robusta) */
 (function(){
   document.addEventListener('DOMContentLoaded', async function(){
+    console.log('[Video] script caricato');
+
     const root = document.getElementById('videos');
-    if (!root) return;
+    if (!root) { console.error('[Video] #videos non trovato'); return; }
 
     const BASE = (root.getAttribute('data-assets-base') || 'assets/video/').replace(/\/+$/,'') + '/';
     const MANIFEST = BASE + '_videos.json';
@@ -21,7 +17,6 @@
       return n;
     };
 
-    // -------- helpers
     const isLocal = v => !!v.file;
     const getYear = v => v.year || (String(v.file||v.url||'').match(/(20\d{2}|19\d{2})/)||[])[1] || null;
 
@@ -47,13 +42,24 @@
       }catch(e){}
       return null;
     }
+
+    // Thumb corretta:
+    // - se v.thumb è relativo, lo attacchiamo a BASE;
+    // - se è assoluto (http), lo usiamo così com'è;
+    // - se non c'è, e il video è locale: <categoria>/thumbs/<filename>.jpg
     function getThumb(v){
-      if (v.thumb) return isLocal(v) ? (BASE + v.thumb) : v.thumb;
-      if (isLocal(v)){
-        // prova /thumbs/<file>.jpg
-        const p = 'thumbs/' + (v.file.replace(/\.\w+$/i, '.jpg'));
-        return BASE + p;
-      } else if (v.url){
+      if (v.thumb){
+        if (/^https?:\/\//i.test(v.thumb)) return v.thumb;
+        return BASE + v.thumb.replace(/^\/+/, '');
+      }
+      if (isLocal(v) && v.file){
+        const parts = v.file.split('/');     // es. ["Video_gare","video_Gara.mp4"]
+        const fileName = parts.pop();        // "video_Gara.mp4"
+        const folder   = parts.join('/');    // "Video_gare"
+        const jpgName  = fileName.replace(/\.\w+$/i, '.jpg');
+        return BASE + (folder ? folder + '/' : '') + 'thumbs/' + jpgName;
+      }
+      if (v.url){
         const id = ytId(v.url);
         if (id) return 'https://img.youtube.com/vi/'+id+'/hqdefault.jpg';
       }
@@ -66,7 +72,7 @@
         if (!r.ok) throw new Error('HTTP '+r.status);
         return await r.json();
       }catch(e){
-        // fallback inline
+        console.warn('[Video] Manifest esterno non disponibile, provo inline:', e);
         const inline = document.getElementById('videos-manifest');
         if (inline) { try { return JSON.parse(inline.textContent); } catch(_){ /* noop */ } }
         throw e;
@@ -81,7 +87,6 @@
         const s = state.q.trim().toLowerCase();
         rows = rows.filter(v => (v.title||'').toLowerCase().includes(s) || (v.file||v.url||'').toLowerCase().includes(s));
       }
-      // sort: data desc -> title
       rows.sort((a,b)=>{
         const da = new Date(a.date || a.year || 0).getTime();
         const db = new Date(b.date || b.year || 0).getTime();
@@ -104,7 +109,6 @@
       ]);
       const spacer = el('span', { class:'spacer' });
 
-      // options
       Array.from(new Set(state.all.map(v=>v.category).filter(Boolean))).sort()
         .forEach(c => selCat.appendChild(el('option', { value:c }, c)));
       Array.from(new Set(state.all.map(v=>v.year).filter(Boolean))).sort()
@@ -196,7 +200,6 @@
         const card = el('div', { class:'vid-card' });
         const t = getThumb(v);
         const thumb = el('img', { class:'vid-thumb', src: t || '', alt: v.title || 'Video', loading:'lazy' });
-        // se la thumb manca prova il poster mp4.jpg (se locale)
         if (!t && isLocal(v)) thumb.onerror = ()=>{ thumb.style.background='#000'; thumb.removeAttribute('src'); };
 
         const title = el('div', { class:'vid-title' }, v.title || (v.file || v.url || '').split('/').pop());
@@ -214,6 +217,7 @@
     try{
       const data = await loadData();
       state.all = (data.videos||[]).map(v => ({ ...v, year: getYear(v) }));
+      console.log('[Video] caricati', state.all.length, 'elementi da', MANIFEST);
       root.innerHTML = '';
       renderToolbar(root);
       renderScaffold(root);
