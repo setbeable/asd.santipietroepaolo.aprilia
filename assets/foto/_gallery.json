@@ -2,6 +2,15 @@
   "version": 1,
   "events": [
     {
+      "slug": "Allenamenti",
+      "name": "Allenamenti",
+      "images": [
+        {
+          "file": "bigstock-213473884.jpg"
+        }
+      ]
+    },
+    {
       "slug": "Campionato",
       "name": "Campionato",
       "images": [
@@ -20,26 +29,47 @@
       ]
     },
     {
-      "slug": "example-event",
-      "name": "Example Event",
+      "slug": "Open",
+      "name": "Open",
       "images": [
         {
-          "file": "foto-01.jpg"
-        },
-        {
-          "file": "foto-02.jpg"
+          "file": "figc-bulli.jpg"
         }
       ]
     },
     {
-      "slug": "prova",
-      "name": "Prova",
+      "slug": "Under10",
+      "name": "Under10",
       "images": [
         {
-          "file": "foto-01.jpg"
-        },
+          "file": "figc-bulli.jpg"
+        }
+      ]
+    },
+    {
+      "slug": "Under12",
+      "name": "Under12",
+      "images": [
         {
-          "file": "foto-02.jpg"
+          "file": "figc-bulli.jpg"
+        }
+      ]
+    },
+    {
+      "slug": "Under14",
+      "name": "Under14",
+      "images": [
+        {
+          "file": "figc-bulli.jpg"
+        }
+      ]
+    },
+    {
+      "slug": "Under16",
+      "name": "Under16",
+      "images": [
+        {
+          "file": "figc-bulli.jpg"
         }
       ]
     }
