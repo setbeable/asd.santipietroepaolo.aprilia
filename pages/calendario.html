@@ -5,11 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
   <link rel="icon" href="../assets/favicon.png" type="image/png"/>
-
-  <!-- Stili originali -->
   <link rel="stylesheet" href="../styles/styles.css"/>
 
-  <!-- Patch UI v2: ingrandisce card/tab e migliora il contrasto -->
+  <!-- Patch UI v2 -->
   <link rel="stylesheet" href="../css/asd-tabs-override-v2.css?v=2"/>
 
   <title>Calendario — ASD</title>
@@ -26,23 +24,22 @@
       </div>
     </div>
 
-    <!-- La classe .card viene ingrandita e resa leggibile dalla patch v2 -->
     <div class="card">
       <p>Calendario allenamenti e partite</p>
 
-      <!-- Pulsante per aprire la versione grande in modale -->
-      <div style="margin-bottom:12px;">
-        <a id="openCalendarFull" class="btn" href="#"
-           style="display:inline-block;padding:10px 14px;border-radius:10px;font-weight:600;">
-          Apri a schermo intero
-        </a>
+      <!-- Toolbar locale -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 12px 0">
+        <button class="btn" id="btn-day"    type="button">Vista Giorno (Agenda)</button>
+        <button class="btn" id="btn-week"   type="button">Vista Settimana</button>
+        <button class="btn" id="btn-month"  type="button">Vista Mese</button>
+        <a id="openCalendarFull" class="btn" href="#" style="margin-left:auto">Apri a schermo intero</a>
       </div>
 
-      <!-- Embed responsivo (rimane nella pagina) -->
+      <!-- Embed responsivo con TAB native abilitate -->
       <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px">
         <iframe 
           id="calendar-embed"
-          src="https://calendar.google.com/calendar/embed?src=29d83543be0fbbe269fcc9cb7018d6356%40group.calendar.google.com&ctz=Europe%2FRome&mode=WEEK&showTitle=0&showPrint=0&showTabs=0" 
+          src=""
           style="border:0;position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;" 
           frameborder="0" scrolling="no">
         </iframe>
@@ -50,7 +47,7 @@
     </div>
   </div>
 
-  <!-- Snippet MODALE: incolla questo blocco in tutte le pagine del sito, una sola volta ciascuna -->
+  <!-- Modale full-screen -->
   <div id="asd-modal" class="asd-modal" aria-hidden="true">
     <div class="asd-modal__inner">
       <button type="button" class="asd-modal__close" aria-label="Chiudi">✕</button>
@@ -58,22 +55,40 @@
     </div>
   </div>
 
-  <!-- JS patch v2: gestisce la modale e l’apertura automatica di PDF/immagini -->
+  <!-- JS patch v2 -->
   <script src="../js/asd-modal-v2.js?v=2" defer></script>
 
-  <!-- JS locale: apre il calendario in modale a pieno schermo -->
+  <!-- JS locale -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
+      // BASE URL DELL’EMBED con tab/navigazione abilitate
+      const BASE = "https://calendar.google.com/calendar/embed";
+      const CAL  = "29d83543be0fbbe269fcc9cb7018d6356%40group.calendar.google.com";
+      const COMMON = "ctz=Europe%2FRome&showTitle=0&showPrint=0&showTabs=1&showDate=1&showNav=1&showCalendars=0";
+
+      const iframe = document.getElementById('calendar-embed');
       const openBtn = document.getElementById('openCalendarFull');
-      const modal   = document.getElementById('asd-modal');
-      const body    = modal.querySelector('.asd-modal__body');
 
-      // stesso URL dell'iframe incorporato
-      const calUrl = document.getElementById('calendar-embed').getAttribute('src');
+      // helper per costruire l’URL con la vista desiderata
+      function urlFor(mode) {
+        // mode: 'AGENDA' (≈Giorno), 'WEEK', 'MONTH'
+        return `${BASE}?src=${CAL}&${COMMON}&mode=${mode}`;
+      }
 
+      // vista di default: settimana
+      iframe.src = urlFor('WEEK');
+
+      // Bottoni di vista
+      document.getElementById('btn-day').addEventListener('click',  () => iframe.src = urlFor('AGENDA'));
+      document.getElementById('btn-week').addEventListener('click', () => iframe.src = urlFor('WEEK'));
+      document.getElementById('btn-month').addEventListener('click', () => iframe.src = urlFor('MONTH'));
+
+      // Modale full screen con stesse viste (parte dalla vista corrente dell’iframe)
       openBtn.addEventListener('click', function (e) {
         e.preventDefault();
-        body.innerHTML = '<iframe src="'+ calUrl +'" width="100%" height="100%" frameborder="0"></iframe>';
+        const modal = document.getElementById('asd-modal');
+        const body  = modal.querySelector('.asd-modal__body');
+        body.innerHTML = `<iframe src="${iframe.src}" width="100%" height="100%" frameborder="0"></iframe>`;
         modal.classList.add('is-open');
         document.documentElement.style.overflow = 'hidden';
       });
@@ -81,3 +96,4 @@
   </script>
 </body>
 </html>
+
