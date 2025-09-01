@@ -116,47 +116,111 @@
   <!-- JS locale -->
 
   <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    // URL embed "safe" (niente dates/start non supportati nell’embed classico)
-    const BASE = "https://calendar.google.com/calendar/embed";
-    const CAL  = "29d83543be0fbbe269fcc9cb7018d6356%40group.calendar.google.com";
-    const COMMON = "ctz=Europe%2FRome&showTitle=0&showPrint=0&showTabs=1&showDate=1&showNav=1&showCalendars=0&hl=it";
+document.addEventListener('DOMContentLoaded', function () {
+  // URL embed "safe"
+  const BASE = "https://calendar.google.com/calendar/embed";
+  const CAL  = "29d83543be0fbbe269fcc9cb7018d6356%40group.calendar.google.com";
+  const COMMON = "ctz=Europe%2FRome&showTitle=0&showPrint=0&showTabs=1&showDate=1&showNav=1&showCalendars=0&hl=it";
 
-    const iframe  = document.getElementById('calendar-embed');
-    const openBtn = document.getElementById('openCalendarFull');
+  const iframe   = document.getElementById('calendar-embed');
+  const openBtn  = document.getElementById('openCalendarFull');
+  const yearPanel= document.getElementById('yearPanel');
+  const yearSelect = document.getElementById('yearSelect');
+  const monthsGrid = document.getElementById('monthsGrid');
 
-    // builder senza "dates"
-    const urlFor = (mode) => `${BASE}?src=${CAL}&${COMMON}&mode=${mode}`;
+  // Stato
+  const today = new Date();
+  const state = { mode: 'WEEK', year: today.getFullYear(), month: today.getMonth() };
 
-    // vista predefinita
-    let currentMode = 'WEEK';
-    iframe.src = urlFor(currentMode);
+  // Helpers
+  const pad = n => n.toString().padStart(2, '0');
+  function lastDayOfMonth(y, mZeroBased) {
+    return new Date(y, mZeroBased + 1, 0).getDate();
+  }
+  function monthRange(y, mZeroBased) {
+    const start = `${y}${pad(mZeroBased+1)}01`;
+    const end   = `${y}${pad(mZeroBased+1)}${pad(lastDayOfMonth(y, mZeroBased))}`;
+    return `${start}/${end}`;
+  }
+  const urlForMode = (mode) => `${BASE}?src=${CAL}&${COMMON}&mode=${mode}`;
+  const urlForMonth = (y, mZeroBased) =>
+    `${BASE}?src=${CAL}&${COMMON}&mode=MONTH&dates=${monthRange(y, mZeroBased)}`;
 
-    // switch vista (le frecce mese/giorno sono dentro l’iframe e funzionano)
-    document.getElementById('btn-day')  .addEventListener('click', () => { currentMode = 'AGENDA'; iframe.src = urlFor(currentMode); });
-    document.getElementById('btn-week') .addEventListener('click', () => { currentMode = 'WEEK';   iframe.src = urlFor(currentMode);  });
-    document.getElementById('btn-month').addEventListener('click', () => { currentMode = 'MONTH';  iframe.src = urlFor(currentMode);  });
+  // Applica URL e gestisci visibilità frecce
+  function setIframe(src) {
+    iframe.src = src;
+    document.getElementById('btn-prev').style.display =
+    document.getElementById('btn-next').style.display = src.includes('mode=MONTH') ? 'inline-block' : 'none';
+  }
 
-    // "Anno": mostriamo un pannello esterno con i mesi (facoltativo) oppure
-    // semplicemente mettiamo MONTH e usiamo le frecce nell’iframe.
-    document.getElementById('btn-year').addEventListener('click', () => {
-      currentMode = 'MONTH';
-      iframe.src = urlFor(currentMode);
-      // qui puoi eventualmente mostrare/chiudere un pannello tuoi con i mesi,
-      // ma non possiamo forzare il mese dall’esterno (limitazione dell’embed).
-    });
+  // Iniziale
+  setIframe(urlForMode(state.mode));
 
-    // Schermo intero: riapre lo stesso URL in modale
-    openBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      const modal = document.getElementById('asd-modal');
-      const body  = modal.querySelector('.asd-modal__body');
-      body.innerHTML = `<iframe src="${urlFor(currentMode)}" width="100%" height="100%" frameborder="0"></iframe>`;
-      modal.classList.add('is-open');
-      document.documentElement.style.overflow = 'hidden';
-    });
+  // Bottoni vista
+  document.getElementById('btn-day').addEventListener('click',  () => { state.mode='AGENDA'; yearPanel.classList.remove('is-open'); setIframe(urlForMode('AGENDA')); });
+  document.getElementById('btn-week').addEventListener('click', () => { state.mode='WEEK';   yearPanel.classList.remove('is-open'); setIframe(urlForMode('WEEK'));   });
+  document.getElementById('btn-month').addEventListener('click',() => { state.mode='MONTH';  yearPanel.classList.remove('is-open'); setIframe(urlForMode('MONTH'));  });
+
+  // Pannello ANNO (apri/chiudi)
+  document.getElementById('btn-year').addEventListener('click', () => {
+    yearPanel.classList.toggle('is-open');
+    // sincronizza selettore anno
+    if (!yearSelect.options.length) {
+      const base = today.getFullYear();
+      for (let y = base - 3; y <= base + 3; y++) {
+        const opt = document.createElement('option');
+        opt.value = y; opt.textContent = y; if (y === state.year) opt.selected = true;
+        yearSelect.appendChild(opt);
+      }
+      const mesi = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+      mesi.forEach((name, idx) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'month-btn';
+        b.textContent = name;
+        b.addEventListener('click', () => {
+          state.year = parseInt(yearSelect.value,10);
+          state.month = idx;
+          state.mode = 'MONTH';
+          // URL con dates=YYYYMM01/YYYYMMDD (funziona in embed)
+          setIframe(urlForMonth(state.year, state.month));
+        });
+        monthsGrid.appendChild(b);
+      });
+    }
   });
-	</script>
+
+  // Scorrimento mesi (funziona perché restiamo in MONTH; se non lo siamo, portiamo a MONTH corrente)
+  document.getElementById('btn-prev').addEventListener('click', () => {
+    if (state.mode !== 'MONTH') { state.mode='MONTH'; setIframe(urlForMode('MONTH')); return; }
+    const d = new Date(state.year, state.month - 1, 1);
+    state.year = d.getFullYear(); state.month = d.getMonth();
+    setIframe(urlForMonth(state.year, state.month));
+  });
+  document.getElementById('btn-next').addEventListener('click', () => {
+    if (state.mode !== 'MONTH') { state.mode='MONTH'; setIframe(urlForMode('MONTH')); return; }
+    const d = new Date(state.year, state.month + 1, 1);
+    state.year = d.getFullYear(); state.month = d.getMonth();
+    setIframe(urlForMonth(state.year, state.month));
+  });
+
+  // Schermo intero: stessa vista corrente
+  openBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    const modal = document.getElementById('asd-modal');
+    const body  = modal.querySelector('.asd-modal__body');
+
+    let src;
+    if (state.mode === 'MONTH') src = urlForMonth(state.year, state.month);
+    else src = urlForMode(state.mode);
+
+    body.innerHTML = `<iframe src="${src}" width="100%" height="100%" frameborder="0"></iframe>`;
+    modal.classList.add('is-open');
+    document.documentElement.style.overflow = 'hidden';
+  });
+});
+</script>
+
 
 
 </body>
