@@ -2,16 +2,44 @@
   "version": 1,
   "events": [
     {
-      "slug": "example-event",
-      "name": "Example Event 2025",
+      "slug": "Campionato",
+      "name": "Campionato",
       "images": [
         {
-          "file": "foto-01.jpg",
-          "title": "Foto 01"
+          "file": "OIP (1).jpg"
+        }
+      ]
+    },
+    {
+      "slug": "Eventi",
+      "name": "Eventi",
+      "images": [
+        {
+          "file": "papa.francesco.sansiro.750x450.jpg"
+        }
+      ]
+    },
+    {
+      "slug": "example-event",
+      "name": "Example Event",
+      "images": [
+        {
+          "file": "foto-01.jpg"
         },
         {
-          "file": "foto-02.jpg",
-          "title": "Foto 02"
+          "file": "foto-02.jpg"
+        }
+      ]
+    },
+    {
+      "slug": "prova",
+      "name": "Prova",
+      "images": [
+        {
+          "file": "foto-01.jpg"
+        },
+        {
+          "file": "foto-02.jpg"
         }
       ]
     }

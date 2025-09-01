@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Foto — TEST standalone</title>
+  <style>
+    body{font-family:system-ui,Arial,Helvetica,sans-serif;margin:0;background:#0a0a0a;color:#fff}
+    .page{padding:24px}
+    .card{max-width:1150px;margin:0 auto;background:rgba(0,0,0,.7);padding:20px;border-radius:14px}
+    .foto-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+    .foto-grid img{width:100%;height:160px;object-fit:cover;border-radius:10px}
+    /* Modale minimale */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.85);z-index:9999}
+    .modal.is-open{display:flex}
+    .modal__inner{width:min(96vw,1200px);height:min(92vh,900px);background:#0f0f10;border-radius:14px;position:relative;overflow:hidden}
+    .modal__body{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+    .modal__close{position:absolute;top:10px;right:14px;color:#fff;font-size:28px;background:rgba(255,255,255,.1);border:0;border-radius:8px;cursor:pointer;padding:6px 10px}
+    .navbtn{position:absolute;top:50%;transform:translateY(-50%);border:0;border-radius:10px;padding:8px 10px;cursor:pointer}
+    .navbtn.left{left:10px}.navbtn.right{right:10px}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="card">
+      <h2>Galleria fotografica (TEST)</h2>
+      <!-- 👇 Adatta se la pagina NON è in pages/, es: "assets/foto/" se è in root -->
+      <div id="galleria" data-assets-base="../assets/foto/"></div>
+    </div>
+  </div>
+
+  <!-- Modale -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal__inner">
+      <button type="button" class="modal__close" aria-label="Chiudi">✕</button>
+      <div class="modal__body"></div>
+    </div>
+  </div>
+
+  <!-- Manifest INLINE: niente fetch, funziona anche senza server -->
+  <script type="application/json" id="gallery-manifest">
+  {
+    "version": 1,
+    "events": [
+      {
+        "slug": "prova",
+        "name": "Prova 2025",
+        "images": [
+          { "file": "foto-01.jpg", "title": "Foto 01" },
+          { "file": "foto-02.jpg", "title": "Foto 02" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <script>
+  (function(){
+    const cont = document.getElementById('galleria');
+    const base = (cont.getAttribute('data-assets-base')||'assets/foto/').replace(/\/+$/,'')+'/';
+    // leggi manifest inline
+    const data = JSON.parse(document.getElementById('gallery-manifest').textContent);
+    const flat = [];
+    (data.events||[]).forEach(evt=>{
+      (evt.images||[]).forEach((img,idx)=>{
+        flat.push({
+          event: evt.slug, title: img.title||evt.name||'Foto',
+          src: base + evt.slug + '/' + img.file,
+          thumb: base + evt.slug + '/thumbs/' + img.file
+        });
+      });
+    });
+
+    // griglia
+    const grid = document.createElement('div'); grid.className='foto-grid';
+    flat.forEach(item=>{
+      const a = document.createElement('a'); a.href=item.src; a.title=item.title;
+      const im= document.createElement('img'); im.src=item.thumb; im.alt=item.title; im.loading='lazy';
+      im.onerror = () => { im.src = item.src; }; // se non c'è la thumb usa l'originale
+      a.appendChild(im); grid.appendChild(a);
+      a.addEventListener('click', (e)=>{ e.preventDefault(); open(item); current = item; });
+    });
+    cont.appendChild(grid);
+
+    // modale con frecce
+    const modal = document.getElementById('modal');
+    const body  = modal.querySelector('.modal__body');
+    const close = modal.querySelector('.modal__close');
+    let current = null;
+
+    function open(item){
+      body.innerHTML='';
+      const wrap = document.createElement('div'); wrap.style.cssText='position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#0f0f10;';
+      const img  = new Image(); img.src=item.src; img.style.cssText='max-width:100%;max-height:100%;object-fit:contain';
+      const left = document.createElement('button'); left.textContent='←'; left.className='navbtn left';
+      const right= document.createElement('button'); right.textContent='→'; right.className='navbtn right';
+      left.onclick = ()=> nav(-1); right.onclick= ()=> nav(+1);
+      wrap.append(img,left,right); body.appendChild(wrap);
+      modal.classList.add('is-open'); document.documentElement.style.overflow='hidden';
+    }
+    function nav(dir){
+      const list = flat.filter(f=> f.src.includes('/'+current.event+'/'));
+      let idx = list.findIndex(x=>x.src===current.src);
+      idx = (idx + dir + list.length) % list.length;
+      current = list[idx]; open(current);
+    }
+    function closeModal(){ modal.classList.remove('is-open'); document.documentElement.style.overflow=''; body.innerHTML=''; }
+    modal.addEventListener('click', (e)=>{ if(e.target===modal) closeModal(); });
+    close.addEventListener('click', closeModal);
+    document.addEventListener('keydown', (e)=>{ if(!modal.classList.contains('is-open')) return; if(e.key==='Escape') closeModal(); if(e.key==='ArrowLeft') nav(-1); if(e.key==='ArrowRight') nav(+1); });
+  })();
+  </script>
+</body>
+</html>
