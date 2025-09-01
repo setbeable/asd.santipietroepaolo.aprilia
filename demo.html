@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo Tabs Patch</title>
+<link rel="stylesheet" href="css/asd-tabs-override.css">
+<style>
+  body { 
+    min-height: 100vh; 
+    background: url('https://images.unsplash.com/photo-1605732282612-8ef6b0bb4a01?q=80&w=2400&auto=format&fit=crop') center/cover no-repeat fixed; 
+  }
+</style>
+</head>
+<body>
+  <div class="tab-content">
+    <h2>Comunicati</h2>
+    <ul>
+      <li><a class="enlargeable" href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf">Comunicato n.1 (PDF)</a></li>
+      <li><a class="enlargeable" href="https://upload.wikimedia.org/wikipedia/commons/3/3f/Fronalpstock_big.jpg">Foto grande (JPG)</a></li>
+    </ul>
+  </div>
+
+  <!-- Modal root -->
+  
+<!-- ASD SPP — Modal root: inserire subito prima di </body> -->
+<div id="asd-modal" class="asd-modal" aria-hidden="true">
+  <div class="asd-modal__inner">
+    <button type="button" class="asd-modal__close" aria-label="Chiudi">✕</button>
+    <div class="asd-modal__body"><!-- iframe/img injected here --></div>
+  </div>
+</div>
+
+<script src="js/asd-modal.js" defer></script>
+</body>
+</html>
