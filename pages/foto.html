@@ -3,14 +3,30 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-
   <link rel="icon" href="../assets/favicon.png" type="image/png"/>
-  <!-- Stili originali -->
   <link rel="stylesheet" href="../styles/styles.css"/>
-  <!-- Patch UI v2 (ingrandisce card e migliora contrasto) -->
-  <link rel="stylesheet" href="../css/asd-tabs-override-v2.css?v=2"/>
-
   <title>Foto — ASD</title>
+  <style>
+    /* Stili essenziali per griglia + modale */
+    .card{max-width:1150px;margin:24px auto;background:rgba(0,0,0,.68);color:#fff;border-radius:14px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    .foto-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+    .foto-grid img{width:100%;height:160px;object-fit:cover;border-radius:10px;display:block}
+    .cal-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 12px 0}
+    .cal-toolbar .spacer{flex:1 1 auto}
+    .btn, .cal-toolbar select, .cal-toolbar input[type="search"]{padding:8px 12px;border-radius:10px;border:0;font-weight:600}
+    .btn{background:#f5d76e;color:#0b0b0b;cursor:pointer}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+
+    /* Modale */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.85);z-index:9999;padding:4vh 3vw}
+    .modal.is-open{display:flex}
+    .modal__inner{width:min(96vw,1200px);height:min(92vh,900px);background:#0f0f10;border-radius:14px;box-shadow:0 16px 40px rgba(0,0,0,.55);overflow:hidden;position:relative}
+    .modal__body{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+    .modal__close{position:absolute;top:10px;right:14px;color:#fff;font-size:28px;background:rgba(255,255,255,.1);border:0;border-radius:8px;cursor:pointer;padding:6px 10px}
+    .navbtn{position:absolute;top:50%;transform:translateY(-50%);border:0;border-radius:10px;padding:8px 10px;cursor:pointer;background:#f5d76e;color:#0b0b0b}
+    .navbtn.left{left:10px}.navbtn.right{right:10px}
+    #gallery-pager{margin-top:14px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  </style>
 </head>
 <body>
   <div class="page">
@@ -24,24 +40,31 @@
       </div>
     </div>
 
-    <!-- La patch v2 rende .card ampia/leggibile -->
     <div class="card">
       <p>Galleria fotografica</p>
-      <!-- Contenitore griglia -->
-      <div id="galleria" class="foto-grid"></div>
+
+      <!-- ⚠️ Se questa pagina non è in /pages/ cambia il path qui sotto:
+           - se foto.html è in root → data-assets-base="assets/foto/"
+           - se è due livelli sotto → data-assets-base="../../assets/foto/" -->
+      <div id="galleria" data-assets-base="../assets/foto/"></div>
+
+      <!-- scaffolding griglia + pager verranno iniettati dallo script -->
     </div>
   </div>
 
-  <!-- Modale (una per pagina) -->
-  <div id="asd-modal" class="asd-modal" aria-hidden="true">
-    <div class="asd-modal__inner">
-      <button type="button" class="asd-modal__close" aria-label="Chiudi">✕</button>
-      <div class="asd-modal__body"></div>
+  <!-- Modale -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal__inner">
+      <button type="button" class="modal__close" aria-label="Chiudi">✕</button>
+      <div class="modal__body"></div>
     </div>
   </div>
 
-  <!-- Modale v2: apre automaticamente immagini/PDF -->
-  <script src="../js/asd-modal-v2.js?v=2" defer></script>
-  <script src="../js/foto.js" defer></script>
-</body>
-</html>
+  <!-- Script Galleria (inline, nessun file esterno richiesto) -->
+  <script>
+  (function(){
+    const container = document.getElementById('galleria');
+    if (!container) return;
+
+    //
+
