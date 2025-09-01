@@ -114,110 +114,51 @@
   <script src="../js/asd-modal-v2.js?v=2" defer></script>
 
   <!-- JS locale -->
+
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      // ======= CONFIG BASE EMBED =======
-      const BASE = "https://calendar.google.com/calendar/embed";
-      const CAL  = "29d83543be0fbbe269fcc9cb7018d6356%40group.calendar.google.com";
-      const COMMON = "ctz=Europe%2FRome&showTitle=0&showPrint=0&showTabs=1&showDate=1&showNav=1&showCalendars=0";
-      // Modal refs
-      const modal = document.getElementById('asd-modal');
-      const modalBody = modal.querySelector('.asd-modal__body');
-      const iframe = document.getElementById('calendar-embed');
+  document.addEventListener('DOMContentLoaded', function () {
+    // URL embed "safe" (niente dates/start non supportati nell’embed classico)
+    const BASE = "https://calendar.google.com/calendar/embed";
+    const CAL  = "29d83543be0fbbe269fcc9cb7018d6356%40group.calendar.google.com";
+    const COMMON = "ctz=Europe%2FRome&showTitle=0&showPrint=0&showTabs=1&showDate=1&showNav=1&showCalendars=0&hl=it";
 
-      // Stato corrente
-      const today = new Date();
-      const state = {
-        view: 'WEEK',                  // 'AGENDA' | 'WEEK' | 'MONTH'
-        year: today.getFullYear(),
-        month: today.getMonth(),       // 0..11
-        day: today.getDate()
-      };
+    const iframe  = document.getElementById('calendar-embed');
+    const openBtn = document.getElementById('openCalendarFull');
 
-      // Helpers
-      const pad = n => n.toString().padStart(2, '0');
-      const yyyymmdd = (d) => d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate());
-      function urlFor(view, d) {
-        // d = Date oggetto; uso 'dates=YYYYMMDD' per puntare un giorno dentro al mese/settimana
-        const dateStr = yyyymmdd(d);
-        return `${BASE}?src=${CAL}&${COMMON}&mode=${view}&dates=${dateStr}`;
-      }
-      function updateIframe() {
-        const d = new Date(state.year, state.month, Math.min(state.day, 28)); // day safe
-        iframe.src = urlFor(state.view, d);
-        // mostra/nascondi i bottoni prev/next solo in vista Mese
-        document.getElementById('btn-prev').style.display = state.view === 'MONTH' ? 'inline-block' : 'none';
-        document.getElementById('btn-next').style.display = state.view === 'MONTH' ? 'inline-block' : 'none';
-      }
-      function setView(view) {
-        state.view = view;
-        updateIframe();
-      }
-      function gotoMonth(y, m) {
-        state.year = y; state.month = m; state.day = 1; state.view = 'MONTH';
-        updateIframe();
-      }
-      function addMonths(delta) {
-        const d = new Date(state.year, state.month + delta, 1);
-        state.year = d.getFullYear(); state.month = d.getMonth(); state.day = 1;
-        updateIframe();
-      }
+    // builder senza "dates"
+    const urlFor = (mode) => `${BASE}?src=${CAL}&${COMMON}&mode=${mode}`;
 
-      // Inizializza
-      updateIframe();
+    // vista predefinita
+    let currentMode = 'WEEK';
+    iframe.src = urlFor(currentMode);
 
-      // Bottoni vista
-      document.getElementById('btn-day').addEventListener('click',  () => setView('AGENDA'));
-      document.getElementById('btn-week').addEventListener('click', () => setView('WEEK'));
-      document.getElementById('btn-month').addEventListener('click', () => setView('MONTH'));
+    // switch vista (le frecce mese/giorno sono dentro l’iframe e funzionano)
+    document.getElementById('btn-day')  .addEventListener('click', () => { currentMode = 'AGENDA'; iframe.src = urlFor(currentMode); });
+    document.getElementById('btn-week') .addEventListener('click', () => { currentMode = 'WEEK';   iframe.src = urlFor(currentMode);  });
+    document.getElementById('btn-month').addEventListener('click', () => { currentMode = 'MONTH';  iframe.src = urlFor(currentMode);  });
 
-      // Pannello Anno
-      const yearPanel = document.getElementById('yearPanel');
-      const yearSelect = document.getElementById('yearSelect');
-      const monthsGrid = document.getElementById('monthsGrid');
-
-      // Popola selettore anni (corrente ± 3)
-      const baseYear = today.getFullYear();
-      for (let y = baseYear - 3; y <= baseYear + 3; y++) {
-        const opt = document.createElement('option');
-        opt.value = y; opt.textContent = y;
-        if (y === state.year) opt.selected = true;
-        yearSelect.appendChild(opt);
-      }
-
-      // Popola mesi
-      const mesi = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
-      mesi.forEach((mName, mIdx) => {
-        const b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'month-btn';
-        b.textContent = mName;
-        b.addEventListener('click', () => gotoMonth(parseInt(yearSelect.value,10), mIdx));
-        monthsGrid.appendChild(b);
-      });
-
-      document.getElementById('btn-year').addEventListener('click', () => {
-        yearPanel.classList.toggle('is-open');
-      });
-      yearSelect.addEventListener('change', () => {
-        // non cambia vista finché non scegli un mese
-      });
-
-      // Scorrimento mesi (solo in vista Mese)
-      document.getElementById('btn-prev').addEventListener('click', () => addMonths(-1));
-      document.getElementById('btn-next').addEventListener('click', () => addMonths(1));
-
-      // Modale full-screen (mantiene la vista corrente)
-      document.getElementById('openCalendarFull').addEventListener('click', function (e) {
-        e.preventDefault();
-        const d = new Date(state.year, state.month, Math.min(state.day, 28));
-        const src = urlFor(state.view, d);
-        modalBody.innerHTML = `<iframe src="${src}" width="100%" height="100%" frameborder="0"></iframe>`;
-        modal.classList.add('is-open');
-        document.documentElement.style.overflow = 'hidden';
-      });
+    // "Anno": mostriamo un pannello esterno con i mesi (facoltativo) oppure
+    // semplicemente mettiamo MONTH e usiamo le frecce nell’iframe.
+    document.getElementById('btn-year').addEventListener('click', () => {
+      currentMode = 'MONTH';
+      iframe.src = urlFor(currentMode);
+      // qui puoi eventualmente mostrare/chiudere un pannello tuoi con i mesi,
+      // ma non possiamo forzare il mese dall’esterno (limitazione dell’embed).
     });
-  </script>
+
+    // Schermo intero: riapre lo stesso URL in modale
+    openBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      const modal = document.getElementById('asd-modal');
+      const body  = modal.querySelector('.asd-modal__body');
+      body.innerHTML = `<iframe src="${urlFor(currentMode)}" width="100%" height="100%" frameborder="0"></iframe>`;
+      modal.classList.add('is-open');
+      document.documentElement.style.overflow = 'hidden';
+    });
+  });
+	</script>
+
+
 </body>
 </html>
 
