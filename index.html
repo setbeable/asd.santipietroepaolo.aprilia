@@ -1,36 +1,58 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Demo Tabs Patch</title>
-<link rel="stylesheet" href="css/asd-tabs-override.css">
-<style>
-  body { 
-    min-height: 100vh; 
-    background: url('https://images.unsplash.com/photo-1605732282612-8ef6b0bb4a01?q=80&w=2400&auto=format&fit=crop') center/cover no-repeat fixed; 
-  }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ASD Santi Pietro e Paolo</title>
+  <link rel="icon" href="assets/favicon.png" type="image/png" />
+  <link rel="stylesheet" href="styles/styles.css" />
 </head>
 <body>
-  <div class="tab-content">
-    <h2>Comunicati</h2>
-    <ul>
-      <li><a class="enlargeable" href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf">Comunicato n.1 (PDF)</a></li>
-      <li><a class="enlargeable" href="https://upload.wikimedia.org/wikipedia/commons/3/3f/Fronalpstock_big.jpg">Foto grande (JPG)</a></li>
-    </ul>
-  </div>
+  <main class="container">
+    <img class="mascot" src="assets/logo.png" alt="Logo ASD Santi Pietro e Paolo" />
+    <h1>ASD SANTI PIETRO E PAOLO</h1>
+    <h2 class="subtitle">Associazione Sportiva Dilettantistica</h2>
+    <p class="tagline">Passione, fair play e futsal per tutti ⚽</p>
+    <p class="slogan">⚽ Passione, sport e amicizia – Calcio a 5 per tutti</p>
 
-  <!-- Modal root -->
-  
-<!-- ASD SPP — Modal root: inserire subito prima di </body> -->
-<div id="asd-modal" class="asd-modal" aria-hidden="true">
-  <div class="asd-modal__inner">
-    <button type="button" class="asd-modal__close" aria-label="Chiudi">✕</button>
-    <div class="asd-modal__body"><!-- iframe/img injected here --></div>
-  </div>
+    
+    <div class="radial-zoom" id="radial-zoom">
+    <div class="radial-zoom" id="radial-zoom"><div class="radial-wrap" id="radial"><div class="center-circle"><img src="assets/logo.png" alt="Logo ASD Santi Pietro e Paolo"></div><div class="radial-nav" id="radial-nav"></div></div></div>
+<div class="radial-tools">
+  <button class="reset-layout" id="reset-layout" title="Ripristina disposizione">↺ Ripristina disposizione</button>
+  <button class="reset-layout" id="lock-layout" title="Blocca/Sblocca trascinamento">🔓 Blocca layout</button>
 </div>
+<!-- RADIAL-END -->
 
-<script src="js/asd-modal.js" defer></script>
+
+    <nav class="menu">
+      <a class="btn" href="pages/hub.html">📚 Hub</a>
+      <a class="btn" href="pages/orari.html">🏆 Orari</a>
+      <a class="btn" href="pages/documenti.html">📂 Documenti</a>
+      <a class="btn" href="pages/newsletter.html">📬 Newsletter</a>
+      <a class="btn" href="pages/sponsor.html">🤝 Sponsor</a>
+      <a class="btn" href="pages/calendario.html">📅 Calendario</a>
+      <a class="btn" href="pages/contatti.html">✉️ Contatti</a>
+      <a class="btn" href="pages/chi-siamo.html">👥 Chi siamo</a>
+      <a class="btn" href="pages/campionati.html">🏆 Campionati</a>
+      <a class="btn" href="pages/regolamento.html">📄 Regolamento</a>
+      <a class="btn" href="pages/comunicati.html">📣 Comunicati</a>
+      <a class="btn" href="pages/foto.html">📸 Foto</a>
+      <a class="btn" href="pages/video.html">🎬 Video</a>
+      <a class="btn" href="pages/interviste.html">🎙️ Interviste</a>
+    </nav>
+
+    <a class="btn cta" href="#" target="_blank" rel="noopener">
+      📺 DIRETTE INSTAGRAM <span class="dot" aria-hidden="true"></span>
+    </a>
+    <a class="btn cta alt" id="cta-iscrizioni" href="pages/iscrizioni.html" rel="noopener">📝 ISCRIZIONI</a>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> ASD Santi Pietro e Paolo by @Set ⚽</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/radial.js"></script>
 </body>
 </html>
