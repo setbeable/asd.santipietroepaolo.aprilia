@@ -1,6 +1,47 @@
-{
+﻿{
   "version": 1,
   "docs": [
-    { "file": "comunicati/2025-08-campionati.pdf", "title": "Comunicato Campionati", "category": "Comunicati", "year": 2025, "date": "2025-08-20" }
+    {
+      "file": "altro/Open_Day.pdf",
+      "title": "Open Day",
+      "category": "altro",
+      "year": 2025,
+      "date": null
+    },
+    {
+      "file": "moduli/2025-iscrizioni.pdf",
+      "title": "2025 Iscrizioni",
+      "category": "moduli",
+      "year": 2025,
+      "date": null
+    },
+    {
+      "file": "comunicati/2025-09-risultati.pdf",
+      "title": "2025 09 Risultati",
+      "category": "comunicati",
+      "year": 2025,
+      "date": null
+    },
+    {
+      "file": "regolamenti/2025-09-regoalmeto.pdf",
+      "title": "2025 09 Regoalmeto",
+      "category": "regolamenti",
+      "year": 2025,
+      "date": null
+    },
+    {
+      "file": "comunicati/2025-09-campionati.docx",
+      "title": "2025 09 Campionati",
+      "category": "comunicati",
+      "year": 2025,
+      "date": null
+    },
+    {
+      "file": "comunicati/2025-09-campionati.pdf",
+      "title": "2025 09 Campionati",
+      "category": "comunicati",
+      "year": 2025,
+      "date": null
+    }
   ]
 }
