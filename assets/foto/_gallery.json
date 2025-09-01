@@ -3,15 +3,13 @@
   "events": [
     {
       "slug": "example-event",
-      "name": "Example Event 2025",
+      "name": "Example Event",
       "images": [
         {
-          "file": "foto-01.jpg",
-          "title": "Foto 01"
+          "file": "foto-01.jpg"
         },
         {
-          "file": "foto-02.jpg",
-          "title": "Foto 02"
+          "file": "foto-02.jpg"
         }
       ]
     }
