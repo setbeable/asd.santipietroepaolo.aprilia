@@ -1,224 +1,276 @@
-/* Video — griglia + filtri + player in modale (v3) */
-(function(){
-  document.addEventListener('DOMContentLoaded', async function(){
+/* ============================================================================
+ * videos.js (v4)
+ * Galleria video con filtri, paginazione e player in modale
+ * - Legge il manifest JSON da <BASE>/_videos.json (es. assets/video/_videos.json)
+ * - Supporta file locali (mp4/webm/ogg) e link YouTube/Vimeo (.url/.txt)
+ * - Anteprime: v.thumb assoluto/relativo, oppure <cartella>/thumbs/<filename>.jpg
+ * - Modale accessibile: aria-hidden/inert gestiti all’apertura/chiusura
+ * ========================================================================== */
+(function () {
+  document.addEventListener('DOMContentLoaded', async function () {
     console.log('[Video] script caricato');
 
     const root = document.getElementById('videos');
-    if (!root) { console.error('[Video] #videos non trovato'); return; }
+    if (!root) {
+      console.error('[Video] #videos non trovato');
+      return;
+    }
 
-    const BASE = (root.getAttribute('data-assets-base') || 'assets/video/').replace(/\/+$/,'') + '/';
+    // Base degli asset, es. "../assets/video/"
+    const BASE = (root.getAttribute('data-assets-base') || 'assets/video/').replace(/\/+$/, '') + '/';
     const MANIFEST = BASE + '_videos.json';
 
-    const state = { all:[], filtered:[], page:1, pageSize:24, category:'all', year:'all', q:'' };
+    const state = {
+      all: [],
+      filtered: [],
+      page: 1,
+      pageSize: 24,
+      category: 'all',
+      year: 'all',
+      q: ''
+    };
 
-    const el = (t,a={},c=[]) => { const n=document.createElement(t);
-      for (const [k,v] of Object.entries(a)) { if(k==='class') n.className=v; else if(k==='html') n.innerHTML=v; else n.setAttribute(k,v); }
-      (Array.isArray(c)?c:[c]).forEach(x=>{ if(x==null) return; n.appendChild(typeof x==='string'?document.createTextNode(x):x); });
+    // ---------- util ----------
+    const el = (t, a = {}, c = []) => {
+      const n = document.createElement(t);
+      for (const [k, v] of Object.entries(a)) {
+        if (k === 'class') n.className = v;
+        else if (k === 'html') n.innerHTML = v;
+        else n.setAttribute(k, v);
+      }
+      (Array.isArray(c) ? c : [c]).forEach(x => {
+        if (x == null) return;
+        n.appendChild(typeof x === 'string' ? document.createTextNode(x) : x);
+      });
       return n;
     };
 
     const isLocal = v => !!v.file;
-    const getYear = v => v.year || (String(v.file||v.url||'').match(/(20\d{2}|19\d{2})/)||[])[1] || null;
+    const getYear = v => v.year || (String(v.file || v.url || '').match(/(20\d{2}|19\d{2})/) || [])[1] || null;
 
-    function ytId(u){
-      try{
+    function ytId(u) {
+      try {
         const url = new URL(u);
         if (url.hostname.includes('youtu.be')) return url.pathname.slice(1);
-        if (url.hostname.includes('youtube.com')){
+        if (url.hostname.includes('youtube.com')) {
           if (url.pathname.startsWith('/watch')) return url.searchParams.get('v');
           if (url.pathname.startsWith('/shorts/')) return url.pathname.split('/')[2];
         }
-      }catch(e){}
-      return null;
-    }
-    function vimeoId(u){
-      try{
-        const url = new URL(u);
-        if (url.hostname.includes('vimeo.com')){
-          const parts = url.pathname.split('/').filter(Boolean);
-          const id = parts.find(p=>/^\d+$/.test(p));
-          return id || null;
-        }
-      }catch(e){}
+      } catch (_) {}
       return null;
     }
 
-    function getThumb(v){
-      if (v.thumb){
+    function vimeoId(u) {
+      try {
+        const url = new URL(u);
+        if (url.hostname.includes('vimeo.com')) {
+          const parts = url.pathname.split('/').filter(Boolean);
+          const id = parts.find(p => /^\d+$/.test(p));
+          return id || null;
+        }
+      } catch (_) {}
+      return null;
+    }
+
+    // Calcolo thumbnail:
+    // - v.thumb http/https => usa così
+    // - v.thumb relativo => BASE + (categoria se mancante) + v.thumb
+    // - se mancante ed è locale => <cartella>/thumbs/<file>.jpg
+    // - se URL YouTube => thumbnail ufficiale
+    function getThumb(v) {
+      if (v.thumb) {
         if (/^https?:\/\//i.test(v.thumb)) return v.thumb;
-        // se la thumb è "thumbs/..." e il file ha una cartella, prefissala
-        if (/^thumbs\//i.test(v.thumb) && v.file && v.file.includes('/')){
+        if (/^thumbs\//i.test(v.thumb) && v.file && v.file.includes('/')) {
           const cat = v.file.split('/')[0];
           return BASE + cat + '/' + v.thumb.replace(/^\/+/, '');
         }
         return BASE + v.thumb.replace(/^\/+/, '');
       }
-      if (isLocal(v) && v.file){
+      if (isLocal(v) && v.file) {
         const parts = v.file.split('/');
         const fileName = parts.pop();
-        const folder   = parts.join('/');
-        const jpgName  = fileName.replace(/\.\w+$/i, '.jpg');
+        const folder = parts.join('/');
+        const jpgName = fileName.replace(/\.\w+$/i, '.jpg');
         return BASE + (folder ? folder + '/' : '') + 'thumbs/' + jpgName;
       }
-      if (v.url){
+      if (v.url) {
         const id = ytId(v.url);
-        if (id) return 'https://img.youtube.com/vi/'+id+'/hqdefault.jpg';
+        if (id) return 'https://img.youtube.com/vi/' + id + '/hqdefault.jpg';
       }
       return '';
     }
 
-    async function loadData(){
-      const r = await fetch(MANIFEST, { cache:'no-store' });
-      if (!r.ok) throw new Error('Manifest HTTP '+r.status+' @ '+MANIFEST);
+    async function loadData() {
+      // prova manifest esterno
+      const r = await fetch(MANIFEST, { cache: 'no-store' });
+      if (!r.ok) throw new Error('Manifest HTTP ' + r.status + ' @ ' + MANIFEST);
       return await r.json();
     }
 
-    function applyFilters(){
+    function applyFilters() {
       let rows = state.all.slice();
-      if (state.category !== 'all') rows = rows.filter(v => (v.category||'').toLowerCase() === state.category.toLowerCase());
+      if (state.category !== 'all') rows = rows.filter(v => (v.category || '').toLowerCase() === state.category.toLowerCase());
       if (state.year !== 'all') rows = rows.filter(v => String(v.year) === String(state.year));
-      if (state.q && state.q.trim()){
+      if (state.q && state.q.trim()) {
         const s = state.q.trim().toLowerCase();
-        rows = rows.filter(v => (v.title||'').toLowerCase().includes(s) || (v.file||v.url||'').toLowerCase().includes(s));
+        rows = rows.filter(v =>
+          (v.title || '').toLowerCase().includes(s) ||
+          (v.file || v.url || '').toLowerCase().includes(s)
+        );
       }
-      rows.sort((a,b)=>{
+      // Ordina: data desc -> titolo
+      rows.sort((a, b) => {
         const da = new Date(a.date || a.year || 0).getTime();
         const db = new Date(b.date || b.year || 0).getTime();
         if (db !== da) return db - da;
-        return (a.title||'').localeCompare(b.title||'');
+        return (a.title || '').localeCompare(b.title || '');
       });
-      state.filtered = rows; state.page = 1;
+      state.filtered = rows;
+      state.page = 1;
     }
 
-    function renderToolbar(container){
-      const bar = el('div', { class:'vid-toolbar' });
-      const selCat = el('select', {}, [el('option', { value:'all' }, 'Tutte le categorie')]);
-      const selYear= el('select', {}, [el('option', { value:'all' }, 'Tutti gli anni')]);
-      const search = el('input', { type:'search', placeholder:'Cerca…' });
-      const perPage= el('select', {}, [
-        el('option', { value:'12' }, '12 / pagina'),
-        el('option', { value:'24', selected:'selected' }, '24 / pagina'),
-        el('option', { value:'48' }, '48 / pagina'),
-        el('option', { value:'96' }, '96 / pagina')
-      ]);
-      const spacer = el('span', { class:'spacer' });
+    function renderToolbar(container) {
+      const bar = el('div', { class: 'vid-toolbar' });
 
-      Array.from(new Set(state.all.map(v=>v.category).filter(Boolean))).sort()
-        .forEach(c => selCat.appendChild(el('option', { value:c }, c)));
-      Array.from(new Set(state.all.map(v=>v.year).filter(Boolean))).sort()
-        .forEach(y => selYear.appendChild(el('option', { value:String(y) }, String(y))));
+      const selCat = el('select', {}, [el('option', { value: 'all' }, 'Tutte le categorie')]);
+      const selYear = el('select', {}, [el('option', { value: 'all' }, 'Tutti gli anni')]);
+      const search = el('input', { type: 'search', placeholder: 'Cerca…' });
+      const perPage = el('select', {}, [
+        el('option', { value: '12' }, '12 / pagina'),
+        el('option', { value: '24', selected: 'selected' }, '24 / pagina'),
+        el('option', { value: '48' }, '48 / pagina'),
+        el('option', { value: '96' }, '96 / pagina')
+      ]);
+      const spacer = el('span', { class: 'spacer' });
+
+      Array.from(new Set(state.all.map(v => v.category).filter(Boolean))).sort()
+        .forEach(c => selCat.appendChild(el('option', { value: c }, c)));
+
+      Array.from(new Set(state.all.map(v => v.year).filter(Boolean))).sort()
+        .forEach(y => selYear.appendChild(el('option', { value: String(y) }, String(y))));
 
       bar.append(selCat, selYear, search, spacer, perPage);
       container.appendChild(bar);
 
-      selCat.addEventListener('change', ()=>{ state.category = selCat.value; applyFilters(); renderList(); });
-      selYear.addEventListener('change', ()=>{ state.year = selYear.value; applyFilters(); renderList(); });
-      search.addEventListener('input', ()=>{ state.q = search.value; applyFilters(); renderList(); });
-      perPage.addEventListener('change', ()=>{ state.pageSize = parseInt(perPage.value,10)||24; state.page = 1; renderList(); });
+      selCat.addEventListener('change', () => { state.category = selCat.value; applyFilters(); renderList(); });
+      selYear.addEventListener('change', () => { state.year = selYear.value; applyFilters(); renderList(); });
+      search.addEventListener('input', () => { state.q = search.value; applyFilters(); renderList(); });
+      perPage.addEventListener('change', () => { state.pageSize = parseInt(perPage.value, 10) || 24; state.page = 1; renderList(); });
     }
 
     let gridEl, pagerEl;
-    function renderScaffold(container){
-      gridEl = el('div', { class:'vid-grid' });
-      pagerEl = el('div', { class:'pager' });
+    function renderScaffold(container) {
+      gridEl = el('div', { class: 'vid-grid' });
+      pagerEl = el('div', { class: 'pager' });
       container.append(gridEl, pagerEl);
     }
 
-    function pageSlice(){
-      const s = (state.page-1)*state.pageSize;
-      return state.filtered.slice(s, s+state.pageSize);
-    }
+    const pageSlice = () => {
+      const s = (state.page - 1) * state.pageSize;
+      return state.filtered.slice(s, s + state.pageSize);
+    };
 
-    function renderPager(){
+    function renderPager() {
       pagerEl.innerHTML = '';
       const total = state.filtered.length; if (!total) return;
-      const pages = Math.ceil(total/state.pageSize);
-      const prev = el('button', { class:'btn', type:'button' }, '←');
+      const pages = Math.ceil(total / state.pageSize);
+      const prev = el('button', { class: 'btn', type: 'button' }, '←');
       const info = el('span', {}, `Pagina ${state.page}/${pages} — ${total} video`);
-      const next = el('button', { class:'btn', type:'button' }, '→');
+      const next = el('button', { class: 'btn', type: 'button' }, '→');
       prev.disabled = state.page <= 1; next.disabled = state.page >= pages;
-      prev.addEventListener('click', ()=>{ if(state.page>1){ state.page--; renderList(); }});
-      next.addEventListener('click', ()=>{ if(state.page<pages){ state.page++; renderList(); }});
+      prev.addEventListener('click', () => { if (state.page > 1) { state.page--; renderList(); } });
+      next.addEventListener('click', () => { if (state.page < pages) { state.page++; renderList(); } });
       pagerEl.append(prev, info, next);
     }
 
-    function openPlayer(v){
+    function openPlayer(v) {
       const modal = document.getElementById('modal');
-      const body  = modal.querySelector('.modal__body');
-      const btnX  = modal.querySelector('.modal__close');
-      const btnB  = modal.querySelector('.modal__back');
+      const body = modal.querySelector('.modal__body');
+      const btnX = modal.querySelector('.modal__close');
+      const btnB = modal.querySelector('.modal__back');
+      const page = document.querySelector('.page');
 
-      function close(){
+      function close() {
         modal.classList.remove('is-open');
-        document.documentElement.style.overflow='';
-        body.innerHTML='';
+        modal.setAttribute('aria-hidden', 'true');
+        if (page) page.removeAttribute('inert');
+        document.documentElement.style.overflow = '';
+        body.innerHTML = '';
         document.removeEventListener('keydown', onKey);
       }
-      function onKey(e){ if(e.key==='Escape') close(); }
+      function onKey(e) { if (e.key === 'Escape') close(); }
 
       body.innerHTML = '';
-      const wrap = el('div', { class:'player-wrap' });
+      const wrap = el('div', { class: 'player-wrap' });
 
-      if (isLocal(v)){
+      if (isLocal(v)) {
         const src = BASE + v.file;
-        const video = el('video', { controls:'', playsinline:'', autoplay:'', src });
+        const video = el('video', { controls: '', playsinline: '', autoplay: '', src });
         wrap.appendChild(video);
-      } else if (v.url){
+      } else if (v.url) {
         let iframeSrc = v.url;
         const yid = ytId(v.url);
         const vidVimeo = vimeoId(v.url);
         if (yid) iframeSrc = `https://www.youtube.com/embed/${yid}?autoplay=1&rel=0`;
         else if (vidVimeo) iframeSrc = `https://player.vimeo.com/video/${vidVimeo}?autoplay=1`;
         const iframe = el('iframe', {
-          src: iframeSrc, frameborder:'0', allow:'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share',
-          allowfullscreen:''
+          src: iframeSrc, frameborder: '0',
+          allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share',
+          allowfullscreen: ''
         });
         wrap.appendChild(iframe);
       }
 
       body.appendChild(wrap);
       modal.classList.add('is-open');
-      document.documentElement.style.overflow='hidden';
+      modal.setAttribute('aria-hidden', 'false');
+      if (page) page.setAttribute('inert', '');
+      document.documentElement.style.overflow = 'hidden';
       btnX.onclick = close;
       btnB.onclick = close;
-      modal.addEventListener('click', (e)=>{ if(e.target===modal) close(); }, { once:true });
+      modal.addEventListener('click', (e) => { if (e.target === modal) close(); }, { once: true });
       document.addEventListener('keydown', onKey);
     }
 
-    function renderList(){
+    function renderList() {
       gridEl.innerHTML = '';
       const rows = pageSlice();
-      if (!rows.length){ gridEl.innerHTML = '<div style="opacity:.8">Nessun video trovato.</div>'; renderPager(); return; }
+      if (!rows.length) { gridEl.innerHTML = '<div style="opacity:.8">Nessun video trovato.</div>'; renderPager(); return; }
 
-      rows.forEach(v=>{
-        const card = el('div', { class:'vid-card' });
+      rows.forEach(v => {
+        const card = el('div', { class: 'vid-card', tabindex: '0' });
         const t = getThumb(v);
-        const thumb = el('img', { class:'vid-thumb', src: t || '', alt: v.title || 'Video', loading:'lazy' });
-        if (!t && isLocal(v)) thumb.onerror = ()=>{ thumb.style.background='#000'; thumb.removeAttribute('src'); };
+        const thumb = el('img', { class: 'vid-thumb', src: t || '', alt: v.title || 'Video', loading: 'lazy' });
+        if (!t && isLocal(v)) thumb.onerror = () => { thumb.style.background = '#000'; thumb.removeAttribute('src'); };
 
-        const title = el('div', { class:'vid-title' }, v.title || (v.file || v.url || '').split('/').pop());
-        const play  = el('button', { class:'vid-play', type:'button' }, '▶');
+        const title = el('div', { class: 'vid-title' }, v.title || (v.file || v.url || '').split('/').pop());
+        const play = el('button', { class: 'vid-play', type: 'button' }, '▶');
+
+        const open = () => openPlayer(v);
+        card.addEventListener('click', open);
+        card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
 
         card.append(thumb, title, play);
-        card.addEventListener('click', ()=> openPlayer(v));
         gridEl.appendChild(card);
       });
 
       renderPager();
     }
 
-    try{
+    // ---------- boot ----------
+    try {
       const data = await loadData();
-      state.all = (data.videos||[]).map(v => ({ ...v, year: getYear(v) }));
+      state.all = (data.videos || []).map(v => ({ ...v, year: getYear(v) }));
       console.log('[Video] caricati', state.all.length, 'elementi da', MANIFEST);
       root.innerHTML = '';
       renderToolbar(root);
       renderScaffold(root);
       applyFilters();
       renderList();
-    }catch(err){
+    } catch (err) {
       console.error('[Video] Errore:', err);
-      root.innerHTML = '<div style="opacity:.85">Impossibile caricare i video. Controlla che esista <code>'+MANIFEST+'</code>.</div>';
+      root.innerHTML = '<div style="opacity:.85">Impossibile caricare i video. Controlla che esista <code>' + MANIFEST + '</code>.</div>';
     }
   });
 })();
+
