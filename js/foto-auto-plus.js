@@ -1,18 +1,12 @@
 
-/* Foto auto-gallery PLUS
- * - Legge assets/foto/_gallery.json
- * - Filtri: per evento, per anno (se trovato nello slug o nel name), ricerca testuale
- * - Paginazione (default 24 per pagina)
- * - Modale con Navigazione Avanti/Indietro (sostituisce l'autoload di asd-modal-v2 per le nostre immagini)
- */
-
+/* Foto auto-gallery PLUS — filtri, paginazione, navigazione modale */
 (function() {
   const MANIFEST_URL = '../assets/foto/_gallery.json';
   const PAGE_SIZE = 24;
 
   const state = {
     manifest: null,
-    flat: [],          // tutte le foto con metadati arricchiti
+    flat: [],
     filtered: [],
     page: 1,
     pageSize: PAGE_SIZE,
@@ -40,15 +34,12 @@
     return m ? m[1] : null;
   }
 
-  function slugify(s){ return String(s||'').toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9\-]/g,'').replace(/\-+/g,'-').replace(/^\-|\-$/g,''); }
-
   async function loadManifest() {
     const res = await fetch(MANIFEST_URL, { cache: 'no-store' });
     if (!res.ok) throw new Error('manifest HTTP ' + res.status);
     const data = await res.json();
     state.manifest = data;
 
-    // flat array
     const flat = [];
     (data.events || []).forEach(evt => {
       const year = evt.year || extractYear(evt.name) || extractYear(evt.slug);
@@ -161,23 +152,19 @@
     }
 
     const grid = el('div', { class: 'foto-grid' });
-    rows.forEach((r, idx) => {
+    rows.forEach((r) => {
       const base = `../assets/foto/${r.eventSlug}/`;
-      const a = el('a', { href: base + r.file, 'data-group': r.eventSlug, 'data-file': r.file, 'data-index': String(idx), title: r.title });
+      const a = el('a', { href: base + r.file, 'data-group': r.eventSlug, 'data-file': r.file, title: r.title });
       const img = el('img', { src: base + r.thumb, alt: r.title, loading: 'lazy' });
       a.appendChild(img);
-      // Intercetta il click e usa la nostra modale con navigazione
-      a.addEventListener('click', (e) => {
-        e.preventDefault();
-        openViewer(r.eventSlug, r.file);
-      });
+      a.addEventListener('click', (e) => { e.preventDefault(); openViewer(r.eventSlug, r.file); });
       grid.appendChild(a);
     });
     gridRoot.appendChild(grid);
     renderPager();
   }
 
-  // === Modale con navigazione ===
+  // Modale con navigazione
   function openViewer(eventSlug, file) {
     const modal = document.getElementById('asd-modal');
     const body  = modal.querySelector('.asd-modal__body');
@@ -206,35 +193,36 @@
     modal.classList.add('is-open');
     document.documentElement.style.overflow = 'hidden';
 
-    // key navigation
     function onKey(e) {
-      if (e.key === 'ArrowLeft') { e.preventDefault(); document.querySelector('#asd-modal .btn:nth-child(2)')?.click(); }
-      if (e.key === 'ArrowRight'){ e.preventDefault(); document.querySelector('#asd-modal .btn:nth-child(3)')?.click(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); const btn = modal.querySelector('button.btn'); btn && btn.click(); }
+      if (e.key === 'ArrowRight'){ e.preventDefault(); const btns = modal.querySelectorAll('button.btn'); const b = btns[1]; b && b.click(); }
     }
     document.addEventListener('keydown', onKey, { once: false });
 
-    // cleanup when modal closes
     const closeBtn = modal.querySelector('.asd-modal__close');
     const cleanup = () => document.removeEventListener('keydown', onKey);
     closeBtn.addEventListener('click', cleanup, { once: true });
     modal.addEventListener('click', (e)=>{ if (e.target === modal) cleanup(); }, { once: true });
   }
 
-  // Boot
   document.addEventListener('DOMContentLoaded', async function () {
     const container = document.getElementById('galleria');
     if (!container) return;
     try {
       await loadManifest();
       container.innerHTML = '';
-      // scaffolding
+
+      // Titolo sezione opzionale
+      // container.appendChild(el('h2', {}, 'Galleria'));
+
+      // Filtri + scaffold
       renderFilters(container);
       renderScaffold(container);
       applyFilters();
       renderGrid();
     } catch (e) {
       console.error(e);
-      container.innerHTML = '<div style="opacity:.8">Impossibile caricare la galleria. Verifica il file <code>assets/foto/_gallery.json</code>.</div>';
+      container.innerHTML = '<div style="opacity:.8">Impossibile caricare la galleria. Verifica <code>assets/foto/_gallery.json</code>.</div>';
     }
   });
 })();

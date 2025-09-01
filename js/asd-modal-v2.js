@@ -1,7 +1,5 @@
-/*! ASD SPP — Modal v2
- * - Auto-enlarge per tutti i link a PDF/immagini (no classe richiesta)
- * - Mantiene supporto anche per elementi con .enlargeable
- */
+
+/*! ASD SPP — Modal v2 (auto per immagini/pdf + API basica) */
 (function () {
   const modal = document.getElementById('asd-modal');
   if (!modal) return;
@@ -18,6 +16,9 @@
       const img = document.createElement('img');
       img.src = href;
       img.alt = 'preview';
+      img.style.maxWidth = '100%';
+      img.style.maxHeight = '100%';
+      img.style.objectFit = 'contain';
       body.appendChild(img);
     } else {
       const iframe = document.createElement('iframe');
@@ -30,38 +31,26 @@
     modal.classList.add('is-open');
     document.documentElement.style.overflow = 'hidden';
   }
+
   function closeModal() {
     modal.classList.remove('is-open');
     document.documentElement.style.overflow = '';
     body.innerHTML = '';
   }
 
-  // 1) Click su .enlargeable (compatibilità)
-  document.addEventListener('click', function (e) {
-    const el = e.target.closest('.enlargeable');
-    if (!el) return;
-    let href = (el.tagName === 'A') ? el.getAttribute('href') :
-               (el.tagName === 'IMG') ? el.getAttribute('src') : null;
-    if (href && (isImage(href) || isPDF(href))) {
-      e.preventDefault();
-      openModalFromHref(href);
-    }
-  });
-
-  // 2) Auto-hook per tutti i link PDF/immagini (senza classe)
+  // Click su immagini/pdf senza richiedere classi
   document.addEventListener('click', function (e) {
     const a = e.target.closest('a');
     if (!a) return;
     const href = a.getAttribute('href') || '';
     if (isImage(href) || isPDF(href)) {
-      // escludi link con data-no-modal
-      if (a.hasAttribute('data-no-modal')) return;
+      if (a.hasAttribute('data-no-modal')) return; // opt-out
       e.preventDefault();
       openModalFromHref(href);
     }
   });
 
-  // Chiudi con click overlay / X / ESC
+  // Chiudi con overlay / X / ESC
   modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
   closeBtn.addEventListener('click', closeModal);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });

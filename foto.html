@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="../assets/favicon.png" type="image/png"/>
+  <!-- Stili progetto -->
+  <link rel="stylesheet" href="../styles/styles.css"/>
+  <!-- Patch UI v2 -->
+  <link rel="stylesheet" href="../css/asd-tabs-override-v2.css?v=2"/>
+  <title>Foto — ASD</title>
+</head>
+<body>
+  <div class="page">
+    <a class="back" href="../index.html">← Torna alla home</a>
+    <div class="brand">
+      <img class="brand-logo" src="../assets/logo.png" alt="Logo ASD Santi Pietro e Paolo" />
+      <div class="brand-title">
+        <h1>Foto</h1>
+        <div class="brand-sub">ASD Santi Pietro e Paolo</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p>Galleria fotografica</p>
+      <div id="galleria"></div>
+    </div>
+  </div>
+
+  <!-- Modale -->
+  <div id="asd-modal" class="asd-modal" aria-hidden="true">
+    <div class="asd-modal__inner">
+      <button type="button" class="asd-modal__close" aria-label="Chiudi">✕</button>
+      <div class="asd-modal__body"></div>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="../js/asd-modal-v2.js?v=2" defer></script>
+  <script src="../js/foto-auto-plus.js" defer></script>
+</body>
+</html>
