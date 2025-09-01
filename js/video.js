@@ -1,4 +1,4 @@
-/* Video — griglia + filtri + player in modale (v2 robusta) */
+/* Video — griglia + filtri + player in modale (v3) */
 (function(){
   document.addEventListener('DOMContentLoaded', async function(){
     console.log('[Video] script caricato');
@@ -43,19 +43,20 @@
       return null;
     }
 
-    // Thumb corretta:
-    // - se v.thumb è relativo, lo attacchiamo a BASE;
-    // - se è assoluto (http), lo usiamo così com'è;
-    // - se non c'è, e il video è locale: <categoria>/thumbs/<filename>.jpg
     function getThumb(v){
       if (v.thumb){
         if (/^https?:\/\//i.test(v.thumb)) return v.thumb;
+        // se la thumb è "thumbs/..." e il file ha una cartella, prefissala
+        if (/^thumbs\//i.test(v.thumb) && v.file && v.file.includes('/')){
+          const cat = v.file.split('/')[0];
+          return BASE + cat + '/' + v.thumb.replace(/^\/+/, '');
+        }
         return BASE + v.thumb.replace(/^\/+/, '');
       }
       if (isLocal(v) && v.file){
-        const parts = v.file.split('/');     // es. ["Video_gare","video_Gara.mp4"]
-        const fileName = parts.pop();        // "video_Gara.mp4"
-        const folder   = parts.join('/');    // "Video_gare"
+        const parts = v.file.split('/');
+        const fileName = parts.pop();
+        const folder   = parts.join('/');
         const jpgName  = fileName.replace(/\.\w+$/i, '.jpg');
         return BASE + (folder ? folder + '/' : '') + 'thumbs/' + jpgName;
       }
@@ -67,16 +68,9 @@
     }
 
     async function loadData(){
-      try{
-        const r = await fetch(MANIFEST, { cache:'no-store' });
-        if (!r.ok) throw new Error('HTTP '+r.status);
-        return await r.json();
-      }catch(e){
-        console.warn('[Video] Manifest esterno non disponibile, provo inline:', e);
-        const inline = document.getElementById('videos-manifest');
-        if (inline) { try { return JSON.parse(inline.textContent); } catch(_){ /* noop */ } }
-        throw e;
-      }
+      const r = await fetch(MANIFEST, { cache:'no-store' });
+      if (!r.ok) throw new Error('Manifest HTTP '+r.status+' @ '+MANIFEST);
+      return await r.json();
     }
 
     function applyFilters(){
@@ -213,7 +207,6 @@
       renderPager();
     }
 
-    // Boot
     try{
       const data = await loadData();
       state.all = (data.videos||[]).map(v => ({ ...v, year: getYear(v) }));
@@ -225,7 +218,7 @@
       renderList();
     }catch(err){
       console.error('[Video] Errore:', err);
-      root.innerHTML = '<div style="opacity:.85">Impossibile caricare i video. Controlla che esista <code>'+MANIFEST+'</code> o usa il manifest inline.</div>';
+      root.innerHTML = '<div style="opacity:.85">Impossibile caricare i video. Controlla che esista <code>'+MANIFEST+'</code>.</div>';
     }
   });
 })();

@@ -8,23 +8,18 @@
   <title>Video — ASD</title>
 
   <style>
-    /* Toolbar + griglia */
     .vid-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 12px 0}
     .vid-toolbar .spacer{flex:1 1 auto}
-    .vid-toolbar .btn, .vid-toolbar select, .vid-toolbar input[type="search"]{
-      padding:8px 12px;border-radius:10px;border:0;font-weight:600
-    }
+    .vid-toolbar .btn, .vid-toolbar select, .vid-toolbar input[type="search"]{padding:8px 12px;border-radius:10px;border:0;font-weight:600}
     .vid-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
     .vid-card{position:relative;background:rgba(0,0,0,.55);border-radius:12px;overflow:hidden;cursor:pointer}
     .vid-thumb{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#000}
     .vid-title{padding:10px 12px;color:#fff;font-weight:700}
     .vid-play{position:absolute;inset:auto auto 10px 10px;background:#ffd76e;color:#111;border-radius:999px;padding:6px 10px;font-weight:800}
-
     .pager{margin-top:12px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
     .btn{background:#f5d76e;color:#0b0b0b;cursor:pointer}
     .btn:disabled{opacity:.6;cursor:not-allowed}
 
-    /* Modale */
     .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.85);z-index:9999;padding:4vh 3vw}
     .modal.is-open{display:flex}
     .modal__inner{width:min(96vw,1200px);height:min(92vh,900px);background:#0f0f10;border-radius:14px;box-shadow:0 16px 40px rgba(0,0,0,.55);overflow:hidden;position:relative}
@@ -51,13 +46,10 @@
 
     <div class="card">
       <p>Archivio video</p>
-
-      <!-- Se questa pagina NON è in /pages/, aggiorna il path sotto -->
       <div id="videos" data-assets-base="../assets/video/"></div>
     </div>
   </div>
 
-  <!-- Modale player -->
   <div id="modal" class="modal" aria-hidden="true">
     <div class="modal__inner">
       <button type="button" class="modal__close" aria-label="Chiudi">✕</button>
@@ -66,19 +58,7 @@
     </div>
   </div>
 
-  <!-- JS della galleria video -->
-  <src="https://setbeable.github.io/asd.santipietroepaolo.aprilia/js/videos.js?v=2" defer></script>
-
-
-  <!-- Fallback inline FACOLTATIVO per test (se manca _videos.json). Rimuovi in produzione.
-  <script type="application/json" id="videos-manifest">
-  {
-    "version": 1,
-    "videos": [
-      { "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "title": "Intervista Mister", "category": "Interviste", "year": 2025, "date": "2025-09-01" }
-    ]
-  }
-  </script>
-  -->
+  <!-- usa l’assoluto per evitare 404 -->
+  <script src="https://setbeable.github.io/asd.santipietroepaolo.aprilia/js/videos.js?v=3" defer></script>
 </body>
 </html>

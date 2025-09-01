@@ -63,16 +63,16 @@ def scan(base_dir):
             title = nice_title(f)
 
             if ext in VIDEO_EXT:
-                # thumb di default: thumbs/<stesso-percorso-senza-ext>.jpg
+                # thumb default: <categoria>/thumbs/<file>.jpg
                 subpath = '/'.join(parts[1:]) or f
-                thumb = 'thumbs/' + os.path.splitext(subpath)[0] + '.jpg'
+                thumb_rel = (category + '/' if category else '') + 'thumbs/' + os.path.splitext(subpath)[0] + '.jpg'
                 items.append({
                     "file": rel,
                     "title": title,
                     "category": category,
                     "year": int(year_str) if year_str else None,
                     "date": date_str,
-                    "thumb": thumb
+                    "thumb": thumb_rel
                 })
             else:
                 url = read_first_url(os.path.join(root, f))
@@ -85,7 +85,7 @@ def scan(base_dir):
                     "year": int(year_str) if year_str else None,
                     "date": date_str
                 })
-    # ordinamento: data desc -> titolo
+    # ordina: data desc -> titolo
     def key(v):
         dt=v.get('date') or f"{v.get('year',0)}-01-01"
         return (dt, v.get('title') or '')
