@@ -2,6 +2,22 @@
   "version": 1,
   "videos": [
     {
+      "file": "under10/video_Gara.mp4",
+      "title": "Video Gara",
+      "category": "under10",
+      "year": null,
+      "date": null,
+      "thumb": "under10/thumbs/video_Gara.jpg"
+    },
+    {
+      "file": "interviste/video_Gara.mp4",
+      "title": "Video Gara",
+      "category": "interviste",
+      "year": null,
+      "date": null,
+      "thumb": "interviste/thumbs/video_Gara.jpg"
+    },
+    {
       "file": "Video_gare/video_Gara.mp4",
       "title": "Video Gara",
       "category": "Video_gare",
