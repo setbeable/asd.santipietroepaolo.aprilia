@@ -1,0 +1,43 @@
+name: Build videos manifest
+
+on:
+  push:
+    branches: [ main ]            # se il branch è "master", sostituisci
+    paths:
+      - 'assets/video/**'
+      - '!assets/video/_videos.json'
+      - 'scripts/build_videos.py'
+      - '.github/workflows/build-videos-manifest.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: videos-manifest
+  cancel-in-progress: true
+
+jobs:
+  build-manifest:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Generate _videos.json
+        run: |
+          python scripts/build_videos.py --root . --video assets/video
+          test -f assets/video/_videos.json && echo "Manifest creato."
+      - name: Commit manifest if changed
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add assets/video/_videos.json
+            git commit -m "chore(video): update _videos.json [skip ci]"
+            git push
+          else
+            echo "Nessuna modifica da committare."
+          fi
