@@ -38,6 +38,51 @@
       ]
     },
     {
+      "slug": "OpenDay",
+      "name": "Openday",
+      "images": [
+        {
+          "file": "OpenDay_U14_U16.jpg"
+        },
+        {
+          "file": "OpenDay_U14_U16_10.jpg"
+        },
+        {
+          "file": "OpenDay_U14_U16_11.jpg"
+        },
+        {
+          "file": "OpenDay_U14_U16_12.jpg"
+        },
+        {
+          "file": "OpenDay_U14_U16_13.jpg"
+        },
+        {
+          "file": "OpenDay_U14_U16_2.jpg"
+        },
+        {
+          "file": "OpenDay_U14_U16_3.jpg"
+        },
+        {
+          "file": "OpenDay_U14_U16_4.jpg"
+        },
+        {
+          "file": "OpenDay_U14_U16_5.jpg"
+        },
+        {
+          "file": "OpenDay_U14_U16_6.jpg"
+        },
+        {
+          "file": "OpenDay_U14_U16_7.jpg"
+        },
+        {
+          "file": "OpenDay_U14_U16_8.jpg"
+        },
+        {
+          "file": "OpenDay_U14_U16_9.jpg"
+        }
+      ]
+    },
+    {
       "slug": "Under10",
       "name": "Under10",
       "images": [
