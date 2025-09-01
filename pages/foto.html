@@ -3,10 +3,13 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
   <link rel="icon" href="../assets/favicon.png" type="image/png"/>
+  <!-- Stili originali -->
   <link rel="stylesheet" href="../styles/styles.css"/>
-  <!-- Se usi la patch grafica v2, lascia questa riga. Altrimenti puoi toglierla. -->
+  <!-- Patch UI v2 (ingrandisce card e migliora contrasto) -->
   <link rel="stylesheet" href="../css/asd-tabs-override-v2.css?v=2"/>
+
   <title>Foto — ASD</title>
 </head>
 <body>
@@ -21,14 +24,15 @@
       </div>
     </div>
 
+    <!-- La patch v2 rende .card ampia/leggibile -->
     <div class="card">
       <p>Galleria fotografica</p>
-      <!-- ⚠️ IMPOSTA QUI IL PERCORSO ALLA TUA CARTELLA FOTO -->
-      <div id="galleria" data-assets-base="../assets/foto/"></div>
+      <!-- Contenitore griglia -->
+      <div id="galleria" class="foto-grid"></div>
     </div>
   </div>
 
-  <!-- Modale full-screen -->
+  <!-- Modale (una per pagina) -->
   <div id="asd-modal" class="asd-modal" aria-hidden="true">
     <div class="asd-modal__inner">
       <button type="button" class="asd-modal__close" aria-label="Chiudi">✕</button>
@@ -36,27 +40,8 @@
     </div>
   </div>
 
-  <!-- Script modale (se già lo hai, lascia il tuo) -->
-  <script>
-  /*! Modal base per immagini/PDF */
-  (function () {
-    const modal = document.getElementById('asd-modal');
-    if (!modal) return;
-    const body  = modal.querySelector('.asd-modal__body');
-    const closeBtn = modal.querySelector('.asd-modal__close');
-    const isImage = (u) => /\.(png|jpe?g|gif|webp|svg)$/i.test(u);
-    const isPDF   = (u) => /\.pdf(\?.*)?$/i.test(u);
-    function open(href){ body.innerHTML=''; if(isImage(href)){ const img=new Image(); img.src=href; img.style="max-width:100%;max-height:100%;object-fit:contain"; body.appendChild(img);} else { const ifr=document.createElement('iframe'); ifr.src=href; ifr.width="100%"; ifr.height="100%"; ifr.frameBorder="0"; body.appendChild(ifr);} modal.classList.add('is-open'); document.documentElement.style.overflow='hidden';}
-    function close(){ modal.classList.remove('is-open'); document.documentElement.style.overflow=''; body.innerHTML=''; }
-    document.addEventListener('click', (e)=>{ const a=e.target.closest('a'); if(!a) return; const href=a.getAttribute('href')||''; if(isImage(href)||isPDF(href)){ if(a.hasAttribute('data-no-modal')) return; e.preventDefault(); open(href); }});
-    modal.addEventListener('click', (e)=>{ if(e.target===modal) close(); });
-    closeBtn.addEventListener('click', close);
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') close(); });
-  })();
-  </script>
-
-  <!-- Script galleria (VEDI BLOCCO SOTTO) -->
-  <script src="../js/foto-auto-plus-v3.js?v=3"></script>
+  <!-- Modale v2: apre automaticamente immagini/PDF -->
+  <script src="../js/asd-modal-v2.js?v=2" defer></script>
+  <script src="../js/foto.js" defer></script>
 </body>
 </html>
-
