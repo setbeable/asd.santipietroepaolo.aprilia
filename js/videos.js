@@ -234,3 +234,85 @@
     }
   });
 })();
+function openPlayer(v){
+  const modal     = document.getElementById('modal');
+  const inner     = modal.querySelector('.modal__inner');
+  const body      = modal.querySelector('.modal__body');
+  const btnClose  = modal.querySelector('.modal__close');
+  const btnBack   = modal.querySelector('.modal__back');
+
+  // niente duplicati
+  modal.querySelectorAll('.modal__fs').forEach(b=>b.remove());
+
+  const btnFS = document.createElement('button');
+  btnFS.className = 'modal__fs';
+  btnFS.type = 'button';
+  btnFS.title = 'Schermo intero';
+  btnFS.textContent = '⤢';
+  inner.appendChild(btnFS);
+
+  body.innerHTML = '';
+  const wrap = document.createElement('div');
+  wrap.className = 'player-wrap';
+
+  let videoEl = null;
+
+  if (isLocal(v)) {
+    const src = BASE + v.file;
+    videoEl = document.createElement('video');
+    videoEl.setAttribute('controls','');
+    videoEl.setAttribute('playsinline','');
+    videoEl.setAttribute('webkit-playsinline','');
+    videoEl.src = src;
+    wrap.appendChild(videoEl);
+  } else if (v.url) {
+    let iframeSrc = v.url;
+    const yid = ytId(v.url), vid = vimeoId(v.url);
+    if (yid) iframeSrc = `https://www.youtube.com/embed/${yid}?autoplay=1&rel=0`;
+    else if (vid) iframeSrc = `https://player.vimeo.com/video/${vid}?autoplay=1`;
+    const iframe = document.createElement('iframe');
+    iframe.src = iframeSrc;
+    iframe.allow =
+      'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    iframe.setAttribute('allowfullscreen','');
+    wrap.appendChild(iframe);
+  }
+
+  body.appendChild(wrap);
+
+  // fullscreen: preferisci il video (iOS), altrimenti il contenitore
+  btnFS.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    if (videoEl && (videoEl.webkitEnterFullscreen || videoEl.webkitEnterFullScreen)) {
+      (videoEl.webkitEnterFullscreen || videoEl.webkitEnterFullScreen).call(videoEl);
+      return;
+    }
+    const target = inner;
+    if (!document.fullscreenElement) {
+      target.requestFullscreen && target.requestFullscreen();
+    } else {
+      document.exitFullscreen && document.exitFullscreen();
+    }
+  });
+
+  modal.classList.add('is-open');
+  modal.removeAttribute('aria-hidden');
+  document.documentElement.style.overflow = 'hidden';
+
+  function onKey(e){ if(e.key === 'Escape'){ e.preventDefault(); close(); } }
+  function close(){
+    // stop video
+    try{ if (videoEl) videoEl.pause(); }catch(_){}
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden','true');
+    body.innerHTML = '';
+    document.documentElement.style.overflow = '';
+    document.removeEventListener('keydown', onKey, true);
+    modal.querySelectorAll('.modal__fs').forEach(b=>b.remove());
+  }
+
+  btnClose.addEventListener('click', (e)=>{ e.stopPropagation(); close(); }, {once:true});
+  btnBack .addEventListener('click', (e)=>{ e.stopPropagation(); close(); }, {once:true});
+  modal.addEventListener('click', (e)=>{ if(e.target === modal) close(); }, {once:true});
+  document.addEventListener('keydown', onKey, true);
+}

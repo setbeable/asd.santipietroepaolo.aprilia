@@ -42,3 +42,66 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   container.appendChild(frag);
 });
+function openViewer(eventSlug, file){
+  const modal     = document.getElementById('modal');
+  const inner     = modal.querySelector('.modal__inner');
+  const body      = modal.querySelector('.modal__body');
+  const btnClose  = modal.querySelector('.modal__close');
+  const btnBack   = modal.querySelector('.modal__back');
+
+  // pulizia eventuali pulsanti duplicati
+  modal.querySelectorAll('.modal__fs').forEach(b=>b.remove());
+
+  // bottone schermo intero
+  const btnFS = document.createElement('button');
+  btnFS.className = 'modal__fs';
+  btnFS.type = 'button';
+  btnFS.title = 'Schermo intero';
+  btnFS.textContent = '⤢';
+  inner.appendChild(btnFS);
+
+  function toggleFS(){
+    const target = inner;
+    if (!document.fullscreenElement) {
+      if (target.requestFullscreen) target.requestFullscreen();
+    } else {
+      if (document.exitFullscreen) document.exitFullscreen();
+    }
+  }
+  btnFS.addEventListener('click', (e)=>{ e.stopPropagation(); toggleFS(); });
+
+  // …(il resto della tua renderImage/gestione frecce)…
+
+  // mostra modale
+  body.innerHTML = '';
+  // wrapper immagine
+  const wrap = document.createElement('div');
+  wrap.className = 'player-wrap';
+  const img  = document.createElement('img');
+  img.src    = /* base + item.file */ BASE + eventSlug + '/' + file;
+  img.alt    = 'Foto';
+  img.style.maxWidth  = '100%';
+  img.style.maxHeight = '100%';
+  img.style.objectFit = 'contain';
+  wrap.appendChild(img);
+  body.appendChild(wrap);
+
+  modal.classList.add('is-open');
+  modal.removeAttribute('aria-hidden');
+  document.documentElement.style.overflow = 'hidden';
+
+  function onKey(e){ if(e.key === 'Escape'){ e.preventDefault(); close(); } }
+  function close(){
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden','true');
+    body.innerHTML = '';
+    document.documentElement.style.overflow = '';
+    document.removeEventListener('keydown', onKey, true);
+    modal.querySelectorAll('.modal__fs').forEach(b=>b.remove());
+  }
+
+  btnClose.addEventListener('click', (e)=>{ e.stopPropagation(); close(); }, {once:true});
+  btnBack .addEventListener('click', (e)=>{ e.stopPropagation(); close(); }, {once:true});
+  modal.addEventListener('click', (e)=>{ if(e.target === modal) close(); }, {once:true});
+  document.addEventListener('keydown', onKey, true);
+}
