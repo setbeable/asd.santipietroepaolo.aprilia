@@ -1,0 +1,11 @@
+/* ===== Stili pagina Foto ===== */
+.cal-toolbar{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:0 0 12px 0}
+.cal-toolbar .spacer{flex:1 1 auto}
+.cal-toolbar .btn, .cal-toolbar select, .cal-toolbar input[type="search"]{
+  padding:8px 12px; border-radius:10px; border:0; font-weight:600
+}
+.foto-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:14px}
+.foto-grid img{width:100%; height:160px; object-fit:cover; border-radius:10px; display:block}
+.navbtn{position:absolute; top:50%; transform:translateY(-50%); border:0; border-radius:10px; padding:8px 10px; cursor:pointer; background:#f5d76e; color:#0b0b0b}
+.navbtn.left{left:10px} .navbtn.right{right:10px}
+#gallery-pager{margin-top:14px; display:flex; gap:6px; flex-wrap:wrap; align-items:center}

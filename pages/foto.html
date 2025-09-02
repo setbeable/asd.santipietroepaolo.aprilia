@@ -4,29 +4,10 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <link rel="icon" href="../assets/favicon.png" type="image/png"/>
-  <link rel="stylesheet" href="../styles/styles.css"/>
+  <link rel="stylesheet" href="../styles/styles.css?v=5"/>
+  <link rel="stylesheet" href="../css/modal.css?v=1"/><!-- nuovo -->
+  <link rel="stylesheet" href="../css/foto.css?v=1"/><!-- nuovo -->
   <title>Foto — ASD</title>
-  <style>
-    /* Stili essenziali per griglia + modale */
-    .card{max-width:1150px;margin:24px auto;background:rgba(0,0,0,.68);color:#fff;border-radius:14px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
-    .foto-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
-    .foto-grid img{width:100%;height:160px;object-fit:cover;border-radius:10px;display:block}
-    .cal-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 12px 0}
-    .cal-toolbar .spacer{flex:1 1 auto}
-    .btn, .cal-toolbar select, .cal-toolbar input[type="search"]{padding:8px 12px;border-radius:10px;border:0;font-weight:600}
-    .btn{background:#f5d76e;color:#0b0b0b;cursor:pointer}
-    .btn:disabled{opacity:.6;cursor:not-allowed}
-
-    /* Modale */
-    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.85);z-index:9999;padding:4vh 3vw}
-    .modal.is-open{display:flex}
-    .modal__inner{width:min(96vw,1200px);height:min(92vh,900px);background:#0f0f10;border-radius:14px;box-shadow:0 16px 40px rgba(0,0,0,.55);overflow:hidden;position:relative}
-    .modal__body{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
-    .modal__close{position:absolute;top:10px;right:14px;color:#fff;font-size:28px;background:rgba(255,255,255,.1);border:0;border-radius:8px;cursor:pointer;padding:6px 10px}
-    .navbtn{position:absolute;top:50%;transform:translateY(-50%);border:0;border-radius:10px;padding:8px 10px;cursor:pointer;background:#f5d76e;color:#0b0b0b}
-    .navbtn.left{left:10px}.navbtn.right{right:10px}
-    #gallery-pager{margin-top:14px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-  </style>
 </head>
 <body>
   <div class="page">
@@ -42,212 +23,21 @@
 
     <div class="card">
       <p>Galleria fotografica</p>
-
-      <!-- ⚠️ Se questa pagina non è in /pages/ cambia il path qui sotto:
-           - se foto.html è in root → data-assets-base="assets/foto/"
-           - se è due livelli sotto → data-assets-base="../../assets/foto/" -->
+      <!-- se questa pagina non è in /pages/ aggiorna il path -->
       <div id="galleria" data-assets-base="../assets/foto/"></div>
-
-      <!-- scaffolding griglia + pager verranno iniettati dallo script -->
     </div>
   </div>
 
-  <!-- Modale -->
+  <!-- Modale condiviso -->
   <div id="modal" class="modal" aria-hidden="true">
     <div class="modal__inner">
       <button type="button" class="modal__close" aria-label="Chiudi">✕</button>
+      <button type="button" class="modal__back">← Torna alla galleria</button>
       <div class="modal__body"></div>
     </div>
   </div>
 
-  <!-- Script Galleria (inline, nessun file esterno richiesto) -->
-  <script>
-  (function(){
-    const container = document.getElementById('galleria');
-    if (!container) return;
-
-    // Base assets (cartella che contiene gli EVENTI)
-    const ASSETS_BASE = (container.getAttribute('data-assets-base') || 'assets/foto/').replace(/\/+$/, '') + '/';
-    const MANIFEST_URL = ASSETS_BASE + '_gallery.json';
-    const PAGE_SIZE = 24;
-
-    const state = { flat:[], filtered:[], page:1, pageSize:PAGE_SIZE, event:'all', year:'all', q:'' };
-
-    const el=(t,a={},c=[])=>{const n=document.createElement(t);for(const[k,v]of Object.entries(a)){if(k==='class')n.className=v;else if(k==='html')n.innerHTML=v;else n.setAttribute(k,v)};(Array.isArray(c)?c:[c]).forEach(x=>{if(x==null)return;n.appendChild(typeof x==='string'?document.createTextNode(x):x)});return n};
-    const extractYear = s => (String(s).match(/(20\\d{2}|19\\d{2})/)||[])[1] || null;
-
-    async function loadManifest() {
-      try {
-        const res = await fetch(MANIFEST_URL, { cache: 'no-store' });
-        if (!res.ok) throw new Error('HTTP '+res.status);
-        return await res.json();
-      } catch (e) {
-        // FALLBACK facoltativo: scommenta il blocco qui sotto e personalizza
-        /*
-        return {
-          "version": 1,
-          "events": [
-            {
-              "slug": "prova",
-              "name": "Prova 2025",
-              "images": [
-                { "file": "foto-01.jpg", "title": "Foto 01" },
-                { "file": "foto-02.jpg", "title": "Foto 02" }
-              ]
-            }
-          ]
-        };
-        */
-        throw new Error('Manifest non disponibile: controlla '+MANIFEST_URL);
-      }
-    }
-
-    function applyFilters() {
-      const { flat, event, year, q } = state;
-      let rows = flat.slice();
-      if (event !== 'all') rows = rows.filter(r=>r.eventSlug===event);
-      if (year  !== 'all') rows = rows.filter(r=>String(r.year)===String(year));
-      if (q && q.trim())  { const s=q.trim().toLowerCase(); rows = rows.filter(r => (r.title||'').toLowerCase().includes(s) || (r.eventName||'').toLowerCase().includes(s)); }
-      state.filtered = rows; state.page = 1;
-    }
-
-    function renderFilters(root) {
-      const uniq = arr => Array.from(new Set(arr));
-      const top = el('div',{class:'cal-toolbar'});
-      const selEvent = el('select',{id:'flt-event',class:'btn'}); selEvent.appendChild(el('option',{value:'all'},'Tutti gli eventi'));
-      const selYear  = el('select',{id:'flt-year', class:'btn'}); selYear.appendChild(el('option',{value:'all'},'Tutti gli anni'));
-      const search   = el('input',{id:'flt-q', type:'search', placeholder:'Cerca…', class:'btn', style:'min-width:200px'});
-      const spacer   = el('span',{class:'spacer'});
-      const perPage  = el('select',{id:'flt-pp', class:'btn'},[
-        el('option',{value:'12'},'12 / pagina'),
-        el('option',{value:'24',selected:'selected'},'24 / pagina'),
-        el('option',{value:'48'},'48 / pagina'),
-        el('option',{value:'96'},'96 / pagina')
-      ]);
-      top.append(selEvent, selYear, search, spacer, perPage);
-      root.appendChild(top);
-
-      const events = uniq(state.flat.map(r=>r.eventSlug));
-      events.forEach(slug => {
-        const name = (state.flat.find(r=>r.eventSlug===slug)?.eventName) || slug;
-        selEvent.appendChild(el('option',{value:slug},name));
-      });
-      const years = uniq(state.flat.map(r=>String(r.year))).sort();
-      years.forEach(y => selYear.appendChild(el('option',{value:y},y)));
-
-      selEvent.addEventListener('change', ()=>{ state.event = selEvent.value; applyFilters(); renderGrid(); });
-      selYear .addEventListener('change', ()=>{ state.year  = selYear.value;  applyFilters(); renderGrid(); });
-      search  .addEventListener('input',  ()=>{ state.q     = search.value;   applyFilters(); renderGrid(); });
-      perPage .addEventListener('change', ()=>{ state.pageSize = parseInt(perPage.value,10)||24; state.page = 1; renderGrid(); });
-    }
-
-    let gridRoot, pagerRoot;
-    function renderScaffold(root){
-      gridRoot  = el('div',{id:'gallery-grid'});
-      pagerRoot = el('div',{id:'gallery-pager'});
-      root.append(gridRoot, pagerRoot);
-    }
-
-    const pageSlice = ()=>{ const s=(state.page-1)*state.pageSize; return state.filtered.slice(s, s+state.pageSize); };
-
-    function renderPager(){
-      pagerRoot.innerHTML='';
-      const total = state.filtered.length; if (!total) return;
-      const pages = Math.ceil(total/state.pageSize);
-      const info = el('span',{},`Pagina ${state.page}/${pages} — ${total} foto`);
-      const prev = el('button',{class:'btn',type:'button'},'←');
-      const next = el('button',{class:'btn',type:'button'},'→');
-      prev.disabled = state.page<=1; next.disabled = state.page>=pages;
-      prev.addEventListener('click',()=>{ if(state.page>1){ state.page--; renderGrid(); }});
-      next.addEventListener('click',()=>{ if(state.page<pages){ state.page++; renderGrid(); }});
-      pagerRoot.append(prev, info, next);
-    }
-
-    function renderGrid(){
-      gridRoot.innerHTML='';
-      const rows = pageSlice();
-      if (!rows.length) { gridRoot.innerHTML='<div style="opacity:.8">Nessun risultato.</div>'; renderPager(); return; }
-      const grid = el('div',{class:'foto-grid'});
-      rows.forEach(r=>{
-        const base = ASSETS_BASE + r.eventSlug + '/';
-        const a = el('a',{href: base + r.file, title:r.title});
-        const img = el('img',{src: base + r.thumb, alt:r.title, loading:'lazy'});
-        img.onerror = () => { img.src = base + r.file; }; // se manca la thumb usa l'originale
-        a.appendChild(img);
-        a.addEventListener('click', (e)=>{ e.preventDefault(); openViewer(r.eventSlug, r.file); });
-        grid.appendChild(a);
-      });
-      gridRoot.appendChild(grid);
-      renderPager();
-    }
-
-    // Modale + navigazione
-    const modal = document.getElementById('modal');
-    const modalBody = modal.querySelector('.modal__body');
-    const modalClose= modal.querySelector('.modal__close');
-
-    function openViewer(eventSlug, file){
-      const list  = state.flat.filter(x=>x.eventSlug===eventSlug);
-      let index   = list.findIndex(x=>x.file===file); if(index<0) index=0;
-
-      function renderImage(){
-        const item = list[index];
-        const base = ASSETS_BASE + item.eventSlug + '/';
-        modalBody.innerHTML='';
-        const wrap = el('div',{style:'position:relative; width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#0f0f10;'});
-        const img  = el('img',{src: base + item.file, alt:item.title||'Foto', style:'max-width:100%; max-height:100%; object-fit:contain;'});
-        const left = el('button',{class:'navbtn left'},'←');
-        const right= el('button',{class:'navbtn right'},'→');
-		const back = el('button', { class: 'navbtn', style: 'position:absolute; left:10px; top:10px; transform:none;' }, '← Torna alla galleria');
-			back.addEventListener('click', closeModal);
-
-        left.addEventListener('click',()=>{ index=(index-1+list.length)%list.length; renderImage(); });
-        right.addEventListener('click',()=>{ index=(index+1)%list.length; renderImage(); });
-        wrap.append(img,left,right,back);
-        modalBody.appendChild(wrap);
-      }
-
-      renderImage();
-      modal.classList.add('is-open');
-      document.documentElement.style.overflow='hidden';
-
-      function onKey(e){ if(e.key==='Escape') closeModal(); if(e.key==='ArrowLeft'){e.preventDefault(); modal.querySelector('.navbtn.left')?.click();} if(e.key==='ArrowRight'){e.preventDefault(); modal.querySelector('.navbtn.right')?.click();} }
-      document.addEventListener('keydown', onKey, { once:false });
-      function closeModal(){ modal.classList.remove('is-open'); document.documentElement.style.overflow=''; modalBody.innerHTML=''; document.removeEventListener('keydown', onKey); }
-      modal.addEventListener('click', (e)=>{ if(e.target===modal) closeModal(); }, { once:true });
-      modalClose.addEventListener('click', closeModal, { once:true });
-    }
-
-    // Boot
-    (async function(){
-      try{
-        const data = await loadManifest();
-        // Flat
-        state.flat = [];
-        (data.events||[]).forEach(evt=>{
-          const year = evt.year || extractYear(evt.name) || extractYear(evt.slug) || 's.n.';
-          (evt.images||[]).forEach((img,idx)=>{
-            const file = img.file || img.src; if(!file) return;
-            state.flat.push({
-              id:`${evt.slug}__${idx}`, eventSlug:evt.slug, eventName:evt.name||evt.slug,
-              year:String(year), file, thumb:img.thumb||('thumbs/'+file), title:img.title||evt.name||'Foto'
-            });
-          });
-        });
-
-        container.innerHTML='';
-        renderFilters(container);
-        renderScaffold(container);
-        applyFilters();
-        renderGrid();
-      }catch(err){
-        console.error('[Galleria] Errore:', err);
-        container.innerHTML = '<div style="opacity:.85">Impossibile caricare la galleria.<br>Controlla che esista <code>'+MANIFEST_URL+'</code> (o scommenta il fallback inline nello script).</div>';
-      }
-    })();
-  })();
-  </script>
+  <!-- JS galleria foto -->
+  <script src="../js/foto-auto-plus-v2.js?v=3" defer></script>
 </body>
 </html>
-
-
