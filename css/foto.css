@@ -9,28 +9,51 @@
 .navbtn{position:absolute; top:50%; transform:translateY(-50%); border:0; border-radius:10px; padding:8px 10px; cursor:pointer; background:#f5d76e; color:#0b0b0b}
 .navbtn.left{left:10px} .navbtn.right{right:10px}
 #gallery-pager{margin-top:14px; display:flex; gap:6px; flex-wrap:wrap; align-items:center}
-/* ---- Fix leggibilità tendine (Foto) ---- */
+/* ==== Fix leggibilità tendine (Foto) ==== */
+
+/* Controllo selezione (chiuso) */
 .cal-toolbar select{
-  background: rgba(13,71,161,.92);   /* blu scuro del tema */
-  color:#fff;
-  border:1px solid rgba(255,255,255,.25);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.15);
-}
-
-/* Colori dell'elenco delle opzioni (dropdown) */
-.cal-toolbar select option{
-  background:#0a1435;  /* navy scuro */
-  color:#ffffff;       /* testo bianco pieno */
-}
-
-/* Stato selezionato/hover: più acceso */
-.cal-toolbar select option:checked,
-.cal-toolbar select option:hover{
-  background:#1b62cf;  /* blu acceso */
+  background-color:#0e1b3d;   /* blu scuro coerente col tema */
   color:#ffffff;
+  border:1px solid rgba(255,255,255,.28);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.15);
+  color-scheme: dark;          /* suggerisce palette scura al browser */
+  appearance: none;
+  -webkit-appearance: none;
+  opacity:1;                   /* evita eventuali trasparenze ereditate */
 }
 
-/* Placeholder della ricerca un filo più visibile */
+/* Elenco opzioni (popup) — forzato */
+.cal-toolbar select option,
+.cal-toolbar select optgroup{
+  background-color:#0a1435 !important;  /* sfondo scuro */
+  color:#ffffff !important;             /* testo bianco */
+  opacity:1 !important;
+}
+
+/* Stato evidenziato/selezionato */
+.cal-toolbar select option:hover,
+.cal-toolbar select option:checked{
+  background-color:#1b62cf !important;  /* blu acceso */
+  color:#ffffff !important;
+}
+
+/* Placeholder della ricerca più visibile */
 .cal-toolbar input[type="search"]::placeholder{
-  color: rgba(255,255,255,.75);
+  color: rgba(255,255,255,.78);
+}
+
+/* Accessibilità in modalità colori forzati (Windows) */
+@media (forced-colors: active){
+  .cal-toolbar select{
+    forced-color-adjust:none;
+    background-color:CanvasText;
+    color:Canvas;
+    border-color:Canvas;
+  }
+  .cal-toolbar select option{
+    forced-color-adjust:none;
+    background-color:CanvasText !important;
+    color:Canvas !important;
+  }
 }
