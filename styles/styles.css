@@ -171,4 +171,24 @@ h1{ font-weight:900; letter-spacing:1.2px; margin:4px 0 8px; text-shadow:0 4px 6
 @media (min-width:901px){
   .menu{ display:none; }
 }
+/* ==== MOBILE NAV FIX: forza la lista verticale e nasconde il radiale ==== */
+@media (max-width: 860px){
+  .radial-wrap{ display:none !important; }
+  .menu{
+    display:flex !important;
+    flex-direction:column;
+    gap:12px;
+    margin:16px 0 24px;
+  }
+  .menu .btn{
+    width:100%;
+    justify-content:center;
+  }
+}
+
+/* Desktop: mostra il radiale, nascondi la lista */
+@media (min-width: 861px){
+  .radial-wrap{ display:block !important; }
+  .menu{ display:none !important; }
+}
 
