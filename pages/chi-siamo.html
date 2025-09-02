@@ -1,11 +1,226 @@
-<!DOCTYPE html><html lang="it"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="icon" href="../assets/favicon.png" type="image/png"/><link rel="stylesheet" href="../styles/styles.css"/><title>Chi siamo — ASD</title></head><body>
-  <div class="page">
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="../assets/favicon.png" type="image/png"/>
+  <!-- bump versione se vuoi forzare cache-bust -->
+  <link rel="stylesheet" href="../styles/styles.css?v=11"/>
+  <title>Chi siamo — ASD</title>
+
+  <style>
+    /* ===== Layout wide come Documenti ===== */
+    .page.page-wide{ max-width:1200px; margin:0 auto; padding:24px 16px 64px; }
+    .section-title{ margin:0 0 8px; font-weight:900; font-size:20px; }
+
+    /* Hero / Missione */
+    .hero{
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px; padding:18px;
+      box-shadow:0 8px 20px rgba(0,0,0,.35);
+    }
+    .lead{ font-size:18px; line-height:1.65; opacity:.95; margin:6px 0 0; }
+    .tags{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .tag{ display:inline-block; padding:6px 10px; border-radius:999px; font-weight:800;
+          background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.15); font-size:13px; }
+
+    /* Contatti + box laterale */
+    .grid-2{
+      display:grid; gap:12px;
+      grid-template-columns: 1.2fr .8fr;
+    }
+    @media (max-width: 860px){ .grid-2{ grid-template-columns: 1fr; } }
+
+    .card-soft{
+      background: rgba(0,0,0,.55);
+      border-radius:14px; padding:16px;
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 6px 16px rgba(0,0,0,.28);
+    }
+    .list{ margin:8px 0 0; padding:0; list-style:none; }
+    .list li{ margin:8px 0; }
+    .muted{ opacity:.95; }
+    .btn-row{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .btn.hollow{ background:transparent; border:1px solid rgba(255,255,255,.35); }
+
+    /* Mappa grande */
+    .map-wrap{
+      background:rgba(0,0,0,.55); border-radius:14px;
+      padding:10px; border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 6px 16px rgba(0,0,0,.28);
+    }
+    .map{ width:100%; height:360px; border:0; border-radius:10px; }
+    @media (max-width:600px){ .map{ height:300px; } }
+
+    /* Valori */
+    .values{
+      display:grid; gap:12px; grid-template-columns:repeat(auto-fit, minmax(240px,1fr));
+    }
+    .value{ background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.12);
+            border-radius:12px; padding:12px; }
+    .value h3{ margin:0 0 6px; }
+    .value p{ margin:0; opacity:.95; }
+
+    /* Staff */
+    .staff-grid{
+      display:grid; gap:12px; grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+    }
+    .staff{
+      display:flex; gap:12px; align-items:flex-start;
+      background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.12);
+      border-radius:14px; padding:12px;
+    }
+    .staff img{ width:68px; height:68px; border-radius:50%; object-fit:cover; background:#fff;
+                box-shadow:0 6px 16px rgba(0,0,0,.28); }
+    .staff h3{ margin:0; font-weight:900; }
+    .role{ font-size:13px; color:#d6e5ff; font-weight:700; margin:2px 0 8px; }
+    details.staff-bio > summary{
+      cursor:pointer; list-style:none; user-select:none;
+      display:inline-flex; gap:6px; align-items:center;
+      padding:6px 10px; border-radius:10px; font-weight:800;
+      background:#f5d76e; color:#0b0b0b; border:0;
+    }
+    details.staff-bio[open] > summary{ background:#00ffcc; }
+    details.staff-bio > div{ margin-top:8px; opacity:.95; }
+  </style>
+</head>
+<body>
+  <div class="page page-wide">
     <a class="back" href="../index.html">← Torna alla home</a>
+
+    <!-- Brand/title coerente con Documenti -->
     <div class="brand">
       <img class="brand-logo" src="../assets/logo.png" alt="Logo ASD Santi Pietro e Paolo" />
       <div class="brand-title">
         <h1>Chi siamo</h1>
-        <div class="brand-sub">ASD Santi Pietro e Paolo</div>
+        <div class="brand-sub">La nostra missione, i nostri valori, lo staff</div>
       </div>
     </div>
-<div id="about" class="card"></div><div id="contatti" class="card"></div><div id="mappa" class="card"></div></div><script src="../js/chi-siamo.js"></script></body></html>
+
+    <!-- Hero / Missione (card ampia) -->
+    <div class="hero">
+      <div class="section-title">La nostra missione</div>
+      <p class="lead">
+        Promuovere sport, inclusione e crescita personale attraverso il <strong>calcio a 5</strong>,
+        in un ambiente sereno e formativo. Rispetto, impegno e spirito di squadra guidano ogni attività.
+      </p>
+      <div class="tags">
+        <span class="tag">⚽ Futsal per tutti</span>
+        <span class="tag">🤝 Inclusione</span>
+        <span class="tag">📚 Educazione</span>
+        <span class="tag">🎯 Impegno</span>
+      </div>
+    </div>
+
+    <!-- Contatti + azioni rapide -->
+    <div class="grid-2" style="margin-top:12px">
+      <div class="card-soft">
+        <div class="section-title">Contatti</div>
+        <ul class="list muted">
+          <li><strong>Email:</strong> <a href="mailto:info@esempio.it">info@esempio.it</a></li>
+          <li><strong>Telefono:</strong> <a href="tel:+390000000000">+39 000 0000000</a></li>
+          <li><strong>Indirizzo:</strong> Via Esempio 123, 00100 Roma (RM)</li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn hollow" href="mailto:info@esempio.it">✉️ Scrivici</a>
+          <a class="btn hollow" href="tel:+390000000000">📞 Chiama</a>
+          <a class="btn hollow" href="../pages/iscrizioni.html">📝 Iscrizioni</a>
+          <a class="btn hollow" href="../pages/sponsor.html">🤝 Diventa sponsor</a>
+        </div>
+      </div>
+
+      <div class="card-soft">
+        <div class="section-title">Dove siamo</div>
+        <div class="map-wrap">
+          <!-- Sostituisci la query con il tuo indirizzo reale -->
+          <iframe class="map"
+            src="https://www.google.com/maps?q=Via%20Esempio%20123%2000100%20Roma&output=embed"
+            loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Valori -->
+    <div class="card" style="margin-top:12px">
+      <p class="section-title">I nostri valori</p>
+      <div class="values">
+        <div class="value">
+          <h3>Fair play</h3>
+          <p>Rispetto di compagni, avversari e arbitri, dentro e fuori dal campo.</p>
+        </div>
+        <div class="value">
+          <h3>Comunità</h3>
+          <p>Collaborazione con famiglie, scuola e territorio: si cresce insieme.</p>
+        </div>
+        <div class="value">
+          <h3>Formazione</h3>
+          <p>Allenatori qualificati e percorsi educativi, per migliorare ogni giorno.</p>
+        </div>
+        <div class="value">
+          <h3>Inclusione</h3>
+          <p>Ognuno ha il suo ruolo: spazio a tutti, a partire dall’ascolto.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Staff -->
+    <div class="card" style="margin-top:12px">
+      <p class="section-title">Staff tecnico e dirigenti</p>
+      <div class="staff-grid">
+        <!-- Staff card: duplica e personalizza -->
+        <div class="staff">
+          <img src="../assets/staff/coach.jpg" alt="Allenatore"/>
+          <div>
+            <h3>Nome Cognome</h3>
+            <div class="role">Allenatore Prima Squadra</div>
+            <details class="staff-bio">
+              <summary>Bio / Competenze</summary>
+              <div>UEFA B. Esperienza in settore giovanile e prima squadra. Focus su tecnica e cultura del lavoro.</div>
+            </details>
+          </div>
+        </div>
+
+        <div class="staff">
+          <img src="../assets/staff/dirigente.jpg" alt="Direttore sportivo"/>
+          <div>
+            <h3>Nome Cognome</h3>
+            <div class="role">Direttore Sportivo</div>
+            <details class="staff-bio">
+              <summary>Bio / Competenze</summary>
+              <div>Coordinamento attività, rapporti con famiglie e federazione. Tesseramenti ed eventi.</div>
+            </details>
+          </div>
+        </div>
+
+        <div class="staff">
+          <img src="../assets/staff/prep.jpg" alt="Preparatore atletico"/>
+          <div>
+            <h3>Nome Cognome</h3>
+            <div class="role">Preparatore atletico</div>
+            <details class="staff-bio">
+              <summary>Bio / Competenze</summary>
+              <div>Programmi su misura per età e obiettivi. Prevenzione infortuni e potenziamento.</div>
+            </details>
+          </div>
+        </div>
+      </div>
+
+      <div class="muted" style="margin-top:8px">
+        Per aggiornare lo staff: carica le foto in <code>assets/staff/</code> e modifica i nomi/ruoli in questa pagina.
+      </div>
+    </div>
+
+    <!-- CTA finali -->
+    <div class="card" style="margin-top:12px">
+      <p class="section-title">Vuoi dare una mano?</p>
+      <div class="btn-row">
+        <a class="btn" href="../pages/iscrizioni.html">📝 Iscrizioni atleti</a>
+        <a class="btn" href="../pages/sponsor.html">🤝 Diventa sponsor</a>
+        <a class="btn" href="../pages/contatti.html">✉️ Contattaci</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
