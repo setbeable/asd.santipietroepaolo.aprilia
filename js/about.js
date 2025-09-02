@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   map.innerHTML = `
     <div class="section-title">Dove siamo</div>
     <div class="map-wrap">
-      <iframe class="map" src="https://www.google.com/maps?q=${q}&output=embed"
+      <iframe class="map" src="https://www.google.com/maps?q=Oratorio+Santi+Pietro+e+Paolo+Aprilia&output=embed"
         loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
     </div>
   `;
