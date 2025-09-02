@@ -10,6 +10,14 @@
       "thumb": "under10/thumbs/video_Gara.jpg"
     },
     {
+      "file": "sport_sano/video_Gara.mp4",
+      "title": "Video Gara",
+      "category": "sport_sano",
+      "year": null,
+      "date": null,
+      "thumb": "sport_sano/thumbs/video_Gara.jpg"
+    },
+    {
       "file": "interviste/video_Gara.mp4",
       "title": "Video Gara",
       "category": "interviste",
