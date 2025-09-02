@@ -1,52 +1,108 @@
-
 #!/usr/bin/env python3
-import argparse, json, os, sys
+# -*- coding: utf-8 -*-
 
-IMG_EXT = {'.jpg','.jpeg','.png','.webp','.gif','.JPG','.JPEG','.PNG','.WEBP','.GIF'}
+"""
+Genera assets/foto/_gallery.json scansionando le cartelle dentro assets/foto/
+- Ogni sotto-cartella = un evento (slug = nome cartella)
+- Raccoglie immagini (esclude la cartella 'thumbs')
+- Se esiste una miniatura in thumbs/, la indica come 'thumb', altrimenti lascia comunque 'thumbs/<file>'
+  (il JS ha già il fallback sull'originale)
+"""
 
-def is_img(name: str) -> bool:
-    _, ext = os.path.splitext(name)
-    return ext in IMG_EXT
+from pathlib import Path
+import json, re, datetime
 
-def build_manifest(foto_dir: str):
-    events = []
-    for entry in sorted(os.listdir(foto_dir)):
-        ev_path = os.path.join(foto_dir, entry)
-        if not os.path.isdir(ev_path) or entry.startswith('_'):
+ROOT = Path(__file__).resolve().parent.parent
+FOTO_DIR = ROOT / 'assets' / 'foto'
+OUT_PATH = FOTO_DIR / '_gallery.json'
+
+IMG_EXT = {'.jpg', '.jpeg', '.png', '.webp', '.gif', '.avif', '.heic'}
+
+def humanize(name: str) -> str:
+    s = name.replace('-', ' ').replace('_', ' ').strip()
+    return re.sub(r'\s+', ' ', s).title()
+
+def guess_year(*strings):
+    for s in strings:
+        m = re.search(r'(20\d{2}|19\d{2})', s or '')
+        if m:
+            return int(m.group(1))
+    return None
+
+def collect_event(folder: Path):
+    slug = folder.name
+    name = humanize(slug)
+    year = guess_year(slug)
+
+    thumbs_dir = folder / 'thumbs'
+    thumbs_set = {p.name.lower() for p in thumbs_dir.glob('*')} if thumbs_dir.is_dir() else set()
+
+    images = []
+    for p in sorted(folder.iterdir()):
+        if p.is_dir() or p.name == 'thumbs':
             continue
-        images = []
-        for name in sorted(os.listdir(ev_path)):
-            full = os.path.join(ev_path, name)
-            if os.path.isdir(full):  # skip dirs (thumbs handled implicitly)
-                continue
-            if is_img(name):
-                images.append({ "file": name })
-        if images:
-            events.append({
-                "slug": entry,
-                "name": entry.replace('-', ' ').title(),
-                "images": images
-            })
-    return {"version": 1, "events": events}
+        if p.suffix.lower() not in IMG_EXT:
+            continue
+        file_rel = f'{slug}/{p.name}'
+        # se esiste la miniatura con lo stesso nome in thumbs/, usala:
+        thumb_name = p.name
+        thumb_rel = f'{slug}/thumbs/{thumb_name}'
+
+        # titolo: prova a derivarlo dal nome file
+        title = humanize(p.stem)
+        img_year = guess_year(p.stem) or year
+
+        images.append({
+            'file': p.name,
+            'thumb': f'thumbs/{p.name}',  # il JS sa fare fallback se non esiste
+            'title': title,
+            'year': img_year
+        })
+
+    if not images:
+        return None
+
+    # se non c'è anno nei file né nella cartella, lascia None; il frontend gestisce
+    evt = {
+        'slug': slug,
+        'name': name,
+        'year': year,
+        'images': images
+    }
+    return evt
 
 def main():
-    ap = argparse.ArgumentParser(description="Genera assets/foto/_gallery.json")
-    ap.add_argument('--root', default=os.getcwd())
-    ap.add_argument('--foto', default='assets/foto')
-    args = ap.parse_args()
+    if not FOTO_DIR.is_dir():
+        raise SystemExit(f'Cartella non trovata: {FOTO_DIR}')
 
-    root = os.path.abspath(args.root)
-    foto_dir = os.path.join(root, args.foto)
-    if not os.path.isdir(foto_dir):
-        print(f"Cartella non trovata: {foto_dir}", file=sys.stderr)
-        return 2
+    events = []
+    for item in sorted(FOTO_DIR.iterdir()):
+        if not item.is_dir():
+            continue
+        if item.name.startswith(('_', '.')) or item.name.lower() == 'thumbs':
+            continue
+        evt = collect_event(item)
+        if evt:
+            events.append(evt)
 
-    manifest = build_manifest(foto_dir)
-    out_path = os.path.join(foto_dir, "_gallery.json")
-    with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(manifest, f, ensure_ascii=False, indent=2)
-    print(f"Manifest scritto: {out_path} ({len(manifest['events'])} eventi)")
-    return 0
+    # ordina per anno (desc), poi per nome
+    def sort_key(e):
+        y = e.get('year') or 0
+        return (-int(y), e.get('name', '').lower()) if isinstance(y, int) else (0, e.get('name', '').lower())
 
-if __name__ == "__main__":
-    raise SystemExit(main())
+    events.sort(key=sort_key)
+
+    data = {
+        'version': 1,
+        'generated_at': datetime.datetime.utcnow().isoformat() + 'Z',
+        'events': events
+    }
+
+    OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with OUT_PATH.open('w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+    print(f'OK: scritto {OUT_PATH} con {sum(len(e["images"]) for e in events)} foto in {len(events)} eventi.')
+
+if __name__ == '__main__':
+    main()

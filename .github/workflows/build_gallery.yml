@@ -1,0 +1,40 @@
+name: Build photo gallery manifest
+
+on:
+  push:
+    paths:
+      - 'assets/foto/**'
+      - 'scripts/build_gallery.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Build _gallery.json
+        run: python scripts/build_gallery.py
+
+      - name: Commit & push if changed
+        run: |
+          if ! git diff --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add assets/foto/_gallery.json
+            git commit -m "chore: update photo gallery manifest [skip ci]"
+            git push
+          else
+            echo "No changes to commit."
+          fi
