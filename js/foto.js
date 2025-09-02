@@ -49,46 +49,42 @@ function openViewer(eventSlug, file){
   const btnClose  = modal.querySelector('.modal__close');
   const btnBack   = modal.querySelector('.modal__back');
 
-  // pulizia eventuali pulsanti duplicati
-  modal.querySelectorAll('.modal__fs').forEach(b=>b.remove());
+  // rimuovi eventuali pulsanti duplicati
+  modal.querySelectorAll('.modal__fs').forEach(b => b.remove());
 
-  // bottone schermo intero
+  // bottone schermo intero (facoltativo)
   const btnFS = document.createElement('button');
   btnFS.className = 'modal__fs';
   btnFS.type = 'button';
   btnFS.title = 'Schermo intero';
   btnFS.textContent = '⤢';
   inner.appendChild(btnFS);
+  btnFS.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (!document.fullscreenElement) inner.requestFullscreen?.();
+    else document.exitFullscreen?.();
+  });
 
-  function toggleFS(){
-    const target = inner;
-    if (!document.fullscreenElement) {
-      if (target.requestFullscreen) target.requestFullscreen();
-    } else {
-      if (document.exitFullscreen) document.exitFullscreen();
-    }
-  }
-  btnFS.addEventListener('click', (e)=>{ e.stopPropagation(); toggleFS(); });
-
-  // …(il resto della tua renderImage/gestione frecce)…
-
-  // mostra modale
+  // prepara contenuto
   body.innerHTML = '';
-  // wrapper immagine
   const wrap = document.createElement('div');
   wrap.className = 'player-wrap';
-  const img  = document.createElement('img');
-  img.src    = /* base + item.file */ BASE + eventSlug + '/' + file;
-  img.alt    = 'Foto';
-  img.style.maxWidth  = '100%';
-  img.style.maxHeight = '100%';
-  img.style.objectFit = 'contain';
+
+  // BASE è già definita nello script della galleria (cartella assets/foto/)
+  const img = document.createElement('img');
+  img.src   = BASE + eventSlug + '/' + file;
+  img.alt   = 'Foto';
   wrap.appendChild(img);
   body.appendChild(wrap);
 
+  // mostra modale
   modal.classList.add('is-open');
   modal.removeAttribute('aria-hidden');
   document.documentElement.style.overflow = 'hidden';
+
+  // **NEW**: assicurati che parta dall’alto (alcuni browser memorizzano lo scroll)
+  body.scrollTop = 0;
+  img.addEventListener('load', () => { body.scrollTop = 0; }, { once:true });
 
   function onKey(e){ if(e.key === 'Escape'){ e.preventDefault(); close(); } }
   function close(){
@@ -97,11 +93,11 @@ function openViewer(eventSlug, file){
     body.innerHTML = '';
     document.documentElement.style.overflow = '';
     document.removeEventListener('keydown', onKey, true);
-    modal.querySelectorAll('.modal__fs').forEach(b=>b.remove());
+    modal.querySelectorAll('.modal__fs').forEach(b => b.remove());
   }
 
-  btnClose.addEventListener('click', (e)=>{ e.stopPropagation(); close(); }, {once:true});
-  btnBack .addEventListener('click', (e)=>{ e.stopPropagation(); close(); }, {once:true});
-  modal.addEventListener('click', (e)=>{ if(e.target === modal) close(); }, {once:true});
+  btnClose.addEventListener('click', (e)=>{ e.stopPropagation(); close(); }, { once:true });
+  btnBack .addEventListener('click', (e)=>{ e.stopPropagation(); close(); }, { once:true });
+  modal   .addEventListener('click', (e)=>{ if(e.target === modal) close(); }, { once:true });
   document.addEventListener('keydown', onKey, true);
 }
