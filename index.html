@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ASD Santi Pietro e Paolo</title>
   <link rel="icon" href="assets/favicon.png" type="image/png" />
-  <link rel="stylesheet" href="styles/styles.css" />
+  <!-- cache-busting: alza il numero quando modifichi lo stile -->
+  <link rel="stylesheet" href="styles/styles.css?v=10" />
 </head>
 <body>
   <main class="container">
@@ -15,17 +16,23 @@
     <p class="tagline">Passione, fair play e futsal per tutti ⚽</p>
     <p class="slogan">⚽ Passione, sport e amicizia – Calcio a 5 per tutti</p>
 
-       <div class="radial-zoom" id="radial-zoom">
-	<div class="radial-wrap" id="radial"><div class="center-circle"><img src="assets/logo.png" alt="Logo ASD Santi Pietro e Paolo"></div><div class="radial-nav" id="radial-nav"></div></div></div>
-<div class="radial-tools">
-  <button class="reset-layout" id="reset-layout" title="Ripristina disposizione">↺ Ripristina disposizione</button>
-  <button class="reset-layout" id="lock-layout" title="Blocca/Sblocca trascinamento">🔓 Blocca layout</button>
-</div>
+    <!-- RADIALE -->
+    <div class="radial-zoom" id="radial-zoom">
+      <div class="radial-wrap" id="radial">
+        <div class="center-circle">
+          <img src="assets/logo.png" alt="Logo ASD Santi Pietro e Paolo">
+        </div>
+        <div class="radial-nav" id="radial-nav"></div>
+      </div>
+    </div>
+    <div class="radial-tools">
+      <button class="reset-layout" id="reset-layout" title="Ripristina disposizione">↺ Ripristina disposizione</button>
+      <button class="reset-layout" id="lock-layout" title="Blocca/Sblocca trascinamento">🔓 Blocca layout</button>
+    </div>
+    <!-- RADIAL-END -->
 
-<!-- RADIAL-END -->
-
-
-    <nav class="menu">
+    <!-- Lista tab (fallback mobile) -->
+    <nav class="menu" aria-label="Navigazione rapida">
       <a class="btn" href="pages/hub.html">📚 Hub</a>
       <a class="btn" href="pages/orari.html">🏆 Orari</a>
       <a class="btn" href="pages/documenti.html">📂 Documenti</a>
@@ -42,6 +49,25 @@
       <a class="btn" href="pages/interviste.html">🎙️ Interviste</a>
     </nav>
 
+    <!-- CTA GoFundMe — sopra le dirette -->
+    <a class="btn cta donate" id="cta-gofundme"
+       href="https://www.gofundme.com/f/un-sogno-per-i-ragazzi-nuovo-campetto-alloratorio?utm_medium=customer&utm_source=whatsapp&utm_campaign=natman_sharesheet_dash&utm_content=&ts=1756825173905&attribution_id=sl%3Aad52fd68-d9d9-4779-9b19-da4642e00525"
+       target="_blank" rel="noopener noreferrer"
+       aria-label="GoFundMe — Sogna con noi: Regaliamo un sogno ai ragazzi">
+      💚 GoFundMe — Sogna con noi
+      <span class="cta-sub">Regaliamo un sogno ai ragazzi</span>
+      <span class="dot" aria-hidden="true"></span>
+    </a>
+
+    <!-- Widget GoFundMe (ufficiale) -->
+    <div class="card gfm-card">
+      <div class="gfm-embed"
+           data-url="https://www.gofundme.com/f/un-sogno-per-i-ragazzi-nuovo-campetto-alloratorio/widget/large">
+      </div>
+    </div>
+    <script async src="https://www.gofundme.com/static/js/embed.js"></script>
+
+    <!-- CTA esistenti -->
     <a class="btn cta" href="#" target="_blank" rel="noopener">
       📺 DIRETTE INSTAGRAM <span class="dot" aria-hidden="true"></span>
     </a>
