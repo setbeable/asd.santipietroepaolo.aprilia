@@ -11,3 +11,51 @@
 .vid-play{position:absolute; inset:auto auto 10px 10px; background:#ffd76e; color:#111; border-radius:999px; padding:6px 10px; font-weight:800}
 .pager{margin-top:12px; display:flex; gap:6px; align-items:center; flex-wrap:wrap}
 .btn:disabled{opacity:.6; cursor:not-allowed}
+/* ==== Fix leggibilità tendine (Video) ==== */
+
+/* Controllo selezione (chiuso) */
+.vid-toolbar select{
+  background-color:#0e1b3d;    /* blu scuro coerente col tema */
+  color:#ffffff;
+  border:1px solid rgba(255,255,255,.28);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.15);
+  color-scheme: dark;
+  appearance: none;
+  -webkit-appearance: none;
+  opacity:1;
+}
+
+/* Elenco opzioni (popup) — forzato */
+.vid-toolbar select option,
+.vid-toolbar select optgroup{
+  background-color:#0a1435 !important;  /* sfondo scuro */
+  color:#ffffff !important;             /* testo bianco */
+  opacity:1 !important;
+}
+
+/* Stato evidenziato/selezionato */
+.vid-toolbar select option:hover,
+.vid-toolbar select option:checked{
+  background-color:#1b62cf !important;  /* blu acceso */
+  color:#ffffff !important;
+}
+
+/* Placeholder della ricerca più visibile */
+.vid-toolbar input[type="search"]::placeholder{
+  color: rgba(255,255,255,.78);
+}
+
+/* Accessibilità in modalità colori forzati (Windows) */
+@media (forced-colors: active){
+  .vid-toolbar select{
+    forced-color-adjust:none;
+    background-color:CanvasText;
+    color:Canvas;
+    border-color:Canvas;
+  }
+  .vid-toolbar select option{
+    forced-color-adjust:none;
+    background-color:CanvasText !important;
+    color:Canvas !important;
+  }
+}
