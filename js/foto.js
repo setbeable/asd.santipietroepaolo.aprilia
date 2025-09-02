@@ -43,61 +43,77 @@ document.addEventListener('DOMContentLoaded', function () {
   container.appendChild(frag);
 });
 function openViewer(eventSlug, file){
-  const modal     = document.getElementById('modal');
-  const inner     = modal.querySelector('.modal__inner');
-  const body      = modal.querySelector('.modal__body');
-  const btnClose  = modal.querySelector('.modal__close');
-  const btnBack   = modal.querySelector('.modal__back');
+  const modal    = document.getElementById('modal');
+  const inner    = modal.querySelector('.modal__inner');
+  const body     = modal.querySelector('.modal__body');
+  const btnClose = modal.querySelector('.modal__close');
+  const btnBack  = modal.querySelector('.modal__back');
 
-  // rimuovi eventuali pulsanti duplicati
-  modal.querySelectorAll('.modal__fs').forEach(b => b.remove());
+  // elenco foto dell'evento
+  const list = state.flat.filter(x => x.eventSlug === eventSlug);
+  let index  = list.findIndex(x => x.file === file);
+  if (index < 0) index = 0;
 
-  // bottone schermo intero (facoltativo)
-  const btnFS = document.createElement('button');
-  btnFS.className = 'modal__fs';
-  btnFS.type = 'button';
-  btnFS.title = 'Schermo intero';
-  btnFS.textContent = '⤢';
-  inner.appendChild(btnFS);
-  btnFS.addEventListener('click', (e) => {
-    e.stopPropagation();
-    if (!document.fullscreenElement) inner.requestFullscreen?.();
-    else document.exitFullscreen?.();
-  });
+  function renderImage(){
+    const item = list[index];
+    const base = ASSETS_BASE + item.eventSlug + '/';
 
-  // prepara contenuto
-  body.innerHTML = '';
-  const wrap = document.createElement('div');
-  wrap.className = 'player-wrap';
+    // pulisci e costruisci il viewer
+    body.innerHTML = '';
 
-  // BASE è già definita nello script della galleria (cartella assets/foto/)
-  const img = document.createElement('img');
-  img.src   = BASE + eventSlug + '/' + file;
-  img.alt   = 'Foto';
-  wrap.appendChild(img);
-  body.appendChild(wrap);
+    const wrap = document.createElement('div');
+    wrap.className = 'player-wrap';
 
-  // mostra modale
+    const img  = document.createElement('img');
+    img.src    = base + item.file;
+    img.alt    = item.title || 'Foto';
+
+    wrap.appendChild(img);
+    body.appendChild(wrap);
+
+    // frecce
+    const left  = document.createElement('button');
+    left.className = 'navbtn left';  left.textContent  = '←';
+    const right = document.createElement('button');
+    right.className = 'navbtn right'; right.textContent = '→';
+
+    left.addEventListener('click',  ()=>{ index = (index - 1 + list.length) % list.length; renderImage(); });
+    right.addEventListener('click', ()=>{ index = (index + 1) % list.length; renderImage(); });
+
+    body.appendChild(left);
+    body.appendChild(right);
+
+    // reset di ogni scroll (fix “vuoto” in alto su mobile)
+    modal.scrollTop = 0;
+    inner.scrollTop = 0;
+    body.scrollTop  = 0;
+    // alcuni browser applicano lo scroll dopo il reflow: forza un reset async
+    requestAnimationFrame(()=>{ body.scrollTop = 0; });
+  }
+
+  renderImage();
+
+  // apri la modale
   modal.classList.add('is-open');
   modal.removeAttribute('aria-hidden');
   document.documentElement.style.overflow = 'hidden';
 
-  // **NEW**: assicurati che parta dall’alto (alcuni browser memorizzano lo scroll)
-  body.scrollTop = 0;
-  img.addEventListener('load', () => { body.scrollTop = 0; }, { once:true });
-
-  function onKey(e){ if(e.key === 'Escape'){ e.preventDefault(); close(); } }
+  // chiusure & tastiera
+  function onKey(e){
+    if (e.key === 'Escape'){ e.preventDefault(); close(); }
+    if (e.key === 'ArrowLeft'){  e.preventDefault(); body.querySelector('.navbtn.left')?.click(); }
+    if (e.key === 'ArrowRight'){ e.preventDefault(); body.querySelector('.navbtn.right')?.click(); }
+  }
   function close(){
     modal.classList.remove('is-open');
     modal.setAttribute('aria-hidden','true');
     body.innerHTML = '';
     document.documentElement.style.overflow = '';
     document.removeEventListener('keydown', onKey, true);
-    modal.querySelectorAll('.modal__fs').forEach(b => b.remove());
   }
 
   btnClose.addEventListener('click', (e)=>{ e.stopPropagation(); close(); }, { once:true });
   btnBack .addEventListener('click', (e)=>{ e.stopPropagation(); close(); }, { once:true });
-  modal   .addEventListener('click', (e)=>{ if(e.target === modal) close(); }, { once:true });
+  modal   .addEventListener('click', (e)=>{ if (e.target === modal) close(); }, { once:true });
   document.addEventListener('keydown', onKey, true);
 }
