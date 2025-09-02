@@ -1,120 +1,229 @@
 {
   "version": 1,
+  "generated_at": "2025-09-02T18:25:02.258183Z",
   "events": [
     {
       "slug": "Allenamenti",
       "name": "Allenamenti",
+      "year": null,
       "images": [
         {
-          "file": "bigstock-213473884.jpg"
+          "file": "bigstock-213473884.jpg",
+          "thumb": "thumbs/bigstock-213473884.jpg",
+          "title": "Bigstock 213473884",
+          "year": null
         }
       ]
     },
     {
       "slug": "Campionato",
       "name": "Campionato",
+      "year": null,
       "images": [
         {
-          "file": "OIP (1).jpg"
+          "file": "OIP (1).jpg",
+          "thumb": "thumbs/OIP (1).jpg",
+          "title": "Oip (1)",
+          "year": null
         }
       ]
     },
     {
       "slug": "Eventi",
       "name": "Eventi",
+      "year": null,
       "images": [
         {
-          "file": "papa.francesco.sansiro.750x450.jpg"
+          "file": "papa.francesco.sansiro.750x450.jpg",
+          "thumb": "thumbs/papa.francesco.sansiro.750x450.jpg",
+          "title": "Papa.Francesco.Sansiro.750X450",
+          "year": null
         }
       ]
     },
     {
       "slug": "Open",
       "name": "Open",
+      "year": null,
       "images": [
         {
-          "file": "figc-bulli.jpg"
+          "file": "figc-bulli.jpg",
+          "thumb": "thumbs/figc-bulli.jpg",
+          "title": "Figc Bulli",
+          "year": null
         }
       ]
     },
     {
       "slug": "OpenDay",
       "name": "Openday",
+      "year": null,
       "images": [
         {
-          "file": "OpenDay_U14_U16.jpg"
+          "file": "Immagine WhatsApp 2025-09-02 ore 18.34.28_41804849.jpg",
+          "thumb": "thumbs/Immagine WhatsApp 2025-09-02 ore 18.34.28_41804849.jpg",
+          "title": "Immagine Whatsapp 2025 09 02 Ore 18.34.28 41804849",
+          "year": 2025
         },
         {
-          "file": "OpenDay_U14_U16_10.jpg"
+          "file": "Immagine WhatsApp 2025-09-02 ore 18.34.28_53e75e52.jpg",
+          "thumb": "thumbs/Immagine WhatsApp 2025-09-02 ore 18.34.28_53e75e52.jpg",
+          "title": "Immagine Whatsapp 2025 09 02 Ore 18.34.28 53E75E52",
+          "year": 2025
         },
         {
-          "file": "OpenDay_U14_U16_11.jpg"
+          "file": "Immagine WhatsApp 2025-09-02 ore 18.34.28_70547d14.jpg",
+          "thumb": "thumbs/Immagine WhatsApp 2025-09-02 ore 18.34.28_70547d14.jpg",
+          "title": "Immagine Whatsapp 2025 09 02 Ore 18.34.28 70547D14",
+          "year": 2025
         },
         {
-          "file": "OpenDay_U14_U16_12.jpg"
+          "file": "Immagine WhatsApp 2025-09-02 ore 18.34.28_97227213.jpg",
+          "thumb": "thumbs/Immagine WhatsApp 2025-09-02 ore 18.34.28_97227213.jpg",
+          "title": "Immagine Whatsapp 2025 09 02 Ore 18.34.28 97227213",
+          "year": 2025
         },
         {
-          "file": "OpenDay_U14_U16_13.jpg"
+          "file": "Immagine WhatsApp 2025-09-02 ore 18.34.28_bd0a1f59.jpg",
+          "thumb": "thumbs/Immagine WhatsApp 2025-09-02 ore 18.34.28_bd0a1f59.jpg",
+          "title": "Immagine Whatsapp 2025 09 02 Ore 18.34.28 Bd0A1F59",
+          "year": 2025
         },
         {
-          "file": "OpenDay_U14_U16_2.jpg"
+          "file": "Immagine WhatsApp 2025-09-02 ore 18.34.28_bee8bf7b.jpg",
+          "thumb": "thumbs/Immagine WhatsApp 2025-09-02 ore 18.34.28_bee8bf7b.jpg",
+          "title": "Immagine Whatsapp 2025 09 02 Ore 18.34.28 Bee8Bf7B",
+          "year": 2025
         },
         {
-          "file": "OpenDay_U14_U16_3.jpg"
+          "file": "OpenDay_U14_U16.jpg",
+          "thumb": "thumbs/OpenDay_U14_U16.jpg",
+          "title": "Openday U14 U16",
+          "year": null
         },
         {
-          "file": "OpenDay_U14_U16_4.jpg"
+          "file": "OpenDay_U14_U16_10.jpg",
+          "thumb": "thumbs/OpenDay_U14_U16_10.jpg",
+          "title": "Openday U14 U16 10",
+          "year": null
         },
         {
-          "file": "OpenDay_U14_U16_5.jpg"
+          "file": "OpenDay_U14_U16_11.jpg",
+          "thumb": "thumbs/OpenDay_U14_U16_11.jpg",
+          "title": "Openday U14 U16 11",
+          "year": null
         },
         {
-          "file": "OpenDay_U14_U16_6.jpg"
+          "file": "OpenDay_U14_U16_12.jpg",
+          "thumb": "thumbs/OpenDay_U14_U16_12.jpg",
+          "title": "Openday U14 U16 12",
+          "year": null
         },
         {
-          "file": "OpenDay_U14_U16_7.jpg"
+          "file": "OpenDay_U14_U16_13.jpg",
+          "thumb": "thumbs/OpenDay_U14_U16_13.jpg",
+          "title": "Openday U14 U16 13",
+          "year": null
         },
         {
-          "file": "OpenDay_U14_U16_8.jpg"
+          "file": "OpenDay_U14_U16_2.jpg",
+          "thumb": "thumbs/OpenDay_U14_U16_2.jpg",
+          "title": "Openday U14 U16 2",
+          "year": null
         },
         {
-          "file": "OpenDay_U14_U16_9.jpg"
+          "file": "OpenDay_U14_U16_3.jpg",
+          "thumb": "thumbs/OpenDay_U14_U16_3.jpg",
+          "title": "Openday U14 U16 3",
+          "year": null
+        },
+        {
+          "file": "OpenDay_U14_U16_4.jpg",
+          "thumb": "thumbs/OpenDay_U14_U16_4.jpg",
+          "title": "Openday U14 U16 4",
+          "year": null
+        },
+        {
+          "file": "OpenDay_U14_U16_5.jpg",
+          "thumb": "thumbs/OpenDay_U14_U16_5.jpg",
+          "title": "Openday U14 U16 5",
+          "year": null
+        },
+        {
+          "file": "OpenDay_U14_U16_6.jpg",
+          "thumb": "thumbs/OpenDay_U14_U16_6.jpg",
+          "title": "Openday U14 U16 6",
+          "year": null
+        },
+        {
+          "file": "OpenDay_U14_U16_7.jpg",
+          "thumb": "thumbs/OpenDay_U14_U16_7.jpg",
+          "title": "Openday U14 U16 7",
+          "year": null
+        },
+        {
+          "file": "OpenDay_U14_U16_8.jpg",
+          "thumb": "thumbs/OpenDay_U14_U16_8.jpg",
+          "title": "Openday U14 U16 8",
+          "year": null
+        },
+        {
+          "file": "OpenDay_U14_U16_9.jpg",
+          "thumb": "thumbs/OpenDay_U14_U16_9.jpg",
+          "title": "Openday U14 U16 9",
+          "year": null
         }
       ]
     },
     {
       "slug": "Under10",
       "name": "Under10",
+      "year": null,
       "images": [
         {
-          "file": "figc-bulli.jpg"
+          "file": "figc-bulli.jpg",
+          "thumb": "thumbs/figc-bulli.jpg",
+          "title": "Figc Bulli",
+          "year": null
         }
       ]
     },
     {
       "slug": "Under12",
       "name": "Under12",
+      "year": null,
       "images": [
         {
-          "file": "figc-bulli.jpg"
+          "file": "figc-bulli.jpg",
+          "thumb": "thumbs/figc-bulli.jpg",
+          "title": "Figc Bulli",
+          "year": null
         }
       ]
     },
     {
       "slug": "Under14",
       "name": "Under14",
+      "year": null,
       "images": [
         {
-          "file": "figc-bulli.jpg"
+          "file": "figc-bulli.jpg",
+          "thumb": "thumbs/figc-bulli.jpg",
+          "title": "Figc Bulli",
+          "year": null
         }
       ]
     },
     {
       "slug": "Under16",
       "name": "Under16",
+      "year": null,
       "images": [
         {
-          "file": "figc-bulli.jpg"
+          "file": "figc-bulli.jpg",
+          "thumb": "thumbs/figc-bulli.jpg",
+          "title": "Figc Bulli",
+          "year": null
         }
       ]
     }
