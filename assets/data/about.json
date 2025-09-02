@@ -1,0 +1,36 @@
+{
+  "mission": "Promuovere sport, inclusione e crescita personale attraverso il calcio a 5, in un ambiente sereno e formativo. Rispetto, impegno e spirito di squadra guidano ogni attività.",
+  "tags": ["⚽ Futsal per tutti", "🤝 Inclusione", "📚 Educazione", "🎯 Impegno"],
+  "contacts": {
+    "email": "info@esempio.it",
+    "phone": "+39 000 0000000",
+    "address": "Via Esempio 123, 00100 Roma (RM)",
+    "mapQuery": "Via Esempio 123, 00100 Roma"
+  },
+  "values": [
+    {"title": "Fair play",   "text": "Rispetto di compagni, avversari e arbitri, dentro e fuori dal campo."},
+    {"title": "Comunità",    "text": "Collaborazione con famiglie, scuola e territorio: si cresce insieme."},
+    {"title": "Formazione",  "text": "Allenatori qualificati e percorsi educativi, per migliorare ogni giorno."},
+    {"title": "Inclusione",  "text": "Ognuno ha il suo ruolo: spazio a tutti, a partire dall’ascolto."}
+  ],
+  "staff": [
+    {
+      "name": "Nome Cognome",
+      "role": "Allenatore Prima Squadra",
+      "img": "assets/staff/coach.jpg",
+      "bio": "UEFA B. Esperienza in settore giovanile e prima squadra. Focus su tecnica e cultura del lavoro."
+    },
+    {
+      "name": "Nome Cognome",
+      "role": "Direttore Sportivo",
+      "img": "assets/staff/dirigente.jpg",
+      "bio": "Coordinamento attività, rapporti con famiglie e federazione. Tesseramenti ed eventi."
+    },
+    {
+      "name": "Nome Cognome",
+      "role": "Preparatore atletico",
+      "img": "assets/staff/prep.jpg",
+      "bio": "Programmi su misura per età e obiettivi. Prevenzione infortuni e potenziamento."
+    }
+  ]
+}
