@@ -310,3 +310,26 @@ details.staff-bio > summary{
 }
 details.staff-bio[open] > summary{ background:#00ffcc; }
 details.staff-bio > div{ margin-top:8px; opacity:.95; }
+/* --- Contatti: link ad alto contrasto (email/telefono) --- */
+a[href^="mailto:"],
+a[href^="tel:"]{
+  color: #ffda7b;                 /* giallo caldo usato nel tema */
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: rgba(255,218,123,.8);
+}
+a[href^="mailto:"]:hover,
+a[href^="tel:"]:hover,
+a[href^="mailto:"]:focus-visible,
+a[href^="tel:"]:focus-visible{
+  color:#ffffff;
+  text-decoration-color:#ffffff;
+  outline: none;
+}
+
+/* (opzionale) etichette "Email:", "Telefono:" un po' più chiare */
+#about .card strong,
+#about .card b{
+  color:#e9eefc;
+}
