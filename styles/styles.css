@@ -756,3 +756,54 @@ body.orari .sch-row .right .line{
   display:flex; gap:8px; align-items:baseline; 
 }
 body.orari .sch-row .right .ico{ opacity:.9 }
+/* ===== ORARI — team inline accanto all'orario ===== */
+body.orari .sch-row{
+  display: grid;
+  grid-template-columns: minmax(380px, 560px) 1fr; /* più spazio a sinistra per far entrare team in riga */
+  gap: 16px;
+  align-items: center;
+}
+
+body.orari .sch-row .left{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 360px;
+}
+
+body.orari .sch-row .time-badge{
+  display: inline-block;
+  padding: 8px 12px;
+  background: #ffd76e;
+  color: #111;
+  border-radius: 10px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+body.orari .sch-row .team-inline{
+  font-weight: 800;
+  line-height: 1.15;
+  white-space: nowrap;             /* tieni su una riga */
+  overflow: hidden;                /* evita overflow brutti */
+  text-overflow: ellipsis;         /* se troppo lungo, “…” */
+  max-width: 100%;
+}
+
+body.orari .sch-row .right .line{
+  display:flex; gap:8px; align-items:baseline;
+}
+body.orari .sch-row .right .ico{ opacity:.9; }
+
+/* Mobile: su schermi stretti torna a colonna singola */
+@media (max-width: 680px){
+  body.orari .sch-row{
+    grid-template-columns: 1fr;
+  }
+  body.orari .sch-row .left{
+    min-width: 0;
+  }
+  body.orari .sch-row .team-inline{
+    white-space: normal;           /* consenti a capo su mobile, se serve */
+  }
+}
