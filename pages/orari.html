@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Orari — ASD</title>
-  <link rel="icon" href="../assets/favicon.png" type="image/png"/>
-  <link rel="stylesheet" href="../styles/styles.css"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Orari allenamenti — ASD</title>
+  <link rel="icon" href="../assets/favicon.png" type="image/png" />
+  <link rel="stylesheet" href="../styles/styles.css" />
 </head>
+
 <body class="orari">
-  <div class="page" id="orari">
+  <div class="page">
     <a class="back" href="../index.html">← Torna alla home</a>
 
     <div class="brand">
@@ -19,13 +20,19 @@
       </div>
     </div>
 
+    <!-- Toolbar filtri / azioni -->
     <div class="card">
       <div class="sched-toolbar">
-        <select id="filter-team" aria-label="Squadra">
+        <!-- Squadra -->
+        <label for="filter-team" class="sr-only">Squadra</label>
+        <select id="filter-team">
           <option value="all">Tutte le squadre</option>
+          <!-- le altre opzioni vengono inserite da JS -->
         </select>
 
-        <select id="filter-day" aria-label="Giorno">
+        <!-- Giorno -->
+        <label for="filter-day" class="sr-only">Giorno</label>
+        <select id="filter-day">
           <option value="all">Tutti i giorni</option>
           <option value="lun">Lunedì</option>
           <option value="mar">Martedì</option>
@@ -36,26 +43,28 @@
           <option value="dom">Domenica</option>
         </select>
 
+        <!-- Ricerca libera -->
         <input id="filter-q" type="search" placeholder="Cerca… (sede, coach, note)" />
 
         <span class="spacer"></span>
 
-        <button id="btn-csv" class="btn" type="button" title="Esporta elenco filtrato in CSV">⬇️ Esporta CSV</button>
-        <button id="btn-print" class="btn" type="button" title="Stampa/Salva PDF">🖨️ Stampa</button>
+        <!-- Azioni -->
+        <button id="btn-csv" type="button" class="btn">⬇️ Esporta CSV</button>
+        <button id="btn-print" type="button" class="btn">🖨️ Stampa</button>
       </div>
-
-      <div id="sched" class="sched-grid" aria-live="polite"></div>
-
-      <div id="sched-pager" class="pager"></div>
     </div>
 
-    <div class="card" style="opacity:.9">
-      <p style="margin:0">
-        ⚠️ Gli orari possono variare in base agli eventi. Controlla sempre il gruppo squadra/coach.
-      </p>
+    <!-- Calendario -->
+    <div id="sched" class="sched-grid"></div>
+
+    <!-- Nota -->
+    <div class="card" style="text-align:left; opacity:.95; margin-top:12px;">
+      <span style="filter:grayscale(.2);">⚠️</span>
+      Gli orari possono variare in base agli eventi. Controlla sempre il gruppo squadra/coach.
     </div>
   </div>
 
-  <script src="../js/orari.js?v=1" defer></script>
+  <!-- Script -->
+  <script src="../js/orari.js?v=2" defer></script>
 </body>
 </html>
