@@ -393,3 +393,32 @@ body.orari .sch-row .team-inline{
 body.orari .sch-row .meta{ margin-top:2px; }     /* metadati il più possibile “su” */
 body.orari .sch-row .meta .line{ line-height:1.35; }
 body.orari .sch-row .meta .ico{ opacity:.9; }
+/* ===== ORARI — riquadro giallo per l'orario ===== */
+body.orari .time-badge,
+body.orari .sched-item__time{
+  display:inline-block;
+  padding:10px 14px;
+  background: linear-gradient(180deg, #FFE589, #FFD24E);
+  color:#111;
+  border-radius:12px;
+  border:1px solid rgba(0,0,0,.15);
+  font-weight:900;
+  letter-spacing:.2px;
+  white-space:nowrap;
+  box-shadow:
+    0 8px 18px rgba(0,0,0,.28),
+    inset 0 1px 0 rgba(255,255,255,.5);
+}
+
+/* un filo di spazio tra orario e nome squadra */
+body.orari .head-inline{ gap:12px; }
+
+/* versione compatta per schermi piccoli */
+@media (max-width:680px){
+  body.orari .time-badge,
+  body.orari .sched-item__time{
+    padding:8px 12px;
+    border-radius:10px;
+    font-size:14px;
+  }
+}
