@@ -1,4 +1,4 @@
-/* Orari (allenamenti) — renderer con filtri e CSV export (v4.1: team inline col tempo) */
+/* Orari (allenamenti) — renderer con filtri e CSV export (v4) */
 (function(){
   document.addEventListener('DOMContentLoaded', init);
 
@@ -54,7 +54,7 @@
     teams.forEach(t => selTeam.appendChild(new Option(t, t)));
     selTeam.addEventListener('change', ()=>{ state.team = selTeam.value; applyFilters(); render(); });
 
-    // giorni
+    // giorni (già presenti in HTML, qui solo change)
     const selDay = document.getElementById('filter-day');
     selDay.addEventListener('change', ()=>{ state.day = selDay.value; applyFilters(); render(); });
 
@@ -78,6 +78,7 @@
       );
     }
 
+    // ordina: giorno, poi orario
     rows.sort((a,b)=>{
       const d = DAYS_ORDER.indexOf(a.day) - DAYS_ORDER.indexOf(b.day);
       if(d !== 0) return d;
@@ -103,28 +104,29 @@
       byDay.get(row.day).push(row);
     }
 
+    // crea sezioni per giorno
     for(const dayKey of DAYS_ORDER){
       if(!byDay.has(dayKey)) continue;
       const dayBox = el('div', {class:'sched-day'});
       dayBox.appendChild(el('h3', {class:'sched-day__title'}, DAYS_LABEL[dayKey]));
+
       for(const r of byDay.get(dayKey)){
         dayBox.appendChild(renderRow(r));
       }
+
       grid.appendChild(dayBox);
     }
   }
 
-  // Layout a 2 colonne: sinistra (ora + team in linea), destra (dettagli)
+  // layout a due colonne: sinistra (orario + team), destra (dettagli)
   function renderRow(r){
     const row = el('div', {class: 'sched-item sch-row'});
 
-    // sinistra: tempo + team sulla stessa riga
-    const left = el('div', {class:'left left-inline'}, [
-      el('span', {class:'time-badge'}, `${fmt(r.start)}–${fmt(r.end)}`),
-      el('span', {class:'team-inline', title: r.team}, r.team)
+    const left = el('div', {class:'left'}, [
+      el('div', {class:'time-badge'}, `${fmt(r.start)}–${fmt(r.end)}`),
+      el('div', {class:'team'}, r.team)
     ]);
 
-    // destra: sede, coach, note
     const right = el('div', {class:'right'}, [
       line('📍', r.location || '—'),
       line('👤', r.coach || '—'),
