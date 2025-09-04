@@ -197,34 +197,33 @@
       setTimeout(()=>{ try{ btnX.focus(); }catch(_){} }, 0);
     }
 
-    function renderList(){
-      gridEl.innerHTML='';
-      const rows = pageSlice();
-      if(!rows.length){ gridEl.innerHTML='<div style="opacity:.8">Nessun video trovato.</div>'; renderPager(); return; }
+	   function renderList(){
+	  gridEl.innerHTML='';
+	  const rows = pageSlice();
+	  if(!rows.length){ gridEl.innerHTML='<div style="opacity:.8">Nessun video trovato.</div>'; renderPager(); return; }
 
-      rows.forEach(v=>{
-        const card = el('div',{class:'vid-card',tabindex:'0'});
-        const t = getThumb(v);
-        const thumb = el('img',{class:'vid-thumb',src:t||'',alt:v.title||'Video',loading:'lazy'});
-        if(!t && isLocal(v)) thumb.onerror = ()=>{ thumb.style.background='#000'; thumb.removeAttribute('src'); };
+	  rows.forEach(v=>{
+		const card  = el('div',{class:'vid-card',tabindex:'0'});
+		const t     = getThumb(v);
+		const thumb = el('img',{class:'vid-thumb',src:t||'',alt:v.title||'Video',loading:'lazy'});
+		if(!t && isLocal(v)) thumb.onerror = ()=>{ thumb.style.background='#000'; thumb.removeAttribute('src'); };
 
-        const title = el('div',{class:'vid-title'}, v.title || (v.file||v.url||'').split('/').pop());
-		const play  = el('button',{class:'vid-play',type:'button'},'▶');
+		const title  = el('div',{class:'vid-title'}, v.title || (v.file||v.url||'').split('/').pop());
+		const play   = el('button',{class:'vid-play',type:'button'},'▶');
 		const footer = el('div',{class:'vid-footer'}, [title, play]);
 
+		const open = ()=> openPlayer(v);
+		card.addEventListener('click', open);
+		card.addEventListener('keydown',(e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); }});
+
+		// ✅ solo questi due, niente secondo append
 		card.append(thumb, footer);
+		gridEl.appendChild(card);
+	  });
 
+	  renderPager();
+	}
 
-        const open = ()=> openPlayer(v);
-        card.addEventListener('click', open);
-        card.addEventListener('keydown',(e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); }});
-
-        card.append(thumb,title,play);
-        gridEl.appendChild(card);
-      });
-
-      renderPager();
-    }
 
     // ---------- boot ----------
     try{

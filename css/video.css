@@ -79,6 +79,7 @@
 .vid-footer .vid-title {
   flex: 1;
   margin: 0;
+  padding:0; 
   text-align: left;
 }
 
