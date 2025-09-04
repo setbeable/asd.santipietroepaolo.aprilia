@@ -17,8 +17,11 @@ html,body{
     url("../assets/bg-futsal.jpg") center/cover fixed no-repeat;
   animation:hueShift 12s linear infinite alternate;
 }
+<<<<<<< HEAD
 
 <<<<<<< HEAD
+=======
+>>>>>>> parent of b922dfa (d)
 @keyframes hueShift{ from{filter:hue-rotate(0)} to{filter:hue-rotate(12deg)} }
 
 .container{ width:min(860px,92%); text-align:center; padding:48px 16px 64px;}
@@ -356,8 +359,11 @@ html,body{
     url("../assets/bg-futsal.jpg") center/cover fixed no-repeat;
   animation:hueShift 12s linear infinite alternate;
 }
+<<<<<<< HEAD
 =======
 >>>>>>> parent of 4de6b4d (a)
+=======
+>>>>>>> parent of b922dfa (d)
 @keyframes hueShift{ from{filter:hue-rotate(0)} to{filter:hue-rotate(12deg)} }
 
 .container{ width:min(860px,92%); text-align:center; padding:48px 16px 64px;}
@@ -668,6 +674,7 @@ a[href^="tel:"]:focus-visible{
   text-decoration-color:#ffffff;
   outline: none;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 }
 
@@ -676,6 +683,8 @@ a[href^="tel:"]:focus-visible{
 #about .card b{
   color:#e9eefc;
 >>>>>>> parent of 4de6b4d (a)
+=======
+>>>>>>> parent of b922dfa (d)
 }
 
 /* (opzionale) etichette "Email:", "Telefono:" un po' più chiare */
