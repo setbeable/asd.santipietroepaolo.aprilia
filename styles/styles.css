@@ -374,3 +374,47 @@ a[href^="tel:"]:focus-visible{
   .sched-item{ flex-direction:row; align-items:center; justify-content:space-between; }
   .sched-item__head{ gap:14px; }
 }
+/* ===== ORARI — larghezza maggiore della pagina ===== */
+body.orari .page{
+  max-width: 1200px;              /* prima era ~980px */
+}
+@media (min-width: 1500px){
+  body.orari .page{ max-width: 1320px; }
+}
+
+/* ===== ORARI — riga con colonna sinistra (ora+team) e destra (dettagli) ===== */
+body.orari .sch-row{
+  display: grid;
+  grid-template-columns: 260px 1fr;   /* sinistra + destra */
+  gap: 16px;
+  align-items: center;
+}
+
+body.orari .sch-row .left{
+  display: flex;
+  flex-direction: column;             /* <— team sotto l’orario */
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 240px;                   /* per evitare wrap strani */
+}
+
+body.orari .sch-row .time-badge{
+  display: inline-block;
+  padding: 8px 12px;
+  background: #ffd76e;
+  color: #111;
+  border-radius: 10px;
+  font-weight: 900;
+}
+
+body.orari .sch-row .team{
+  font-weight: 800;
+  line-height: 1.15;
+  opacity: .95;
+}
+
+/* (facoltativo) righe testuali a destra */
+body.orari .sch-row .right .line{
+  display:flex; gap:8px; align-items:baseline; 
+}
+body.orari .sch-row .right .ico{ opacity:.9 }
