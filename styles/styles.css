@@ -366,3 +366,30 @@ a[href^="mailto:"]:focus-visible, a[href^="tel:"]:focus-visible{
 @media (min-width:900px){
   .sched-grid{ gap:18px; }
 }
+/* ===== ORARI — ritocchi spacing/leggibilità v4.2.1 ===== */
+body.orari .sched-grid{ gap:16px; }              /* distanza tra i blocchi-giorno */
+body.orari .sch-row{ gap:4px; }                  /* riga compatta */
+
+body.orari .sch-row .head-inline{ gap:12px; }    /* spazio tra orario e squadra */
+
+body.orari .sch-row .time-badge{
+  padding:10px 14px;                             /* badge orario più pieno */
+  border-radius:12px;
+  font-weight:900;
+  font-size:15px;
+  white-space:nowrap;
+}
+@media (max-width:680px){
+  body.orari .sch-row .time-badge{ padding:8px 12px; font-size:14px; }
+}
+
+body.orari .sch-row .team-inline{
+  font-weight:800;
+  font-size:16px;
+  line-height:1.15;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+
+body.orari .sch-row .meta{ margin-top:2px; }     /* metadati il più possibile “su” */
+body.orari .sch-row .meta .line{ line-height:1.35; }
+body.orari .sch-row .meta .ico{ opacity:.9; }
