@@ -26,20 +26,15 @@
       const r = await fetch(manifest, {cache:'no-store'});
       if(!r.ok) throw new Error(r.status+' '+r.statusText);
       const data = await r.json();
-      state.all = (data.trainings || []).map(n => ([
-        // supporta anche liste tipo "lun, gio"
-        ...(String(n.day||'').toLowerCase().split(',').map(s=>s.trim()).filter(Boolean).length
-            ? String(n.day).toLowerCase().split(',').map(s=>s.trim())
-            : [String(n.day||'').toLowerCase()])
-      ].map(d => ({
+      state.all = (data.trainings || []).map(n => ({
         team: n.team || '',
-        day: d || '',
+        day: (n.day || '').toLowerCase(),
         start: n.start || '',
         end: n.end || '',
         location: n.location || '',
         coach: n.coach || '',
         notes: n.notes || ''
-      })))).flat();
+      }));
     }catch(e){
       root.innerHTML = `<div style="opacity:.85">Impossibile caricare gli orari.<br><code>${manifest}</code></div>`;
       console.error('[Orari] errore:', e);
@@ -51,29 +46,22 @@
     render();
 
     // azioni
-    const btnPrint = document.getElementById('btn-print');
-    if (btnPrint) btnPrint.addEventListener('click', ()=> window.print());
-    const btnCsv = document.getElementById('btn-csv');
-    if (btnCsv) btnCsv.addEventListener('click', downloadCSV);
+    document.getElementById('btn-print').addEventListener('click', ()=> window.print());
+    document.getElementById('btn-csv').addEventListener('click', downloadCSV);
   }
 
   function buildFilters(){
     const teams = Array.from(new Set(state.all.map(x => x.team).filter(Boolean))).sort((a,b)=>a.localeCompare(b,'it'));
     const selTeam = document.getElementById('filter-team');
-    if (selTeam){
-      teams.forEach(t => selTeam.appendChild(new Option(t, t)));
-      selTeam.addEventListener('change', ()=>{ state.team = selTeam.value; applyFilters(); render(); });
-    }
+    teams.forEach(t => selTeam.appendChild(new Option(t, t)));
+
+    selTeam.addEventListener('change', ()=>{ state.team = selTeam.value; applyFilters(); render(); });
 
     const selDay = document.getElementById('filter-day');
-    if (selDay){
-      selDay.addEventListener('change', ()=>{ state.day = selDay.value; applyFilters(); render(); });
-    }
+    selDay.addEventListener('change', ()=>{ state.day = selDay.value; applyFilters(); render(); });
 
     const q = document.getElementById('filter-q');
-    if (q){
-      q.addEventListener('input', ()=>{ state.q = q.value; applyFilters(); render(); });
-    }
+    q.addEventListener('input', ()=>{ state.q = q.value; applyFilters(); render(); });
   }
 
   function applyFilters(){
@@ -85,9 +73,9 @@
     if(state.q && state.q.trim()){
       const s = state.q.trim().toLowerCase();
       rows = rows.filter(x =>
-        (x.location||'').toLowerCase().includes(s) ||
-        (x.coach||'').toLowerCase().includes(s)   ||
-        (x.notes||'').toLowerCase().includes(s)
+        x.location.toLowerCase().includes(s) ||
+        x.coach.toLowerCase().includes(s) ||
+        x.notes.toLowerCase().includes(s)
       );
     }
 
@@ -132,32 +120,23 @@
     }
   }
 
-  // --- NUOVO layout riga: sinistra (ora + team sotto), destra (meta + note)
   function renderCard(r){
     const card = el('div',{class:'sched-item'});
-
-    const row  = el('div', {class:'sch-row'});
-
-    // sinistra — orario e squadra sotto
-    const left = el('div', {class:'left'}, [
-      el('div',{class:'sched-item__time time-badge'}, `${fmt(r.start)}–${fmt(r.end)}`),
-      el('div',{class:'sched-item__team team'}, r.team || '')
+    const head = el('div',{class:'sched-item__head'},[
+      el('div',{class:'sched-item__time'}, `${fmt(r.start)}–${fmt(r.end)}`),
+      el('div',{class:'sched-item__team'}, r.team),
     ]);
-
-    // destra — sede/coach e note
-    const right = el('div', {class:'right'});
     const meta = el('div',{class:'sched-item__meta'},[
-      icon('📍'), el('span',{class:'loc'}, r.location || '—'), ' ',
+      icon('📍'), el('span',{class:'loc'}, r.location || '—'),
+      ' ',
       icon('👤'), el('span',{class:'coach'}, r.coach || '—')
     ]);
-    right.appendChild(meta);
+
+    card.append(head, meta);
 
     if(r.notes){
-      right.appendChild(el('div',{class:'sched-item__notes'}, r.notes));
+      card.appendChild(el('div',{class:'sched-item__notes'}, r.notes));
     }
-
-    row.append(left, right);
-    card.append(row);
     return card;
   }
 
@@ -172,10 +151,10 @@
       ...state.filtered.map(r => [
         DAYS_LABEL[r.day] || r.day,
         `${r.start}-${r.end}`,
-        r.team || '',
-        r.location || '',
-        r.coach || '',
-        (r.notes || '').replace(/\r?\n/g,' ')
+        r.team,
+        r.location,
+        r.coach,
+        r.notes.replace(/\r?\n/g,' ')
       ])
     ];
     const csv = rows.map(r => r.map(s => `"${String(s).replace(/"/g,'""')}"`).join(';')).join('\r\n');
