@@ -422,3 +422,15 @@ body.orari .head-inline{ gap:12px; }
     font-size:14px;
   }
 }
+/* Spazio tra orario (pill giallo) e nome squadra */
+body.orari .time-badge,
+body.orari .sched-item__time{
+  margin-right: 12px;   /* spazio orizzontale */
+}
+
+@media (max-width: 480px){
+  body.orari .time-badge,
+  body.orari .sched-item__time{
+    margin-right: 10px; /* un filo meno su schermi piccoli */
+  }
+}
