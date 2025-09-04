@@ -59,3 +59,31 @@
     color:Canvas !important;
   }
 }
+/* Layout titolo + pulsante play affiancati */
+.vid-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.vid-thumb {
+  flex: 0 0 auto;
+}
+
+.vid-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+}
+
+.vid-footer .vid-title {
+  flex: 1;
+  margin: 0;
+  text-align: left;
+}
+
+.vid-footer .vid-play {
+  flex-shrink: 0;
+  margin-left: 10px;
+  position: static;   /* toglie il posizionamento assoluto */
+}

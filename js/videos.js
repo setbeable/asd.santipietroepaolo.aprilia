@@ -209,7 +209,11 @@
         if(!t && isLocal(v)) thumb.onerror = ()=>{ thumb.style.background='#000'; thumb.removeAttribute('src'); };
 
         const title = el('div',{class:'vid-title'}, v.title || (v.file||v.url||'').split('/').pop());
-        const play  = el('button',{class:'vid-play',type:'button'},'▶');
+		const play  = el('button',{class:'vid-play',type:'button'},'▶');
+		const footer = el('div',{class:'vid-footer'}, [title, play]);
+
+		card.append(thumb, footer);
+
 
         const open = ()=> openPlayer(v);
         card.addEventListener('click', open);
