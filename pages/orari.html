@@ -1,25 +1,61 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" href="../assets/favicon.png" type="image/png" />
-  <link rel="stylesheet" href="../styles/styles.css" />
-  <title>Orari — ASD Santi Pietro e Paolo</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Orari — ASD</title>
+  <link rel="icon" href="../assets/favicon.png" type="image/png"/>
+  <link rel="stylesheet" href="../styles/styles.css"/>
 </head>
 <body>
-  <div class="page">
+  <div class="page" id="orari">
     <a class="back" href="../index.html">← Torna alla home</a>
-    <h1 style="text-align:center">Orari corsi e disponibilità palestra</h1>
-    <div class="card">
-      <p>Questo prospetto è aggiornato automaticamente da Google Sheets. Per sostituirlo, pubblica il foglio (File → Pubblica sul Web) e incolla qui l'URL <code>pubhtml</code>.</p>
-      <div style="position:relative;padding-bottom:80%;height:0;overflow:hidden;border-radius:12px">
-        <iframe
-          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQDemoID/pubhtml?widget=true&amp;headers=false"
-          style="border:0;position:absolute;top:0;left:0;width:100%;height:100%"
-        ></iframe>
+
+    <div class="brand">
+      <img class="brand-logo" src="../assets/logo.png" alt="Logo ASD Santi Pietro e Paolo" />
+      <div class="brand-title">
+        <h1>Orari allenamenti</h1>
+        <div class="brand-sub">Calendario settimanale per squadra, giorno e sede</div>
       </div>
     </div>
+
+    <div class="card">
+      <div class="sched-toolbar">
+        <select id="filter-team" aria-label="Squadra">
+          <option value="all">Tutte le squadre</option>
+        </select>
+
+        <select id="filter-day" aria-label="Giorno">
+          <option value="all">Tutti i giorni</option>
+          <option value="lun">Lunedì</option>
+          <option value="mar">Martedì</option>
+          <option value="mer">Mercoledì</option>
+          <option value="gio">Giovedì</option>
+          <option value="ven">Venerdì</option>
+          <option value="sab">Sabato</option>
+          <option value="dom">Domenica</option>
+        </select>
+
+        <input id="filter-q" type="search" placeholder="Cerca… (sede, coach, note)" />
+
+        <span class="spacer"></span>
+
+        <button id="btn-csv" class="btn" type="button" title="Esporta elenco filtrato in CSV">⬇️ Esporta CSV</button>
+        <button id="btn-print" class="btn" type="button" title="Stampa/Salva PDF">🖨️ Stampa</button>
+      </div>
+
+      <div id="sched" class="sched-grid" aria-live="polite"></div>
+
+      <div id="sched-pager" class="pager"></div>
+    </div>
+
+    <div class="card" style="opacity:.9">
+      <p style="margin:0">
+        ⚠️ Gli orari possono variare in base agli eventi. Controlla sempre il gruppo squadra/coach.
+      </p>
+    </div>
   </div>
+
+  <script src="../js/orari.js?v=1" defer></script>
 </body>
 </html>

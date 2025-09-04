@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "trainings": [
+    {
+      "team": "Primi Calci",
+      "day": "lun",
+      "start": "17:00",
+      "end": "18:00",
+      "location": "Oratorio - Campo A",
+      "coach": "Mister Luca",
+      "notes": ""
+    },
+    {
+      "team": "Pulcini",
+      "day": "lun",
+      "start": "18:00",
+      "end": "19:00",
+      "location": "Oratorio - Campo A",
+      "coach": "Mister Anna",
+      "notes": ""
+    },
+    {
+      "team": "Esordienti",
+      "day": "mer",
+      "start": "18:30",
+      "end": "20:00",
+      "location": "Palestra Comunale",
+      "coach": "Mister Paolo",
+      "notes": "Ingresso da via Garibaldi"
+    },
+    {
+      "team": "Open",
+      "day": "gio",
+      "start": "20:30",
+      "end": "22:00",
+      "location": "Oratorio - Campo B",
+      "coach": "Mister Sara",
+      "notes": ""
+    }
+  ]
+}
