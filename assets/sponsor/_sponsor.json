@@ -1,0 +1,22 @@
+{
+  "sponsors": [
+    {
+      "name": "Pasticceria Roma",
+      "url": "https://example.com",
+      "tier": "gold",
+      "logo": "assets/sponsor/loghi/pasticceria-roma.png"
+    },
+    {
+      "name": "Ferramenta Garibaldi",
+      "url": "https://example.com",
+      "tier": "silver",
+      "logo": "assets/sponsor/loghi/ferramenta-garibaldi.png"
+    },
+    {
+      "name": "Bar Sport",
+      "url": "",
+      "tier": "bronze",
+      "logo": "assets/sponsor/loghi/bar-sport.png"
+    }
+  ]
+}

@@ -1,19 +1,93 @@
-<!DOCTYPE html><html lang="it"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../styles/styles.css"/><link rel="stylesheet" href="../styles/additions.css"/><title>Sponsor — ASD</title></head><body>
-<div class="page">
-  <a class="back" href="../index.html">← Torna alla home</a>
-  <div class="brand"><img class="brand-logo" src="../assets/logo.png" alt="Logo"/><div class="brand-title"><h1>Sponsor</h1><div class="brand-sub">Grazie a chi sostiene la nostra ASD</div></div></div>
-  <div class="card">
-    <div class="grid-sponsor">
-      <img src="../assets/logo.png" alt="Sponsor demo 1"/>
-      <img src="../assets/logo.png" alt="Sponsor demo 2"/>
-      <img src="../assets/logo.png" alt="Sponsor demo 3"/>
-      <img src="../assets/logo.png" alt="Sponsor demo 4"/>
-      <img src="../assets/logo.png" alt="Sponsor demo 5"/>
-      <img src="../assets/logo.png" alt="Sponsor demo 6"/>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sponsor • ASD Santi Pietro e Paolo</title>
+  <link rel="icon" href="../assets/favicon.png" type="image/png" />
+  <link rel="stylesheet" href="../styles/styles.css" />
+</head>
+<body class="page">
+  <main class="page">
+    <a class="back" href="../index.html">← Torna alla home</a>
+
+    <div class="brand">
+      <img class="brand-logo" src="../assets/logo.png" alt="Logo ASD" />
+      <div class="brand-title">
+        <h1>Sponsor</h1>
+        <div class="brand-sub">Sostieni i nostri ragazzi e cresci con noi</div>
+      </div>
     </div>
-    <div style="text-align:center;margin-top:16px;">
-      <a class="btn" href="mailto:info@esempio.it?subject=Diventa%20Sponsor%20ASD">🤝 Diventa sponsor</a>
-    </div>
-  </div>
-</div>
-</body></html>
+
+    <!-- Hero -->
+    <section class="spon-hero card">
+      <h2 class="section-title">Diventa sponsor del nostro progetto</h2>
+      <p class="lead">
+        Visibilità locale, social e in campo. Con il tuo supporto possiamo offrire
+        più attività, materiale tecnico e iniziative inclusive.
+      </p>
+      <div class="tags">
+        <span class="tag">Visibilità social</span>
+        <span class="tag">Banner in campo</span>
+        <span class="tag">Eventi & tornei</span>
+        <span class="tag">Progetto sociale</span>
+      </div>
+      <div class="btn-row">
+        <a class="btn" href="mailto:asdsantipietroepaolo@gmail.com?subject=Diventare%20Sponsor%20-%20ASD%20Santi%20Pietro%20e%20Paolo">💌 Contattaci</a>
+        <a class="btn hollow" href="../assets/sponsor/media-kit.pdf" target="_blank" rel="noopener">📄 Scarica media kit</a>
+      </div>
+    </section>
+
+    <!-- Griglia loghi (auto da JSON) -->
+    <section class="card">
+      <h2 class="section-title">I nostri sponsor</h2>
+      <div id="sponsor-grid" class="spon-grid" aria-live="polite"></div>
+    </section>
+
+    <!-- Pacchetti -->
+    <section class="spon-tiers">
+      <article class="spon-card">
+        <div class="badge-tier gold">Gold</div>
+        <h3>Partner Gold</h3>
+        <ul class="list">
+          <li>Logo grande su divise/eventi</li>
+          <li>Post dedicati e stories mensili</li>
+          <li>Banner principale a bordo campo</li>
+        </ul>
+      </article>
+      <article class="spon-card">
+        <div class="badge-tier silver">Silver</div>
+        <h3>Partner Silver</h3>
+        <ul class="list">
+          <li>Logo su materiali e locandine</li>
+          <li>Menzione social periodica</li>
+          <li>Banner a bordo campo</li>
+        </ul>
+      </article>
+      <article class="spon-card">
+        <div class="badge-tier bronze">Bronze</div>
+        <h3>Partner Bronze</h3>
+        <ul class="list">
+          <li>Logo sul sito nella griglia sponsor</li>
+          <li>Menzione negli eventi</li>
+        </ul>
+      </article>
+    </section>
+
+    <!-- Call finale -->
+    <section class="card">
+      <h2 class="section-title">Parliamone!</h2>
+      <p class="muted">Vuoi una proposta su misura per la tua azienda? Scrivici o chiamaci.</p>
+      <div class="btn-row">
+        <a class="btn" href="mailto:asdsantipietroepaolo@gmail.com">✉️ asdsantipietroepaolo@gmail.com</a>
+        <a class="btn hollow" href="tel:+393296186830">📞 +39 329 618 6830</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">© <span id="year"></span> ASD Santi Pietro e Paolo</footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/sponsor.js"></script>
+</body>
+</html>

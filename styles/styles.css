@@ -451,3 +451,44 @@ body.orari .sched-item__time{
     font-size: 0.93rem;
   }
 }
+/* ===== Sponsor ===== */
+.spon-hero .lead{ margin-top:8px; }
+.spon-grid{
+  display:grid; gap:12px;
+  grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
+}
+.spon-logo{
+  position:relative;
+  display:flex; align-items:center; justify-content:center;
+  background: rgba(0,0,0,.55);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:12px; padding:16px;
+  transition: transform .08s ease, box-shadow .2s ease, filter .2s ease;
+}
+.spon-logo:hover{ transform: translateY(-2px); filter: brightness(1.06);
+  box-shadow:0 12px 28px rgba(0,0,0,.35); }
+.spon-logo img{
+  max-width: 90%; max-height: 64px; object-fit: contain; display:block; background:#fff;
+  border-radius:8px; padding:6px; box-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+.badge-tier{
+  position:absolute; left:10px; top:10px;
+  font-weight:800; font-size:12px; padding:4px 8px; border-radius:999px;
+  border:1px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.10);
+}
+.badge-tier.gold{   background:linear-gradient(90deg,#f59e0b,#facc15); color:#111; }
+.badge-tier.silver{ background:linear-gradient(90deg,#9ca3af,#e5e7eb); color:#111; }
+.badge-tier.bronze{ background:linear-gradient(90deg,#b45309,#f59e0b); color:#111; }
+
+.spon-tiers{
+  display:grid; gap:12px; margin:12px 0;
+  grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+}
+.spon-card{
+  background: rgba(0,0,0,.55);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:14px; padding:16px;
+  box-shadow:0 6px 16px rgba(0,0,0,.28);
+}
+.spon-card h3{ margin:6px 0 10px; }
