@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Orari allenamenti — ASD</title>
+  <link rel="icon" href="../assets/favicon.png" type="image/png" />
+  <!-- stile base del sito -->
+  <link rel="stylesheet" href="../styles/styles.css" />
+  <!-- stile dedicato alla pagina Orari -->
+  <link rel="stylesheet" href="../styles/orari.css" />
+</head>
+<body class="orari">
+  <div class="page">
+    <a class="back" href="../index.html">← Torna alla home</a>
+
+    <div class="brand">
+      <img class="brand-logo" src="../assets/logo.png" alt="Logo ASD Santi Pietro e Paolo" />
+      <div class="brand-title">
+        <h1>Orari allenamenti</h1>
+        <div class="brand-sub">Calendario settimanale per squadra, giorno e sede</div>
+      </div>
+    </div>
+
+    <!-- Toolbar filtri -->
+    <div class="card sched-toolbar">
+      <label for="filter-team">Squadra</label>
+      <select id="filter-team">
+        <option value="all" selected>Tutte le squadre</option>
+      </select>
+
+      <label for="filter-day">Giorno</label>
+      <select id="filter-day">
+        <option value="all" selected>Tutti i giorni</option>
+        <option value="lun">Lunedì</option>
+        <option value="mar">Martedì</option>
+        <option value="mer">Mercoledì</option>
+        <option value="gio">Giovedì</option>
+        <option value="ven">Venerdì</option>
+        <option value="sab">Sabato</option>
+        <option value="dom">Domenica</option>
+      </select>
+
+      <input id="filter-q" type="search" placeholder="Cerca… (sede, coach, note)" />
+
+      <span class="spacer"></span>
+
+      <button id="btn-print" class="btn">🖨️ Stampa</button>
+      <button id="btn-csv" class="btn">⬇️ Esporta CSV</button>
+    </div>
+
+    <!-- Calendario -->
+    <div id="sched" class="sched-grid"></div>
+
+    <div class="card warn-note">
+      ⚠️ Gli orari possono variare in base agli eventi. Controlla sempre il gruppo squadra/coach.
+    </div>
+  </div>
+
+  <script src="../js/orari.js?v=3" defer></script>
+</body>
+</html>
