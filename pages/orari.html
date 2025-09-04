@@ -5,11 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Orari allenamenti — ASD</title>
   <link rel="icon" href="../assets/favicon.png" type="image/png" />
+<<<<<<< HEAD
   <!-- stile base del sito -->
   <link rel="stylesheet" href="../styles/styles.css" />
   <!-- stile dedicato alla pagina Orari -->
   <link rel="stylesheet" href="../styles/orari.css" />
 </head>
+=======
+  <link rel="stylesheet" href="../styles/styles.css" />
+</head>
+
+>>>>>>> parent of e83f1c6 (l)
 <body class="orari">
   <div class="page">
     <a class="back" href="../index.html">← Torna alla home</a>
@@ -22,6 +28,7 @@
       </div>
     </div>
 
+<<<<<<< HEAD
     <!-- Toolbar filtri -->
     <div class="card sched-toolbar">
       <label for="filter-team">Squadra</label>
@@ -47,16 +54,62 @@
 
       <button id="btn-print" class="btn">🖨️ Stampa</button>
       <button id="btn-csv" class="btn">⬇️ Esporta CSV</button>
+=======
+    <!-- Toolbar filtri / azioni -->
+    <div class="card">
+      <div class="sched-toolbar">
+        <!-- Squadra -->
+        <label for="filter-team" class="sr-only">Squadra</label>
+        <select id="filter-team">
+          <option value="all">Tutte le squadre</option>
+          <!-- le altre opzioni vengono inserite da JS -->
+        </select>
+
+        <!-- Giorno -->
+        <label for="filter-day" class="sr-only">Giorno</label>
+        <select id="filter-day">
+          <option value="all">Tutti i giorni</option>
+          <option value="lun">Lunedì</option>
+          <option value="mar">Martedì</option>
+          <option value="mer">Mercoledì</option>
+          <option value="gio">Giovedì</option>
+          <option value="ven">Venerdì</option>
+          <option value="sab">Sabato</option>
+          <option value="dom">Domenica</option>
+        </select>
+
+        <!-- Ricerca libera -->
+        <input id="filter-q" type="search" placeholder="Cerca… (sede, coach, note)" />
+
+        <span class="spacer"></span>
+
+        <!-- Azioni -->
+        <button id="btn-csv" type="button" class="btn">⬇️ Esporta CSV</button>
+        <button id="btn-print" type="button" class="btn">🖨️ Stampa</button>
+      </div>
+>>>>>>> parent of e83f1c6 (l)
     </div>
 
     <!-- Calendario -->
     <div id="sched" class="sched-grid"></div>
 
+<<<<<<< HEAD
     <div class="card warn-note">
       ⚠️ Gli orari possono variare in base agli eventi. Controlla sempre il gruppo squadra/coach.
     </div>
   </div>
 
   <script src="../js/orari.js?v=3" defer></script>
+=======
+    <!-- Nota -->
+    <div class="card" style="text-align:left; opacity:.95; margin-top:12px;">
+      <span style="filter:grayscale(.2);">⚠️</span>
+      Gli orari possono variare in base agli eventi. Controlla sempre il gruppo squadra/coach.
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script src="../js/orari.js?v=2" defer></script>
+>>>>>>> parent of e83f1c6 (l)
 </body>
 </html>
