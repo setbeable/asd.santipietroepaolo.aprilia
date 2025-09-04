@@ -1,4 +1,4 @@
-/* Orari (allenamenti) — renderer con filtri e CSV export (v4) */
+/* Orari (allenamenti) — v4.2: tutto a sinistra + team inline col tempo */
 (function(){
   document.addEventListener('DOMContentLoaded', init);
 
@@ -25,7 +25,7 @@
       if(!r.ok) throw new Error(r.status+' '+r.statusText);
       const data = await r.json();
       state.all = (data.trainings || []).map(n => ({
-        team: n.team?.trim() || '',
+        team: (n.team || '').trim(),
         day: (n.day || '').toLowerCase().trim(),
         start: n.start || '',
         end: n.end || '',
@@ -54,10 +54,11 @@
     teams.forEach(t => selTeam.appendChild(new Option(t, t)));
     selTeam.addEventListener('change', ()=>{ state.team = selTeam.value; applyFilters(); render(); });
 
-    // giorni (già presenti in HTML, qui solo change)
+    // giorni
     const selDay = document.getElementById('filter-day');
     selDay.addEventListener('change', ()=>{ state.day = selDay.value; applyFilters(); render(); });
 
+    // ricerca
     const q = document.getElementById('filter-q');
     q.addEventListener('input', ()=>{ state.q = q.value; applyFilters(); render(); });
   }
@@ -78,7 +79,6 @@
       );
     }
 
-    // ordina: giorno, poi orario
     rows.sort((a,b)=>{
       const d = DAYS_ORDER.indexOf(a.day) - DAYS_ORDER.indexOf(b.day);
       if(d !== 0) return d;
@@ -97,43 +97,42 @@
       return;
     }
 
-    // raggruppa per giorno
+    // raggruppo per giorno
     const byDay = new Map();
     for(const row of state.filtered){
       if(!byDay.has(row.day)) byDay.set(row.day, []);
       byDay.get(row.day).push(row);
     }
 
-    // crea sezioni per giorno
     for(const dayKey of DAYS_ORDER){
       if(!byDay.has(dayKey)) continue;
       const dayBox = el('div', {class:'sched-day'});
       dayBox.appendChild(el('h3', {class:'sched-day__title'}, DAYS_LABEL[dayKey]));
-
       for(const r of byDay.get(dayKey)){
         dayBox.appendChild(renderRow(r));
       }
-
       grid.appendChild(dayBox);
     }
   }
 
-  // layout a due colonne: sinistra (orario + team), destra (dettagli)
+  // Singolo blocco: intestazione (tempo + team inline) e sotto i dettagli
   function renderRow(r){
     const row = el('div', {class: 'sched-item sch-row'});
 
-    const left = el('div', {class:'left'}, [
-      el('div', {class:'time-badge'}, `${fmt(r.start)}–${fmt(r.end)}`),
-      el('div', {class:'team'}, r.team)
+    // riga in alto: tempo + team
+    const head = el('div', {class:'head-inline'}, [
+      el('span', {class:'time-badge'}, `${fmt(r.start)}–${fmt(r.end)}`),
+      el('span', {class:'team-inline', title:r.team}, r.team || '—')
     ]);
 
-    const right = el('div', {class:'right'}, [
+    // dettagli sotto
+    const meta = el('div', {class:'meta'}, [
       line('📍', r.location || '—'),
       line('👤', r.coach || '—'),
       r.notes ? line(null, r.notes, 'note') : null
     ].filter(Boolean));
 
-    row.append(left, right);
+    row.append(head, meta);
     return row;
   }
 
@@ -171,7 +170,7 @@
     a.remove();
   }
 
-  // mini helper
+  // helper
   function el(tag, attrs = {}, content){
     const n = document.createElement(tag);
     for(const [k,v] of Object.entries(attrs)){

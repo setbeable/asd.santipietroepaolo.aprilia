@@ -756,3 +756,47 @@ body.orari .sch-row .right .line{
   display:flex; gap:8px; align-items:baseline; 
 }
 body.orari .sch-row .right .ico{ opacity:.9 }
+/* ===== ORARI — tutto a sinistra + team inline col tempo ===== */
+body.orari .sch-row{
+  display:flex !important;             /* annulla eventuale grid precedente */
+  flex-direction:column;
+  align-items:flex-start;
+  gap:6px;
+}
+
+body.orari .sch-row .head-inline{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+body.orari .sch-row .time-badge{
+  display:inline-block;
+  padding:8px 12px;
+  background:#ffd76e;
+  color:#111;
+  border-radius:10px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+body.orari .sch-row .team-inline{
+  font-weight:800;
+  line-height:1.15;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:100%;
+}
+
+body.orari .sch-row .meta .line{
+  display:flex;
+  gap:8px;
+  align-items:baseline;
+}
+body.orari .sch-row .meta .ico{ opacity:.9; }
+
+/* Mobile: identico (già a colonna), solo respiro */
+@media (max-width: 680px){
+  body.orari .sch-row{ gap:8px; }
+}
