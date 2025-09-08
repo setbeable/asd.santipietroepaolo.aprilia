@@ -1,7 +1,7 @@
 {
   "version": 1,
   "trainings": [
-    { "team": "Under 10", "day": "mer", "start": "17:00", "end": "18:00", "location": "Oratorio - SS Pietro e Paolo", "coach": "Mister Antonio M., Fabio, Vittorio", "notes": "Ingresso da via U.La Malfa 11" },
+    { "team": "Under 10", "day": "mer", "start": "18:00", "end": "19:30", "location": "Oratorio - SS Pietro e Paolo", "coach": "Mister Antonio M., Fabio, Vittorio", "notes": "Ingresso da via U.La Malfa 11" },
     { "team": "Under 10", "day": "ven", "start": "17:30", "end": "19:00", "location": "Oratorio - SS Pietro e Paolo", "coach": "Mister Antonio M., Fabio, Vittorio", "notes": "Ingresso da via U.La Malfa 11" },
 
     { "team": "Under 12", "day": "lun", "start": "18:00", "end": "19:30", "location": "Oratorio - SS Pietro e Paolo", "coach": "Mister Giovanni, Marco, Paolo", "notes": "Ingresso da via U.La Malfa 11" },
