@@ -1,21 +1,34 @@
 {
-  "items": [
+  "version": 1,
+  "posts": [
     {
-      "title": "Resoconto partita Under 14",
-      "description": "La squadra Under 14 ha disputato una partita avvincente…",
-      "date": "2025-05-02",
-      "category": "Partite",
-      "thumb": "assets/hub/thumbs/under14-partita.jpg",
-      "url": "pages/partita-u14.html"
+      "id": "iscrizioni-2025",
+      "title": "Iscrizioni 2025/26 aperte",
+      "date": "2025-09-05",
+      "category": "Comunicazioni",
+      "excerpt": "Tutte le informazioni utili su quote, certificati e scadenze.",
+      "cover": "../assets/hub/covers/iscrizioni.jpg",
+      "url": "../pages/iscrizioni.html",
+      "featured": true
     },
     {
-      "title": "Intervista al presidente",
-      "description": "L’intervista esclusiva al nostro presidente sul progetto sportivo.",
-      "date": "2025-05-09",
-      "category": "Interviste",
-      "thumb": "assets/hub/thumbs/presidente.jpg",
-      "url": "https://example.com/intervista"
+      "id": "open-day-settembre",
+      "title": "Open Day in oratorio",
+      "date": "2025-09-14",
+      "category": "Eventi",
+      "excerpt": "Prove gratuite per tutte le età: vi aspettiamo!",
+      "cover": "../assets/hub/covers/open-day.jpg",
+      "url": "#",
+      "featured": true
+    },
+    {
+      "id": "calendario-torneo",
+      "title": "Torneo interno — calendario",
+      "date": "2025-08-28",
+      "category": "Tornei",
+      "excerpt": "Scarica il calendario aggiornato del torneo dell’oratorio.",
+      "cover": "../assets/hub/covers/torneo.jpg",
+      "url": "../pages/documenti.html"
     }
-    // …altri post
   ]
 }
