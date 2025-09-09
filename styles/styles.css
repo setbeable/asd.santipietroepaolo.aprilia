@@ -492,3 +492,28 @@ body.orari .sched-item__time{
   box-shadow:0 6px 16px rgba(0,0,0,.28);
 }
 .spon-card h3{ margin:6px 0 10px; }
+/* ===== Hub ===== */
+.hub-toolbar{
+  display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:16px;
+}
+.hub-toolbar input[type="search"], .hub-toolbar select{
+  padding:8px 12px; border-radius:8px; border:0; font-weight:600;
+  background:rgba(13,71,161,.9); color:#fff; border:1px solid rgba(255,255,255,.25);
+}
+.hub-grid{
+  display:grid; gap:14px;
+  grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+}
+.hub-item{
+  display:block; background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.12);
+  border-radius:12px; overflow:hidden; color:inherit; text-decoration:none;
+  transition:transform .08s ease, box-shadow .2s ease, filter .2s ease;
+}
+.hub-item:hover{ transform:translateY(-2px); filter:brightness(1.05); box-shadow:0 12px 28px rgba(0,0,0,.35); }
+.hub-item img{
+  width:100%; height:140px; object-fit:cover; background:#fff; display:block;
+}
+.hub-body{ padding:12px; }
+.hub-body h3{ margin:0 0 4px; font-size:1.1rem; }
+.hub-meta{ display:block; font-size:0.85rem; opacity:.8; margin-bottom:6px; }
+.hub-body p{ margin:0; font-size:0.9rem; opacity:.9; }

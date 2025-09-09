@@ -1,11 +1,41 @@
-<!DOCTYPE html><html lang="it"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="icon" href="../assets/favicon.png" type="image/png"/><link rel="stylesheet" href="../styles/styles.css"/><title>Hub — ASD</title></head><body>
-  <div class="page">
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hub — ASD Santi Pietro e Paolo</title>
+  <link rel="icon" href="../assets/favicon.png" type="image/png"/>
+  <link rel="stylesheet" href="../styles/styles.css?v=hub"/>
+</head>
+<body>
+  <div class="page page-wide">
     <a class="back" href="../index.html">← Torna alla home</a>
+
     <div class="brand">
-      <img class="brand-logo" src="../assets/logo.png" alt="Logo ASD Santi Pietro e Paolo" />
+      <img class="brand-logo" src="../assets/logo.png" alt="Logo ASD Santi Pietro e Paolo">
       <div class="brand-title">
         <h1>Hub</h1>
-        <div class="brand-sub">ASD Santi Pietro e Paolo</div>
+        <div class="brand-sub">Tutte le novità e gli approfondimenti in un unico posto</div>
       </div>
     </div>
-<div class="card tabs" id="tabs-media"><h2>Media</h2><div role="tablist" class="tab-list" aria-label="Media"><button role="tab" aria-selected="true" data-target="panel-foto">📸 Foto</button><button role="tab" aria-selected="false" data-target="panel-video">🎬 Video</button><button role="tab" aria-selected="false" data-target="panel-interviste">🎙️ Interviste</button></div><section role="tabpanel" id="panel-foto" class="tab-panel"><div class="tab-iframe-wrap"><iframe title="Foto" data-src="foto.html"></iframe></div></section><section role="tabpanel" id="panel-video" class="tab-panel"><div class="tab-iframe-wrap"><iframe title="Video" data-src="video.html"></iframe></div></section><section role="tabpanel" id="panel-interviste" class="tab-panel"><div class="tab-iframe-wrap"><iframe title="Interviste" data-src="interviste.html"></iframe></div></section></div><div class="card tabs" id="tabs-calcio"><h2>Calcio a 5</h2><div role="tablist" class="tab-list" aria-label="Calcio a 5"><button role="tab" aria-selected="true" data-target="panel-regolamento">📄 Regolamento</button><button role="tab" aria-selected="false" data-target="panel-campionati">🏆 Campionati</button></div><section role="tabpanel" id="panel-regolamento" class="tab-panel"><div class="tab-iframe-wrap"><iframe title="Regolamento" data-src="regolamento.html"></iframe></div></section><section role="tabpanel" id="panel-campionati" class="tab-panel"><div class="tab-iframe-wrap"><iframe title="Campionati" data-src="campionati.html"></iframe></div></section></div></div><script src="../js/tabs.js"></script></body></html>
+
+    <!-- filtro e ricerca -->
+    <div class="card hub-toolbar">
+      <input id="hub-search" type="search" placeholder="Cerca… (titolo, categoria)" />
+      <select id="hub-filter">
+        <option value="all">Tutte le categorie</option>
+      </select>
+      <button id="hub-refresh" class="btn">↻ Aggiorna</button>
+    </div>
+
+    <!-- griglia articoli -->
+    <div id="hub-grid" class="hub-grid" aria-live="polite"></div>
+
+    <!-- avviso o messaggio -->
+    <div id="hub-empty" class="muted" style="display:none;margin-top:16px"></div>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/hub.js?v=1" defer></script>
+</body>
+</html>

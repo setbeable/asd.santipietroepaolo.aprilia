@@ -1,0 +1,21 @@
+{
+  "items": [
+    {
+      "title": "Resoconto partita Under 14",
+      "description": "La squadra Under 14 ha disputato una partita avvincente…",
+      "date": "2025-05-02",
+      "category": "Partite",
+      "thumb": "assets/hub/thumbs/under14-partita.jpg",
+      "url": "pages/partita-u14.html"
+    },
+    {
+      "title": "Intervista al presidente",
+      "description": "L’intervista esclusiva al nostro presidente sul progetto sportivo.",
+      "date": "2025-05-09",
+      "category": "Interviste",
+      "thumb": "assets/hub/thumbs/presidente.jpg",
+      "url": "https://example.com/intervista"
+    }
+    // …altri post
+  ]
+}
