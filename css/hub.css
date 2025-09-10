@@ -46,3 +46,13 @@
 
 /* Pager */
 .pager { display:flex; align-items:center; gap:10px; justify-content:center; margin: 16px 0; }
+/* --- CONTRASTO SELECT: testo visibile nel menu a discesa --- */
+.hub-toolbar select { color: #f0f3f7; }             /* nel campo chiuso resta chiaro */
+.hub-toolbar select option {
+  color: #111;                                      /* nel menu aperto: testo scuro */
+  background: #fff;                                 /* sfondo bianco di sistema */
+}
+/* (alcuni browser ignorano parte di queste regole, ma così copri Edge/Chrome/Firefox) */
+/* Bottoni extra link */
+.hub-btn.hub-btn--ghost { opacity: .95; }
+.hub-btn.hub-btn--ghost:hover { opacity: 1; }

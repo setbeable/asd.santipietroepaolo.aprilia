@@ -111,40 +111,49 @@
       $grid.innerHTML = pageList.map(cardHTML).join('');
     }
 
-    function cardHTML (it) {
-      const coverURL  = resolveAsset(it.cover, ROOT_PREFIX);
-      const attachURL = resolveAsset(it.attach, ROOT_PREFIX);
+		function cardHTML (it) {
+	  const coverURL  = resolveAsset(it.cover, ROOT_PREFIX);
+	  const attachURL = resolveAsset(it.attach, ROOT_PREFIX);
 
-      const cover = it.cover
-        ? `<img class="hub-cover" loading="lazy" src="${escapeAttr(coverURL)}" alt="">`
-        : `<div class="hub-cover"></div>`;
+	  const cover = it.cover
+		? `<img class="hub-cover" loading="lazy" src="${escapeAttr(coverURL)}" alt="">`
+		: `<div class="hub-cover"></div>`;
 
-      const title = escapeHtml(it.title || 'Senza titolo');
-      const excerpt = it.excerpt ? `<p class="hub-excerpt">${escapeHtml(it.excerpt)}</p>` : '';
-      const date = it.date ? `<span>${formatDate(it.date)}</span>` : '';
-      const cat = it.category ? `<span class="badge ${cssSafe(it.category)}">${labelCat(it.category)}</span>` : '';
-      const open = it.link ? `<a class="hub-btn" href="${escapeAttr(it.link)}" target="_blank" rel="noopener">Apri</a>` : '';
-      const attach = it.attach ? `<a class="hub-btn" href="${escapeAttr(attachURL)}" target="_blank" rel="noopener">Allegato</a>` : '';
+	  const title = escapeHtml(it.title || 'Senza titolo');
+	  const excerpt = it.excerpt ? `<p class="hub-excerpt">${escapeHtml(it.excerpt)}</p>` : '';
+	  const date = it.date ? `<span>${formatDate(it.date)}</span>` : '';
+	  const cat = it.category ? `<span class="badge ${cssSafe(it.category)}">${labelCat(it.category)}</span>` : '';
 
-      const titleWrapped = it.link
-        ? `<a class="hub-title" href="${escapeAttr(it.link)}" target="_blank" rel="noopener">${title}</a>`
-        : `<span class="hub-title">${title}</span>`;
+	  const open   = it.link   ? `<a class="hub-btn" href="${escapeAttr(it.link)}" target="_blank" rel="noopener">Apri</a>` : '';
+	  const attach = it.attach ? `<a class="hub-btn" href="${escapeAttr(attachURL)}" target="_blank" rel="noopener">Allegato</a>` : '';
 
-      return `
-        <article class="hub-card">
-          ${cover}
-          <div class="hub-body">
-            ${titleWrapped}
-            ${excerpt}
-            <div class="hub-meta">
-              ${cat}
-              ${date}
-              <div class="hub-actions">${open}${attach}</div>
-            </div>
-          </div>
-        </article>
-      `;
-    }
+	  // NEW: link aggiuntivi (array di {label, url})
+	  const extras = Array.isArray(it.links)
+		? it.links.slice(0, 4).map(l =>
+			`<a class="hub-btn hub-btn--ghost" href="${escapeAttr(l.url)}" target="_blank" rel="noopener">${escapeHtml(l.label || 'Link')}</a>`
+		  ).join('')
+		: '';
+
+	  const titleWrapped = it.link
+		? `<a class="hub-title" href="${escapeAttr(it.link)}" target="_blank" rel="noopener">${title}</a>`
+		: `<span class="hub-title">${title}</span>`;
+
+	  return `
+		<article class="hub-card">
+		  ${cover}
+		  <div class="hub-body">
+			${titleWrapped}
+			${excerpt}
+			<div class="hub-meta">
+			  ${cat}
+			  ${date}
+			  <div class="hub-actions">${open}${attach}${extras}</div>
+			</div>
+		  </div>
+		</article>
+	  `;
+	}
+
 
     // util
     function labelCat(s){ return (s||'').replace(/[-_]/g, ' ').trim(); }
