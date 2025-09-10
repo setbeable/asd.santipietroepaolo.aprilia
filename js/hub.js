@@ -3,9 +3,13 @@
   document.addEventListener('DOMContentLoaded', init, { once: true });
 
   async function init () {
+    // ✅ usa #hub-grid, NON #hub
     const $grid = document.getElementById('hub-grid');
-    if (!$grid) return console.error('[Hub] #hub-grid non trovato');
-
+    if (!$grid) {
+      console.error('[Hub] #hub-grid non trovato');
+      return;
+    }
+   
     // data-* dal container griglia
     const BASE = (($grid.getAttribute('data-assets-base')) || '../assets/hub/').replace(/\/+$/, '') + '/';
     const MANIFEST = $grid.getAttribute('data-manifest') || '../assets/_hub.json';
