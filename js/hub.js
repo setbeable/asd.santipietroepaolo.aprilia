@@ -1,270 +1,181 @@
-/* Hub — feed locale con ricerca, filtri, slider e paginazione */
+/* ============================================================================
+ * Hub (auto) — legge assets/_hub.json e genera card ordinate e filtrabili
+ * ========================================================================= */
 (function () {
-  const PATH = '../assets/hub/_hub.json';       // manifest locale
-  const grid = byId('hub-grid');
-  const hero = byId('hub-hero');
-  const heroTrack = byId('hub-hero-track');
-  const q = byId('hub-q');
-  const cat = byId('hub-cat');
-  const count = byId('hub-count');
-  const refreshBtn = byId('hub-refresh');
-  const prevBtn = byId('hub-prev');
-  const nextBtn = byId('hub-next');
-  const pageLbl = byId('hub-page');
-  const pager = byId('hub-pager');
+  document.addEventListener('DOMContentLoaded', init, { once: true });
 
-  const state = {
-    all: [],
-    filtered: [],
-    page: 1,
-    pageSize: 6,
-    heroIndex: 0,
-  };
+  async function init () {
+    const root = document.getElementById('hub');
+    if (!root) { console.error('[Hub] #hub non trovato'); return; }
 
-  document.addEventListener('DOMContentLoaded', init);
+    const BASE = (root.getAttribute('data-assets-base') || 'assets/hub/').replace(/\/+$/, '') + '/';
+    const MANIFEST = (root.getAttribute('data-manifest') || 'assets/_hub.json');
 
-  async function init() {
-    await load();
-    buildCategories();
-    applyFilters();
-    render();
+    const state = {
+      all: [],
+      filtered: [],
+      q: '',
+      category: 'all',
+      year: 'all',
+      sort: 'date_desc'
+    };
 
-    q.addEventListener('input', onFilterChange);
-    cat.addEventListener('change', onFilterChange);
-    refreshBtn.addEventListener('click', reload);
+    // toolbar
+    root.innerHTML = `
+      <div class="hub-toolbar">
+        <input type="search" id="hub-q" placeholder="Cerca… (titolo, categoria, tag)" />
+        <select id="hub-cat"><option value="all">Tutte le categorie</option></select>
+        <select id="hub-year"><option value="all">Tutti gli anni</option></select>
+        <select id="hub-sort">
+          <option value="date_desc">Più recenti</option>
+          <option value="date_asc">Meno recenti</option>
+          <option value="title_asc">Titolo A→Z</option>
+          <option value="title_desc">Titolo Z→A</option>
+        </select>
+        <button id="hub-refresh">Aggiorna</button>
+        <div class="hub-count" id="hub-count"></div>
+      </div>
+      <div class="hub-grid" id="hub-grid" aria-live="polite"></div>
+    `;
 
-    prevBtn.addEventListener('click', () => gotoPage(state.page - 1));
-    nextBtn.addEventListener('click', () => gotoPage(state.page + 1));
+    const $q = root.querySelector('#hub-q');
+    const $cat = root.querySelector('#hub-cat');
+    const $year = root.querySelector('#hub-year');
+    const $sort = root.querySelector('#hub-sort');
+    const $refresh = root.querySelector('#hub-refresh');
+    const $grid = root.querySelector('#hub-grid');
+    const $count = root.querySelector('#hub-count');
 
-    // slider nav
-    hero.querySelector('.prev')?.addEventListener('click', () => heroGo(state.heroIndex - 1));
-    hero.querySelector('.next')?.addEventListener('click', () => heroGo(state.heroIndex + 1));
-
-    // auto-advance hero
-    setInterval(() => {
-      if (!hero.hasAttribute('hidden') && state.filtered.some(p => p.featured)) {
-        heroGo(state.heroIndex + 1, true);
-      }
-    }, 6000);
-  }
-
-  async function load() {
+    // carica manifest
     try {
-      const r = await fetch(PATH, { cache: 'no-store' });
-      if (!r.ok) throw new Error(r.status + ' ' + r.statusText);
-      const data = await r.json();
-      state.all = normalize(data.posts || []);
+      const res = await fetch(MANIFEST + (MANIFEST.includes('?') ? '&' : '?') + 'v=' + Date.now());
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      state.all = Array.isArray(data.items) ? data.items : [];
     } catch (e) {
-      console.warn('[Hub] manifest non trovato, uso contenuti demo.', e);
-      state.all = demoPosts();
-    }
-    // ordina per data desc
-    state.all.sort((a,b) => (b.date||'').localeCompare(a.date||''));
-  }
-
-  function reload() {
-    // forza ricarica “manuale”
-    load().then(() => {
-      buildCategories();
-      applyFilters();
-      render();
-    });
-  }
-
-  function normalize(arr) {
-    return arr.map(p => ({
-      id: p.id || slug(p.title),
-      title: p.title || 'Senza titolo',
-      date: p.date || new Date().toISOString().slice(0,10),
-      category: p.category || 'Aggiornamenti',
-      excerpt: p.excerpt || '',
-      cover: p.cover || '',
-      url: p.url || '#',
-      featured: !!p.featured
-    }));
-  }
-
-  function buildCategories() {
-    const cats = Array.from(new Set(state.all.map(p => p.category))).sort((a,b)=>a.localeCompare(b,'it'));
-    cat.innerHTML = '<option value="all">Tutte le categorie</option>' + cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
-  }
-
-  function onFilterChange() {
-    state.page = 1;
-    applyFilters();
-    render();
-  }
-
-  function applyFilters() {
-    const s = (q.value || '').trim().toLowerCase();
-    const c = cat.value || 'all';
-    let rows = state.all.slice();
-
-    if (c !== 'all') rows = rows.filter(p => p.category === c);
-    if (s) rows = rows.filter(p =>
-      p.title.toLowerCase().includes(s) ||
-      p.category.toLowerCase().includes(s) ||
-      p.excerpt.toLowerCase().includes(s)
-    );
-
-    state.filtered = rows;
-  }
-
-  function render() {
-    // COUNTER
-    count.textContent = state.filtered.length ? `${state.filtered.length} contenuti` : 'Nessun contenuto';
-
-    // HERO (in evidenza)
-    const featured = state.filtered.filter(p => p.featured);
-    if (featured.length) {
-      hero.removeAttribute('hidden');
-      heroTrack.innerHTML = featured.map(cardHero).join('');
-      state.heroIndex = Math.min(state.heroIndex, featured.length-1);
-      heroGo(state.heroIndex, true);
-    } else {
-      hero.setAttribute('hidden','');
-      heroTrack.innerHTML = '';
+      console.error('[Hub] Errore nel caricamento manifest', e);
+      $grid.innerHTML = `<p class="hub-empty">Impossibile caricare i contenuti dell’Hub.</p>`;
+      return;
     }
 
-    // GRID + PAGINAZIONE
-    const total = state.filtered.length;
-    const pages = Math.max(1, Math.ceil(total / state.pageSize));
-    state.page = Math.min(state.page, pages);
-    const start = (state.page - 1) * state.pageSize;
-    const rows = state.filtered.slice(start, start + state.pageSize);
+    // popola filtri
+    const cats = Array.from(new Set(state.all.map(x => x.category))).sort();
+    cats.forEach(c => $cat.insertAdjacentHTML('beforeend', `<option value="${c}">${labelCat(c)}</option>`));
+    const years = Array.from(new Set(state.all.map(x => (x.date||'').slice(0,4)).filter(Boolean))).sort().reverse();
+    years.forEach(y => $year.insertAdjacentHTML('beforeend', `<option value="${y}">${y}</option>`));
 
-    grid.innerHTML = rows.map(cardGrid).join('') || `<div class="card" style="opacity:.85">Nessun contenuto con i filtri attivi.</div>`;
+    // eventi filtri
+    $q.addEventListener('input', apply);
+    $cat.addEventListener('change', e => { state.category = e.target.value; apply(); });
+    $year.addEventListener('change', e => { state.year = e.target.value; apply(); });
+    $sort.addEventListener('change', e => { state.sort = e.target.value; apply(); });
+    $refresh.addEventListener('click', () => { apply(true); });
 
-    if (pages > 1) {
-      pager.removeAttribute('hidden');
-      pageLbl.textContent = `Pagina ${state.page} / ${pages}`;
-      prevBtn.disabled = state.page <= 1;
-      nextBtn.disabled = state.page >= pages;
-    } else {
-      pager.setAttribute('hidden','');
-    }
-  }
+    // avvio
+    apply();
 
-  function gotoPage(n) {
-    state.page = Math.max(1, n);
-    render();
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  }
+    function apply(force = false) {
+      state.q = $q.value.trim().toLowerCase();
 
-  // ----- HERO slider helpers -----
-  function heroGo(i, silent) {
-    const slides = Array.from(heroTrack.children);
-    if (!slides.length) return;
-    const max = slides.length - 1;
-    state.heroIndex = (i < 0) ? max : (i > max ? 0 : i);
-    const offset = -state.heroIndex * 100;
-    heroTrack.style.transform = `translateX(${offset}%)`;
-    if (!silent) heroTrack.style.transition = 'transform .35s ease';
-    // focus handling optional
-  }
+      let list = state.all.slice();
 
-  // ----- TEMPLATES -----
-  function cardHero(p) {
-    const cover = p.cover ? `style="background-image:url('${esc(p.cover)}')"` : '';
-    return `
-      <article class="hub-hero__slide" ${cover} role="group" aria-roledescription="slide">
-        <a class="hub-hero__overlay" href="${esc(p.url)}" target="${p.url.startsWith('http')?'_blank':'_self'}" rel="noopener">
-          <span class="chip">${esc(p.category)}</span>
-          <h3>${esc(p.title)}</h3>
-          <p class="muted">${fmtDate(p.date)}</p>
-        </a>
-      </article>
-    `;
-  }
-
-  function cardGrid(p) {
-    const cover = p.cover ? `style="--bg:url('${esc(p.cover)}')"` : '';
-    return `
-      <article class="hub-card" ${cover}>
-        <a href="${esc(p.url)}" target="${p.url.startsWith('http')?'_blank':'_self'}" rel="noopener" class="hub-card__link">
-          <div class="hub-card__cover"></div>
-          <div class="hub-card__body">
-            <span class="chip">${esc(p.category)}</span>
-            <h3 class="hub-card__title">${esc(p.title)}</h3>
-            <p class="hub-card__excerpt">${esc(p.excerpt || '')}</p>
-            <div class="hub-card__meta">${fmtDate(p.date)}</div>
-          </div>
-        </a>
-      </article>
-    `;
-  }
-
-  // ----- UTIL -----
-  function byId(id){ return document.getElementById(id); }
-  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-  function slug(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,''); }
-  function fmtDate(iso){
-    if(!iso) return '';
-    try{
-      const d = new Date(iso);
-      return d.toLocaleDateString('it-IT', { year:'numeric', month:'long', day:'numeric' });
-    }catch{ return iso; }
-  }
-
-  function demoPosts(){
-    const base = '../assets/hub/covers/';
-    return [
-      {
-        id:'open-day-2025',
-        title:'Open Day al campetto — prova gratuita',
-        date:'2025-09-14',
-        category:'Eventi',
-        excerpt:'Una giornata aperta a tutti per conoscere la nostra realtà di futsal.',
-        cover: base+'open-day.jpg',
-        url:'#',
-        featured:true
-      },
-      {
-        id:'iscrizioni-aperte',
-        title:'Iscrizioni 2025/26 aperte!',
-        date:'2025-09-05',
-        category:'Comunicazioni',
-        excerpt:'Tutte le info su orari, quote e modulistica per il nuovo anno sportivo.',
-        cover: base+'iscrizioni.jpg',
-        url:'../pages/iscrizioni.html',
-        featured:true
-      },
-      {
-        id:'torneo-oratorio',
-        title:'Torneo dell’Oratorio: calendario e regolamento',
-        date:'2025-08-28',
-        category:'Tornei',
-        excerpt:'Scarica il calendario completo e il regolamento del torneo interno.',
-        cover: base+'torneo.jpg',
-        url:'../pages/documenti.html'
-      },
-      {
-        id:'sponsor-2025',
-        title:'Benvenuti ai nuovi sponsor!',
-        date:'2025-08-20',
-        category:'Sponsor',
-        excerpt:'Grazie alle realtà del territorio che sostengono i nostri ragazzi.',
-        cover: base+'sponsor.jpg',
-        url:'../pages/sponsor.html'
-      },
-      {
-        id:'intervista-mister',
-        title:'Intervista al Mister: obiettivi della stagione',
-        date:'2025-08-18',
-        category:'Interviste',
-        excerpt:'“Crescita, inclusione, divertimento”: le parole chiave del nostro progetto.',
-        cover: base+'intervista.jpg',
-        url:'../pages/interviste.html'
-      },
-      {
-        id:'foto-stage',
-        title:'Foto dallo stage estivo',
-        date:'2025-07-30',
-        category:'Foto',
-        excerpt:'Una selezione di scatti dai giorni di stage e amichevoli.',
-        cover: base+'stage.jpg',
-        url:'../pages/foto.html'
+      if (state.category !== 'all') {
+        list = list.filter(x => (x.category || '').toLowerCase() === state.category.toLowerCase());
       }
-    ];
+      if (state.year !== 'all') {
+        list = list.filter(x => (x.date || '').startsWith(state.year + '-'));
+      }
+      if (state.q) {
+        list = list.filter(x => {
+          const txt = [
+            x.title || '',
+            x.category || '',
+            (x.excerpt || ''),
+            (x.tags || []).join(' ')
+          ].join(' ').toLowerCase();
+          return txt.includes(state.q);
+        });
+      }
+
+      // ordinamento
+      list.sort((a,b) => {
+        const tA = (a.title||'').toLocaleLowerCase();
+        const tB = (b.title||'').toLocaleLowerCase();
+        const dA = a.date || '1970-01-01';
+        const dB = b.date || '1970-01-01';
+        switch (state.sort) {
+          case 'title_asc': return tA.localeCompare(tB);
+          case 'title_desc': return tB.localeCompare(tA);
+          case 'date_asc': return dA.localeCompare(dB);
+          case 'date_desc':
+          default: return dB.localeCompare(dA);
+        }
+      });
+
+      state.filtered = list;
+      render();
+      if (force) {
+        // ricontrollo manifest a caldo
+        setTimeout(async () => {
+          try {
+            const res = await fetch(MANIFEST + (MANIFEST.includes('?') ? '&' : '?') + 'v=' + Date.now());
+            if (res.ok) {
+              const data = await res.json();
+              state.all = Array.isArray(data.items) ? data.items : state.all;
+              apply();
+            }
+          } catch {}
+        }, 150);
+      }
+    }
+
+    function render() {
+      $count.textContent = `${state.filtered.length} contenut${state.filtered.length === 1 ? 'o' : 'i'}`;
+      if (!state.filtered.length) {
+        $grid.innerHTML = `<p class="hub-empty">Nessun contenuto trovato con i filtri attuali.</p>`;
+        return;
+      }
+      $grid.innerHTML = state.filtered.map(cardHTML).join('');
+    }
+
+    function cardHTML(it) {
+      const cover = it.cover ? `<img class="hub-cover" loading="lazy" src="${escapeHtml(it.cover)}" alt="">` : `<div class="hub-cover"></div>`;
+      const title = escapeHtml(it.title || 'Senza titolo');
+      const excerpt = it.excerpt ? `<p class="hub-excerpt">${escapeHtml(it.excerpt)}</p>` : '';
+      const date = it.date ? formatDate(it.date) : '';
+      const cat = it.category ? `<span class="badge ${cssSafe(it.category)}">${labelCat(it.category)}</span>` : '';
+      const openLink = it.link ? `<a class="hub-btn" href="${escapeAttr(it.link)}" target="_blank" rel="noopener">Apri</a>` : '';
+      const attach = it.attach ? `<a class="hub-btn" href="${escapeAttr(it.attach)}" target="_blank" rel="noopener">Allegato</a>` : '';
+      const titleLinkStart = it.link ? `<a class="hub-title" href="${escapeAttr(it.link)}" target="_blank" rel="noopener">` : `<span class="hub-title">`;
+      const titleLinkEnd = it.link ? `</a>` : `</span>`;
+
+      return `
+        <article class="hub-card">
+          ${cover}
+          <div class="hub-body">
+            ${titleLinkStart}${title}${titleLinkEnd}
+            ${excerpt}
+            <div class="hub-meta">
+              ${cat}
+              <span>${date}</span>
+              <div class="hub-actions">${openLink}${attach}</div>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    // util
+    function labelCat(c){ return (c||'').replace(/[-_]/g,' ').trim(); }
+    function cssSafe(s){ return (s||'').toLowerCase().replace(/[^a-z0-9_-]+/g,'-'); }
+    function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+    function escapeAttr(s){ return escapeHtml(s); }
+    function formatDate(iso){
+      // ISO YYYY-MM-DD -> 14 settembre 2025
+      const [y,m,d] = iso.split('-').map(x=>parseInt(x,10));
+      if(!y||!m||!d) return iso||'';
+      const months = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+      return `${d} ${months[m-1]} ${y}`;
+    }
   }
 })();

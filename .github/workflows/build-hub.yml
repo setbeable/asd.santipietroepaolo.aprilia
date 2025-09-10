@@ -1,0 +1,49 @@
+name: Build Hub manifest
+
+on:
+  workflow_dispatch: {}           # avvio manuale
+  schedule:
+    - cron: "17 3 * * *"          # ogni giorno alle 03:17 UTC
+  push:
+    paths:
+      - "assets/hub/**"           # nuovi contenuti/cover
+      - "scripts/build_hub_manifest.py"
+      - ".github/workflows/build-hub.yml"
+
+permissions:
+  contents: write                 # serve per committare le modifiche
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build _hub.json
+        run: |
+          python3 --version
+          mkdir -p assets
+          python3 scripts/build_hub_manifest.py
+          echo "---- Preview ----"
+          jq '.count, .generated' assets/_hub.json
+
+      - name: Commit & push if changed
+        run: |
+          if [[ -n "$(git status --porcelain assets/_hub.json)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add assets/_hub.json
+            git commit -m "chore(hub): update _hub.json [skip ci]"
+            git push
+          else
+            echo "Nessuna modifica da committare."
+          fi

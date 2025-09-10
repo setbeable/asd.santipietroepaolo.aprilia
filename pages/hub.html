@@ -6,6 +6,8 @@
   <title>Hub • ASD Santi Pietro e Paolo</title>
   <link rel="icon" href="../assets/favicon.png" type="image/png" />
   <link rel="stylesheet" href="../styles/styles.css" />
+  <!-- Stili specifici dell'Hub -->
+  <link rel="stylesheet" href="../css/hub.css?v=1" />
 </head>
 <body class="page hub">
   <a class="back" href="../index.html">← Torna alla home</a>
@@ -37,7 +39,12 @@
   </section>
 
   <!-- Griglia -->
-  <section id="hub-grid" class="hub-grid"></section>
+  <section
+    id="hub-grid"
+    class="hub-grid"
+    data-assets-base="../assets/hub/"
+    data-manifest="../assets/_hub.json">
+  </section>
 
   <!-- Paginazione -->
   <nav class="pager" id="hub-pager" hidden>
@@ -54,6 +61,8 @@
     // year in footer
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
-  <script src="../js/hub.js"></script>
+  <!-- Script unico dell'Hub (defer) -->
+  <script src="../js/hub.js?v=1" defer></script>
 </body>
 </html>
+
