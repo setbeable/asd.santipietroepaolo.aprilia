@@ -1,4 +1,8 @@
 {
+<<<<<<< Updated upstream
+=======
+  "generated": "2025-09-10T14:30:42Z",
+>>>>>>> Stashed changes
   "count": 3,
   "generated": "2025-09-10T14:11:46Z",
   "items": [
@@ -9,9 +13,14 @@
       "date": "2025-11-11",
       "excerpt": null,
       "link": null,
+<<<<<<< Updated upstream
       "slug": "2025-11-11-calendario",
       "tags": [],
       "title": "Calendario"
+=======
+      "attach": "assets\\hub\\campionati\\2025-11-11-calendario\\2025-09-campionati.docx",
+      "tags": []
+>>>>>>> Stashed changes
     },
     {
       "attach": null,
@@ -20,12 +29,17 @@
       "date": "2025-09-12",
       "excerpt": "Tutte le informazioni utili su quote, certificati e scadenze.",
       "link": "https://forms.gle/IL_TUO_MODULO",
+<<<<<<< Updated upstream
       "slug": "2025-09-12-iscrizioni",
       "tags": [
         "iscrizioni",
         "modulistica"
       ],
       "title": "Iscrizioni 2025/26 aperte"
+=======
+      "attach": null,
+      "tags": []
+>>>>>>> Stashed changes
     },
     {
       "attach": null,
