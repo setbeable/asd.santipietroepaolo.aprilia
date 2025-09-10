@@ -3,12 +3,15 @@ name: Build Hub manifest
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: "17 3 * * *"   # ogni giorno 03:17 UTC
+    - cron: "17 3 * * *"           # giornaliero 03:17 UTC
   push:
-    paths:
-      - "assets/hub/**"
-      - "scripts/build_hub_manifest.py"
-      - ".github/workflows/build-hub.yml"
+    branches: [ main ]              # <— cambia se il ramo predefinito è diverso
+    paths-ignore:
+      - "assets/_hub.json"          # evita loop sui commit della Action
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - "assets/_hub.json"
 
 permissions:
   contents: write
@@ -16,6 +19,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,10 +39,11 @@ jobs:
       - name: Commit & push if changed
         run: |
           if [[ -n "$(git status --porcelain assets/_hub.json)" ]]; then
-            git config user.name "github-actions[bot]"
+            git config user.name  "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add assets/_hub.json
             git commit -m "chore(hub): update _hub.json [skip ci]"
+            git pull --rebase
             git push
           else
             echo "Nessuna modifica da committare."
