@@ -1,22 +1,21 @@
 name: Build Hub manifest
 
 on:
-  workflow_dispatch: {}           # avvio manuale
+  workflow_dispatch: {}
   schedule:
-    - cron: "17 3 * * *"          # ogni giorno alle 03:17 UTC
+    - cron: "17 3 * * *"   # ogni giorno 03:17 UTC
   push:
     paths:
-      - "assets/hub/**"           # nuovi contenuti/cover
+      - "assets/hub/**"
       - "scripts/build_hub_manifest.py"
       - ".github/workflows/build-hub.yml"
 
 permissions:
-  contents: write                 # serve per committare le modifiche
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,11 +29,8 @@ jobs:
 
       - name: Build _hub.json
         run: |
-          python3 --version
-          mkdir -p assets
           python3 scripts/build_hub_manifest.py
-          echo "---- Preview ----"
-          jq '.count, .generated' assets/_hub.json
+          jq '.count, .generated' assets/_hub.json || true
 
       - name: Commit & push if changed
         run: |

@@ -3,18 +3,15 @@
   document.addEventListener('DOMContentLoaded', init, { once: true });
 
   async function init () {
-    // ✅ usa #hub-grid, NON #hub
     const $grid = document.getElementById('hub-grid');
-    if (!$grid) {
-      console.error('[Hub] #hub-grid non trovato');
-      return;
-    }
-   
-    // data-* dal container griglia
+    if (!$grid) return console.error('[Hub] #hub-grid non trovato');
+
+    // Data attributes
     const BASE = (($grid.getAttribute('data-assets-base')) || '../assets/hub/').replace(/\/+$/, '') + '/';
     const MANIFEST = $grid.getAttribute('data-manifest') || '../assets/_hub.json';
+    const ROOT_PREFIX = $grid.getAttribute('data-root-prefix') || '../';
 
-    // UI già presenti nell’HTML
+    // UI
     const $q = document.getElementById('hub-q');
     const $cat = document.getElementById('hub-cat');
     const $refresh = document.getElementById('hub-refresh');
@@ -26,12 +23,7 @@
     const $next = document.getElementById('hub-next');
     const $page = document.getElementById('hub-page');
 
-    const state = {
-      all: [],
-      filtered: [],
-      page: 1,
-      pageSize: 12
-    };
+    const state = { all: [], filtered: [], page: 1, pageSize: 12 };
 
     // Carica manifest
     try {
@@ -41,7 +33,7 @@
       state.all = Array.isArray(data.items) ? data.items : [];
     } catch (e) {
       console.error('[Hub] Errore nel caricamento manifest', e);
-      $grid.innerHTML = `<p class="hub-empty">Impossibile caricare i contenuti dell’Hub.<br><small>${escapeHtml(String(e))}</small></p>`;
+      $grid.innerHTML = `<p class="hub-empty">Impossibile caricare i contenuti.<br><small>${escapeHtml(String(e))}</small></p>`;
       return;
     }
 
@@ -59,32 +51,22 @@
       if (state.page < maxPage) { state.page++; render(); }
     });
 
-    // Prima applicazione
     apply();
 
-    // --- funzioni ---
     function apply () {
       const q = ($q && $q.value || '').trim().toLowerCase();
       const cat = ($cat && $cat.value) || 'all';
 
       let list = state.all.slice();
 
-      if (cat !== 'all') {
-        list = list.filter(x => (x.category || '').toLowerCase() === cat.toLowerCase());
-      }
+      if (cat !== 'all') list = list.filter(x => (x.category || '').toLowerCase() === cat.toLowerCase());
       if (q) {
         list = list.filter(x => {
-          const hay = [
-            x.title || '',
-            x.category || '',
-            (x.excerpt || ''),
-            (x.tags || []).join(' ')
-          ].join(' ').toLowerCase();
+          const hay = [x.title||'', x.category||'', (x.excerpt||''), (x.tags||[]).join(' ')].join(' ').toLowerCase();
           return hay.includes(q);
         });
       }
 
-      // ordina per data desc
       list.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
       state.filtered = list;
@@ -93,17 +75,15 @@
     }
 
     function render () {
-      // count
       if ($count) $count.textContent = `${state.filtered.length} contenut${state.filtered.length === 1 ? 'o' : 'i'}`;
 
-      // hero (prime 3 con cover)
       const heroItems = state.filtered.filter(x => x.cover).slice(0, 3);
       if ($hero && $heroTrack) {
         if (heroItems.length) {
           $hero.hidden = false;
           $heroTrack.innerHTML = heroItems.map(h => `
             <figure class="hub-hero__slide">
-              <img src="${escapeAttr(h.cover)}" alt="">
+              <img src="${escapeAttr(resolveAsset(h.cover, ROOT_PREFIX))}" alt="">
               <figcaption>
                 <a href="${escapeAttr(h.link || '#')}" ${h.link ? 'target="_blank" rel="noopener"' : ''}>${escapeHtml(h.title || '')}</a>
                 ${h.date ? `<small>${formatDate(h.date)}</small>` : ''}
@@ -115,7 +95,6 @@
         }
       }
 
-      // paginazione
       const maxPage = Math.max(1, Math.ceil(state.filtered.length / state.pageSize));
       if ($pager) {
         $pager.hidden = state.filtered.length <= state.pageSize;
@@ -124,26 +103,28 @@
         if ($next) $next.disabled = state.page >= maxPage;
       }
 
-      // slice pagina corrente
       const start = (state.page - 1) * state.pageSize;
       const pageList = state.filtered.slice(start, start + state.pageSize);
 
-      // griglia
-      if (!pageList.length) {
-        $grid.innerHTML = `<p class="hub-empty">Nessun contenuto trovato.</p>`;
-        return;
-      }
+      if (!pageList.length) { $grid.innerHTML = `<p class="hub-empty">Nessun contenuto trovato.</p>`; return; }
+
       $grid.innerHTML = pageList.map(cardHTML).join('');
     }
 
     function cardHTML (it) {
-      const cover = it.cover ? `<img class="hub-cover" loading="lazy" src="${escapeAttr(it.cover)}" alt="">` : `<div class="hub-cover"></div>`;
+      const coverURL  = resolveAsset(it.cover, ROOT_PREFIX);
+      const attachURL = resolveAsset(it.attach, ROOT_PREFIX);
+
+      const cover = it.cover
+        ? `<img class="hub-cover" loading="lazy" src="${escapeAttr(coverURL)}" alt="">`
+        : `<div class="hub-cover"></div>`;
+
       const title = escapeHtml(it.title || 'Senza titolo');
       const excerpt = it.excerpt ? `<p class="hub-excerpt">${escapeHtml(it.excerpt)}</p>` : '';
       const date = it.date ? `<span>${formatDate(it.date)}</span>` : '';
       const cat = it.category ? `<span class="badge ${cssSafe(it.category)}">${labelCat(it.category)}</span>` : '';
       const open = it.link ? `<a class="hub-btn" href="${escapeAttr(it.link)}" target="_blank" rel="noopener">Apri</a>` : '';
-      const attach = it.attach ? `<a class="hub-btn" href="${escapeAttr(it.attach)}" target="_blank" rel="noopener">Allegato</a>` : '';
+      const attach = it.attach ? `<a class="hub-btn" href="${escapeAttr(attachURL)}" target="_blank" rel="noopener">Allegato</a>` : '';
 
       const titleWrapped = it.link
         ? `<a class="hub-title" href="${escapeAttr(it.link)}" target="_blank" rel="noopener">${title}</a>`
@@ -175,6 +156,15 @@
       if(!y||!m||!d) return iso || '';
       const months = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
       return `${d} ${months[m-1]} ${y}`;
+    }
+    // risoluzione robusta dei path asset quando la pagina sta in /pages/
+    function resolveAsset(p, rootPrefix) {
+      if (!p) return p;
+      if (/^(https?:)?\/\//.test(p)) return p;   // assoluto
+      if (p.startsWith('data:')) return p;       // data URI
+      if (p.startsWith('../')) return p;         // già relativo
+      if (p.startsWith('assets/')) return rootPrefix + p; // aggiungi ../
+      return p;
     }
   }
 })();

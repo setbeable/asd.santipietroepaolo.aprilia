@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import json, os, re, datetime, hashlib
 
 BASE = os.path.join('assets', 'hub')
@@ -24,9 +25,8 @@ def load_json(path):
         return None
 
 def iso_date_from_slug(slug):
-    # atteso: YYYY-MM-DD-qualcosa
     m = re.match(r'^(\d{4}-\d{2}-\d{2})-(.+)$', slug)
-    if not m: 
+    if not m:
         return None, slug
     return m.group(1), m.group(2).replace('-', ' ').strip().capitalize()
 
@@ -40,6 +40,13 @@ def file_sha1(path):
     return h.hexdigest()[:12]
 
 items = []
+if not os.path.isdir(BASE):
+    os.makedirs(os.path.dirname(OUT), exist_ok=True)
+    with open(OUT, 'w', encoding='utf-8') as f:
+        json.dump({"generated": datetime.datetime.utcnow().isoformat()+"Z","count":0,"items":[]}, f, ensure_ascii=False, indent=2)
+    print("Cartella vuota, manifest creato con 0 elementi:", OUT)
+    raise SystemExit(0)
+
 for cat in sorted(d for d in os.listdir(BASE) if os.path.isdir(os.path.join(BASE, d))):
     cat_dir = os.path.join(BASE, cat)
     for slug in sorted(d for d in os.listdir(cat_dir) if os.path.isdir(os.path.join(cat_dir, d))):
@@ -51,9 +58,9 @@ for cat in sorted(d for d in os.listdir(BASE) if os.path.isdir(os.path.join(BASE
         tags = meta.get('tags') or []
         excerpt = meta.get('excerpt') or load_text(os.path.join(folder, 'descrizione.md'))
         link = meta.get('link') or load_text(os.path.join(folder, 'link.txt'))
-        attach = meta.get('attach')  # opzionale percorso relativo
+        attach = meta.get('attach')
+
         if not attach:
-            # primo file allegato “non cover/immagine/md/json/txt”
             for name in sorted(os.listdir(folder)):
                 low = name.lower()
                 if any(low.endswith(ext) for ext in ['.jpg','.jpeg','.png','.webp','.gif','.md','.json','.txt']):
@@ -65,23 +72,21 @@ for cat in sorted(d for d in os.listdir(BASE) if os.path.isdir(os.path.join(BASE
         cover = None
         if cover_path:
             rel = os.path.normpath(cover_path).replace('\\','/')
-            # cache-busting con sha
             cover = f"{rel}?v={file_sha1(cover_path)}"
 
         item = {
             "title": title,
             "category": cat,
-            "date": date,             # ISO YYYY-MM-DD
+            "date": date,
             "slug": slug,
-            "cover": cover,           # relativo al sito
+            "cover": cover,             # es. assets/hub/cat/slug/cover.jpg?v=abc
             "excerpt": (excerpt[:400] + '…') if excerpt and len(excerpt) > 400 else excerpt,
-            "link": link,             # URL esterno (se presente)
-            "attach": attach,         # file locale (se presente)
+            "link": link,
+            "attach": attach,           # es. assets/hub/cat/slug/file.pdf
             "tags": tags
         }
         items.append(item)
 
-# ordina per data desc
 def keydate(i):
     try:
         return datetime.datetime.strptime(i.get('date','1970-01-01'), '%Y-%m-%d')

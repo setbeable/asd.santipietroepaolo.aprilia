@@ -1,7 +1,18 @@
 {
-  "generated": "2025-09-10T06:08:38Z",
-  "count": 2,
+  "generated": "2025-09-10T11:15:04Z",
+  "count": 3,
   "items": [
+    {
+      "title": "Calendario",
+      "category": "campionati",
+      "date": "2025-11-11",
+      "slug": "2025-11-11-calendario",
+      "cover": null,
+      "excerpt": null,
+      "link": null,
+      "attach": null,
+      "tags": []
+    },
     {
       "title": "Iscrizioni",
       "category": "comunicati",
