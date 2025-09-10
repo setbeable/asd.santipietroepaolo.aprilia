@@ -1,5 +1,5 @@
 {
-  "generated": "2025-09-10T11:19:12Z",
+  "generated": "2025-09-10T11:31:17Z",
   "count": 3,
   "items": [
     {
@@ -14,15 +14,18 @@
       "tags": []
     },
     {
-      "title": "Iscrizioni",
+      "title": "Iscrizioni 2025/26 aperte",
       "category": "comunicati",
       "date": "2025-09-12",
       "slug": "2025-09-12-iscrizioni",
       "cover": "assets/hub/comunicati/2025-09-12-iscrizioni/cover.jpeg?v=9644815fce65",
-      "excerpt": null,
-      "link": null,
+      "excerpt": "Tutte le informazioni utili su quote, certificati e scadenze.",
+      "link": "https://forms.gle/IL_TUO_MODULO",
       "attach": null,
-      "tags": []
+      "tags": [
+        "iscrizioni",
+        "modulistica"
+      ]
     },
     {
       "title": "Open day",
