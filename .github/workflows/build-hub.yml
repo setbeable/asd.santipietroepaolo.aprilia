@@ -3,11 +3,11 @@ name: Build Hub manifest
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: "17 3 * * *"           # giornaliero 03:17 UTC
+    - cron: "17 3 * * *"              # giornaliero 03:17 UTC
   push:
-    branches: [ main ]              # <— cambia se il ramo predefinito è diverso
+    branches: [ main ]                 # cambia se usi un altro ramo
     paths-ignore:
-      - "assets/_hub.json"          # evita loop sui commit della Action
+      - "assets/_hub.json"             # evita loop
   pull_request:
     branches: [ main ]
     paths-ignore:
@@ -16,10 +16,13 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: build-hub
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,16 +37,19 @@ jobs:
       - name: Build _hub.json
         run: |
           python3 scripts/build_hub_manifest.py
+          # normalizza il JSON per confronti stabili
+          tmpfile=$(mktemp)
+          jq -S . assets/_hub.json > "$tmpfile" && mv "$tmpfile" assets/_hub.json
           jq '.count, .generated' assets/_hub.json || true
 
-      - name: Commit & push if changed
+      - name: Commit & push if changed (rebase-safe)
         run: |
           if [[ -n "$(git status --porcelain assets/_hub.json)" ]]; then
             git config user.name  "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add assets/_hub.json
             git commit -m "chore(hub): update _hub.json [skip ci]"
-            git pull --rebase
+            git pull --rebase --autostash origin $(git rev-parse --abbrev-ref HEAD)
             git push
           else
             echo "Nessuna modifica da committare."
