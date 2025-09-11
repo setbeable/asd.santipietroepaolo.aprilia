@@ -1,0 +1,13 @@
+{
+  "title": "TITOLO",
+  "date": "2025-01-01",
+  "category": "eventi",
+  "excerpt": "Breve descrizione del contenuto.",
+  "cover": "cover.jpg",
+  "link": "https://example.com",
+  "links": [
+    { "label": "Link 1", "url": "https://example.com/1" },
+    { "label": "Link 2", "url": "https://example.com/2" }
+  ],
+  "attach": "documento.pdf"
+}

@@ -1,12 +1,14 @@
 {
   "title": "Iscrizioni 2025/26 aperte",
   "date": "2025-09-12",
-  "tags": ["iscrizioni", "modulistica"],
-  "link": "https://forms.gle/IL_TUO_MODULO", 
+  "category": "comunicati",
   "excerpt": "Tutte le informazioni utili su quote, certificati e scadenze.",
+  "cover": "cover.jpg",
+  "link": "https://forms.gle/IL_TUO_LINK_REALE",
   "links": [
-    { "label": "Modulo Google", "url": "https://forms.gle/IL_TUO_MODULO" },
-    { "label": "Quote e scadenze", "url": "assets/docs/iscrizioni/quote-2025.pdf" },
-    { "label": "Regolamento", "url": "pages/regolamento.html#iscrizioni" }
-  ]
+    { "label": "Modulo Google", "url": "https://forms.gle/IL_TUO_LINK_REALE" },
+    { "label": "Regolamento", "url": "pages/regolamento.html#iscrizioni" },
+    { "label": "Quote 2025", "url": "assets/docs/iscrizioni/quote-2025.pdf" }
+  ],
+  "attach": "documento.pdf"
 }
