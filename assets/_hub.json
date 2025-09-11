@@ -1,6 +1,6 @@
 {
   "count": 3,
-  "generated": "2025-09-11T03:42:06Z",
+  "generated": "2025-09-11T06:49:47Z",
   "items": [
     {
       "attach": "assets/hub/campionati/2025-11-11-calendario/2025-09-campionati.docx",
@@ -15,28 +15,25 @@
     },
     {
       "attach": null,
+      "category": "eventi",
+      "cover": "assets/hub/eventi/2025-09-01-open-day/cover.jpg?v=5530b7be686a",
+      "date": "2025-09-20",
+      "excerpt": "Giornata di prove gratuite e incontro con allenatori.",
+      "link": "https://example.com/open-day",
+      "slug": "2025-09-01-open-day",
+      "tags": [],
+      "title": "Open Day speciale"
+    },
+    {
+      "attach": "documento.pdf",
       "category": "comunicati",
       "cover": "assets/hub/comunicati/2025-09-12-iscrizioni/cover.jpeg?v=9644815fce65",
       "date": "2025-09-12",
       "excerpt": "Tutte le informazioni utili su quote, certificati e scadenze.",
-      "link": "https://forms.gle/IL_TUO_MODULO",
+      "link": "https://forms.gle/IL_TUO_LINK_REALE",
       "slug": "2025-09-12-iscrizioni",
-      "tags": [
-        "iscrizioni",
-        "modulistica"
-      ],
-      "title": "Iscrizioni 2025/26 aperte"
-    },
-    {
-      "attach": null,
-      "category": "eventi",
-      "cover": "assets/hub/eventi/2025-09-01-open-day/cover.jpg?v=5530b7be686a",
-      "date": "2025-09-01",
-      "excerpt": null,
-      "link": null,
-      "slug": "2025-09-01-open-day",
       "tags": [],
-      "title": "Open day"
+      "title": "Iscrizioni 2025/26 aperte"
     }
   ]
 }
