@@ -1,58 +1,132 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Regolamenti • ASD Santi Pietro e Paolo</title>
-  <link rel="icon" href="../assets/favicon.png" type="image/png" />
-  <link rel="stylesheet" href="../styles/styles.css" />
-  <link rel="stylesheet" href="../css/docs.css?v=1" />
-</head>
-<body class="page regolamento">
-  <a class="back" href="../index.html">← Torna alla home</a>
-
-  <header class="brand">
-    <img class="brand-logo" src="../assets/logo.png" alt="Logo" />
-    <div class="brand-title">
-      <h1>Regolamenti</h1>
-      <div class="brand-sub">Documenti ufficiali della società</div>
-    </div>
-  </header>
-
-  <!-- Toolbar -->
-  <section class="card docs-toolbar">
-    <input id="docs-q" type="search" placeholder="Cerca… (titolo, categoria, anno)" />
-    <select id="docs-cat">
-      <option value="all">Tutte le categorie</option>
-    </select>
-    <select id="docs-year">
-      <option value="all">Tutti gli anni</option>
-    </select>
-    <button id="docs-refresh" class="btn hollow">⟳ Aggiorna</button>
-    <span class="spacer"></span>
-    <small id="docs-count" class="muted"></small>
-  </section>
-
-  <!-- Griglia -->
-  <section id="docs-grid" class="docs-grid"
-    data-manifest="../assets/_docs.json"
-    data-root-prefix="../">
-  </section>
-
-  <!-- Paginazione -->
-  <nav class="pager" id="docs-pager" hidden>
-    <button id="docs-prev" class="btn hollow" disabled>←</button>
-    <span id="docs-page" class="muted"></span>
-    <button id="docs-next" class="btn hollow" disabled>→</button>
-  </nav>
-
-  <footer class="footer">
-    <p>© <span id="year"></span> ASD Santi Pietro e Paolo</p>
-  </footer>
-
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
-  <script src="../js/docs.js?v=1" defer></script>
-</body>
-</html>
+{
+  "count": 14,
+  "generated": "2025-09-11T14:23:15Z",
+  "items": [
+    {
+      "attach": "assets/docs/altro/Open_Day.pdf",
+      "category": "altro",
+      "date": "",
+      "excerpt": "",
+      "link": "",
+      "tags": [],
+      "title": "Open day"
+    },
+    {
+      "attach": "assets/docs/moduli/2025-iscrizioni - Copia (3).pdf",
+      "category": "moduli",
+      "date": "",
+      "excerpt": "",
+      "link": "",
+      "tags": [],
+      "title": "Iscrizioni   copia (3)"
+    },
+    {
+      "attach": "assets/docs/moduli/2025-iscrizioni - Copia (2).pdf",
+      "category": "moduli",
+      "date": "",
+      "excerpt": "",
+      "link": "",
+      "tags": [],
+      "title": "Iscrizioni   copia (2)"
+    },
+    {
+      "attach": "assets/docs/moduli/2025-iscrizioni - Copia.pdf",
+      "category": "moduli",
+      "date": "",
+      "excerpt": "",
+      "link": "",
+      "tags": [],
+      "title": "Iscrizioni   copia"
+    },
+    {
+      "attach": "assets/docs/moduli/2025-iscrizioni.pdf",
+      "category": "moduli",
+      "date": "",
+      "excerpt": "",
+      "link": "",
+      "tags": [],
+      "title": "Iscrizioni"
+    },
+    {
+      "attach": "assets/docs/comunicati/2025-iscrizioni.pdf",
+      "category": "comunicati",
+      "date": "",
+      "excerpt": "",
+      "link": "",
+      "tags": [],
+      "title": "Iscrizioni"
+    },
+    {
+      "attach": "assets/docs/regolamenti/2025-iscrizioni.pdf",
+      "category": "regolamenti",
+      "date": "",
+      "excerpt": "",
+      "link": "",
+      "tags": [],
+      "title": "Iscrizioni"
+    },
+    {
+      "attach": "assets/docs/moduli/2025-iscri.pdf",
+      "category": "moduli",
+      "date": "",
+      "excerpt": "",
+      "link": "",
+      "tags": [],
+      "title": "Iscri"
+    },
+    {
+      "attach": "assets/docs/regolamenti/GDPR.pdf",
+      "category": "regolamenti",
+      "date": "",
+      "excerpt": "",
+      "link": "",
+      "tags": [],
+      "title": "Gdpr"
+    },
+    {
+      "attach": "assets/docs/regolamenti/2025-calendari.pdf",
+      "category": "regolamenti",
+      "date": "",
+      "excerpt": "",
+      "link": "",
+      "tags": [],
+      "title": "Calendari"
+    },
+    {
+      "attach": "assets/docs/comunicati/2025-09-risultati.pdf",
+      "category": "comunicati",
+      "date": "",
+      "excerpt": "",
+      "link": "",
+      "tags": [],
+      "title": "09 risultati"
+    },
+    {
+      "attach": "assets/docs/regolamenti/2025-09-regoalmeto.pdf",
+      "category": "regolamenti",
+      "date": "",
+      "excerpt": "",
+      "link": "",
+      "tags": [],
+      "title": "09 regoalmeto"
+    },
+    {
+      "attach": "assets/docs/comunicati/2025-09-campionati.docx",
+      "category": "comunicati",
+      "date": "",
+      "excerpt": "",
+      "link": "",
+      "tags": [],
+      "title": "09 campionati"
+    },
+    {
+      "attach": "assets/docs/comunicati/2025-09-campionati.pdf",
+      "category": "comunicati",
+      "date": "",
+      "excerpt": "",
+      "link": "",
+      "tags": [],
+      "title": "09 campionati"
+    }
+  ]
+}
