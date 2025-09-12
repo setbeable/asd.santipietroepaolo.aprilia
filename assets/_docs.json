@@ -1,6 +1,6 @@
 {
-  "count": 14,
-  "generated": "2025-09-12T04:32:52Z",
+  "count": 9,
+  "generated": "2025-09-12T10:11:42Z",
   "items": [
     {
       "attach": "assets/docs/altro/Open_Day.pdf",
@@ -10,33 +10,6 @@
       "link": "",
       "tags": [],
       "title": "Open day"
-    },
-    {
-      "attach": "assets/docs/moduli/2025-iscrizioni - Copia (3).pdf",
-      "category": "moduli",
-      "date": "",
-      "excerpt": "",
-      "link": "",
-      "tags": [],
-      "title": "Iscrizioni   copia (3)"
-    },
-    {
-      "attach": "assets/docs/moduli/2025-iscrizioni - Copia (2).pdf",
-      "category": "moduli",
-      "date": "",
-      "excerpt": "",
-      "link": "",
-      "tags": [],
-      "title": "Iscrizioni   copia (2)"
-    },
-    {
-      "attach": "assets/docs/moduli/2025-iscrizioni - Copia.pdf",
-      "category": "moduli",
-      "date": "",
-      "excerpt": "",
-      "link": "",
-      "tags": [],
-      "title": "Iscrizioni   copia"
     },
     {
       "attach": "assets/docs/moduli/2025-iscrizioni.pdf",
@@ -64,15 +37,6 @@
       "link": "",
       "tags": [],
       "title": "Iscrizioni"
-    },
-    {
-      "attach": "assets/docs/moduli/2025-iscri.pdf",
-      "category": "moduli",
-      "date": "",
-      "excerpt": "",
-      "link": "",
-      "tags": [],
-      "title": "Iscri"
     },
     {
       "attach": "assets/docs/regolamenti/GDPR.pdf",
@@ -109,15 +73,6 @@
       "link": "",
       "tags": [],
       "title": "09 regoalmeto"
-    },
-    {
-      "attach": "assets/docs/comunicati/2025-09-campionati.docx",
-      "category": "comunicati",
-      "date": "",
-      "excerpt": "",
-      "link": "",
-      "tags": [],
-      "title": "09 campionati"
     },
     {
       "attach": "assets/docs/comunicati/2025-09-campionati.pdf",
