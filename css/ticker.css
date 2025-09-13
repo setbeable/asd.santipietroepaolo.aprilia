@@ -1,0 +1,31 @@
+/* ===== News Ticker ===== */
+.news-ticker {
+  position: fixed; inset-block-end: 0; inset-inline-start: 0; width: 100%;
+  background: rgba(0, 0, 0, 0.85); color: #fff; z-index: 1000;
+  border-top: 1px solid rgba(255,255,255,.12);
+  font: 500 15px/1.2 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased; padding: 8px 0; overflow: hidden;
+}
+.news-ticker__track {
+  display: inline-block; white-space: nowrap; will-change: transform;
+  padding-inline-start: 100%; /* parte fuori dallo schermo a dx */
+  animation: news-ticker-marquee 28s linear infinite;
+}
+.news-ticker__item {
+  margin-inline: 44px; opacity: .96;
+}
+.news-ticker__item a {
+  color: #ffda44; text-decoration: none; border-bottom: 1px dashed rgba(255,218,68,.35);
+}
+.news-ticker:hover .news-ticker__track { animation-play-state: paused; }
+
+/* riduci dimensioni su mobile piccolo */
+@media (max-width: 480px) {
+  .news-ticker { font-size: 14px; padding: 6px 0; }
+  .news-ticker__item { margin-inline: 28px; }
+}
+
+@keyframes news-ticker-marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}

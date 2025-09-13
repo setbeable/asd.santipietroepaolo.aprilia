@@ -7,6 +7,8 @@
   <link rel="icon" href="../assets/favicon.png" type="image/png" />
   <link rel="stylesheet" href="../styles/styles.css" />
   <link rel="stylesheet" href="../css/docs.css?v=1" />
+  <!-- News ticker CSS -->
+  <link rel="stylesheet" href="../css/ticker.css" />
 </head>
 <body class="page regolamento">
   <a class="back" href="../index.html">← Torna alla home</a>
@@ -52,5 +54,8 @@
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
   <script src="../js/docs.js?v=1" defer></script>
+
+  <!-- News ticker JS (inietta il ticker in fondo alla pagina) -->
+  <script src="../js/ticker.js" defer data-base="../" data-limit="6"></script>
 </body>
 </html>

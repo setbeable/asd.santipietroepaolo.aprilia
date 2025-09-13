@@ -7,6 +7,8 @@
   <link rel="icon" href="assets/favicon.png" type="image/png" />
   <!-- cache-busting: alza il numero quando modifichi lo stile -->
   <link rel="stylesheet" href="styles/styles.css?v=10" />
+  <!-- News ticker CSS -->
+  <link rel="stylesheet" href="css/ticker.css" />
 </head>
 <body>
   <main class="container">
@@ -80,5 +82,8 @@
 
   <script src="js/main.js"></script>
   <script src="js/radial.js"></script>
+
+  <!-- News ticker JS (inietta il ticker in fondo alla pagina) -->
+  <script src="js/ticker.js" defer data-base="./" data-limit="6"></script>
 </body>
 </html>
