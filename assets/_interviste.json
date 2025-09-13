@@ -1,50 +1,50 @@
 {
-  "generated": "2025-09-13T17:15:09Z",
   "count": 4,
+  "generated": "2025-09-13T17:17:18Z",
   "items": [
     {
-      "title": "Quando io restavo a casa",
+      "article": "",
+      "author": "Redazione ASD",
+      "cover": "",
       "date": "2020-03-26",
       "excerpt": "Quando Paolo vinceva il covid.",
-      "author": "Redazione ASD",
       "link": "https://www.youtube.com/shorts/yINrV-rORuI",
-      "video": "",
-      "cover": "",
-      "article": "",
-      "tags": []
+      "tags": [],
+      "title": "Quando io restavo a casa",
+      "video": ""
     },
     {
-      "title": "Progetto CSI 2020-2024",
+      "article": "",
+      "author": "Redazione ASD",
+      "cover": "",
       "date": "2020-03-15",
       "excerpt": "Luigi spiega la forza della realtà del CSI e della ASD Aprilia.",
-      "author": "Redazione ASD",
       "link": "",
-      "video": "assets/interviste/2020-09-csi-un progetto-che-parte-da-lontano.mp4",
-      "cover": "",
-      "article": "",
-      "tags": []
+      "tags": [],
+      "title": "Progetto CSI 2020-2024",
+      "video": "assets/interviste/2020-09-csi-un progetto-che-parte-da-lontano.mp4"
     },
     {
+      "article": "",
+      "author": "",
+      "cover": "",
+      "date": "",
+      "excerpt": "",
+      "link": "",
+      "tags": [],
       "title": "09 csi un progetto che parte da lontano",
-      "date": "",
-      "excerpt": "",
-      "author": "",
-      "link": "",
-      "video": "assets/interviste/2020-09-csi-un progetto-che-parte-da-lontano.mp4",
-      "cover": "",
-      "article": "",
-      "tags": []
+      "video": "assets/interviste/2020-09-csi-un progetto-che-parte-da-lontano.mp4"
     },
     {
-      "title": "03 quando io restavo a casa",
+      "article": "",
+      "author": "",
+      "cover": "",
       "date": "",
       "excerpt": "",
-      "author": "",
       "link": "",
-      "video": "assets/interviste/2020-03-quando-io-restavo-a-casa.mp4",
-      "cover": "",
-      "article": "",
-      "tags": []
+      "tags": [],
+      "title": "03 quando io restavo a casa",
+      "video": "assets/interviste/2020-03-quando-io-restavo-a-casa.mp4"
     }
   ]
 }
