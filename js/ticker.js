@@ -1,13 +1,13 @@
 /* ===== News Ticker – ASD SPP =====
- * Include questo file e ticker.css. Lo script inietta da solo l'HTML.
+ * Mostra notizie in fondo a tutte le pagine.
  * Ordine sorgenti:
- *   1) assets/news.json (se esiste)  -> priorità
- *   2) assets/_hub.json              -> fallback automatico
+ *   1) assets/news.json (manuale, priorità)
+ *   2) assets/_hub.json (fallback automatico)
  *
- * Personalizza:
- *   <script src="js/ticker.js" defer data-base="./" data-limit="6"></script>
- *   - data-base:  "./" da root (index.html), "../" dalle pagine in /pages
- *   - data-limit: quante voci mostrare (default 5)
+ * Personalizza con attributi nello <script>:
+ *   - data-base="./"   per index.html (root)
+ *   - data-base="../"  per pagine in /pages
+ *   - data-limit="6"   quante voci mostrare
  */
 (function () {
   document.addEventListener('DOMContentLoaded', init, { once: true });
@@ -37,8 +37,7 @@
         .map(it => `<span class="news-ticker__item">${renderItem(it)}</span>`)
         .join('');
     } catch (e) {
-      // in caso di errore… meglio non mostrare nulla
-      console.warn('[Ticker] nessuna news:', e);
+      console.warn('[Ticker] errore caricamento:', e);
       root.remove();
     }
   }
@@ -50,41 +49,54 @@
   }
 
   async function loadItems(BASE, LIMIT) {
-    // 1) prova assets/news.json (gestione manuale)
+    const combined = [];
+
+    // 1) Manuale (prioritario)
     const newsUrl = resolve(`${BASE}assets/news.json`);
     const manual = await safeJson(newsUrl);
     if (Array.isArray(manual) && manual.length) {
-      return manual.slice(0, LIMIT).map(x => ({
-        text: x.text || '',
-        url:  x.url  || ''
-      })).filter(x => x.text);
+      manual.forEach(x => {
+        if (x && x.text) combined.push({ text: x.text, url: x.url || '' });
+      });
     }
 
-    // 2) fallback: leggi gli ultimi contenuti dall'Hub
-    const hubUrl = resolve(`${BASE}assets/_hub.json`);
-    const hub = await safeJson(hubUrl);
-    const list = Array.isArray(hub) ? hub : (hub && hub.items) || [];
+    // 2) Hub (riempi fino a LIMIT)
+    if (combined.length < LIMIT) {
+      const hubUrl = resolve(`${BASE}assets/_hub.json`);
+      const hub = await safeJson(hubUrl);
+      const list = Array.isArray(hub) ? hub : (hub && hub.items) || [];
 
-    // tieni prima quelli "pinnati" (pin: true) o categoria "comunicati", poi i più recenti
-    const norm = list.map(it => ({
-      title: it.title || '',
-      date:  it.date  || '',
-      link:  it.link  || it.attach || '',
-      category: (it.category || '').toLowerCase(),
-      pin: !!it.pin
-    }));
+      const norm = list.map(it => ({
+        title: it.title || '',
+        date:  it.date  || '',
+        link:  it.link  || it.attach || '',
+        category: (it.category || '').toLowerCase(),
+        pin: !!it.pin
+      }));
 
-    norm.sort((a,b) => {
-      const aScore = (a.pin?2:0) + (a.category==='comunicati'?1:0);
-      const bScore = (b.pin?2:0) + (b.category==='comunicati'?1:0);
-      if (bScore !== aScore) return bScore - aScore;
-      return (b.date||'').localeCompare(a.date||''); // date desc
-    }).reverse();
+      // score: pin > comunicati > data recente
+      norm.sort((a,b) => {
+        const aScore = (a.pin?2:0) + (a.category==='comunicati'?1:0);
+        const bScore = (b.pin?2:0) + (b.category==='comunicati'?1:0);
+        if (bScore !== aScore) return bScore - aScore;
+        return (b.date||'').localeCompare(a.date||'');
+      }).reverse();
 
-    return norm.slice(0, LIMIT).map(x => ({
-      text: x.title,
-      url:  x.link
-    })).filter(x => x.text);
+      // dedup (per testo o url)
+      const seenText = new Set(combined.map(i => (i.text||'').trim()));
+      const seenUrl  = new Set(combined.map(i => (i.url||'').trim()));
+
+      for (const x of norm) {
+        if (!x.title) continue;
+        const t = x.title.trim();
+        const u = (x.link||'').trim();
+        if (seenText.has(t) || (u && seenUrl.has(u))) continue;
+        combined.push({ text: t, url: u });
+        if (combined.length >= LIMIT) break;
+      }
+    }
+
+    return combined.slice(0, LIMIT);
   }
 
   async function safeJson(url) {
