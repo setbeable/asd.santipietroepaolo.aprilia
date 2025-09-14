@@ -1,6 +1,6 @@
 {
-  "count": 4,
-  "generated": "2025-09-14T04:37:19Z",
+  "count": 2,
+  "generated": "2025-09-14T17:18:30Z",
   "items": [
     {
       "article": "",
@@ -23,28 +23,6 @@
       "tags": [],
       "title": "Progetto CSI 2020-2024",
       "video": "assets/interviste/2020-09-csi-un progetto-che-parte-da-lontano.mp4"
-    },
-    {
-      "article": "",
-      "author": "",
-      "cover": "",
-      "date": "",
-      "excerpt": "",
-      "link": "",
-      "tags": [],
-      "title": "09 csi un progetto che parte da lontano",
-      "video": "assets/interviste/2020-09-csi-un progetto-che-parte-da-lontano.mp4"
-    },
-    {
-      "article": "",
-      "author": "",
-      "cover": "",
-      "date": "",
-      "excerpt": "",
-      "link": "",
-      "tags": [],
-      "title": "03 quando io restavo a casa",
-      "video": "assets/interviste/2020-03-quando-io-restavo-a-casa.mp4"
     }
   ]
 }
