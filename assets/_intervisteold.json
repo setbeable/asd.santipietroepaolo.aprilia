@@ -1,5 +1,5 @@
 {
-  "generated": "2025-09-14T17:18:36Z",
+  "generated": "2025-09-14T17:38:38Z",
   "count": 2,
   "items": [
     {
@@ -7,11 +7,15 @@
       "date": "2020-03-26",
       "excerpt": "Quando Paolo vinceva il covid.",
       "author": "Redazione ASD",
-      "link": "https://www.youtube.com/shorts/yINrV-rORuI",
-      "video": "",
-      "cover": "",
+      "link": "https://www.youtube.com/watch?v=yINrV-rORuI",
+      "video": "https://www.youtube.com/embed/yINrV-rORuI",
+      "cover": "assets/interviste/cover.jpg",
       "article": "",
-      "tags": []
+      "tags": [
+        "intervista",
+        "storia",
+        "covid"
+      ]
     },
     {
       "title": "Progetto CSI 2020-2024",
