@@ -1,0 +1,28 @@
+{
+  "generated": "2025-09-14T17:14:20Z",
+  "count": 2,
+  "items": [
+    {
+      "title": "Quando io restavo a casa",
+      "date": "2020-03-26",
+      "excerpt": "Quando Paolo vinceva il covid.",
+      "author": "Redazione ASD",
+      "link": "https://www.youtube.com/shorts/yINrV-rORuI",
+      "video": "",
+      "cover": "",
+      "article": "",
+      "tags": []
+    },
+    {
+      "title": "Progetto CSI 2020-2024",
+      "date": "2020-03-15",
+      "excerpt": "Luigi spiega la forza della realtà del CSI e della ASD Aprilia.",
+      "author": "Redazione ASD",
+      "link": "",
+      "video": "assets/interviste/2020-09-csi-un progetto-che-parte-da-lontano.mp4",
+      "cover": "",
+      "article": "",
+      "tags": []
+    }
+  ]
+}
