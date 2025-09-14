@@ -1,17 +1,21 @@
 {
   "count": 2,
-  "generated": "2025-09-14T17:18:30Z",
+  "generated": "2025-09-14T18:06:36Z",
   "items": [
     {
       "article": "",
       "author": "Redazione ASD",
-      "cover": "",
+      "cover": "assets/interviste/cover.jpg",
       "date": "2020-03-26",
       "excerpt": "Quando Paolo vinceva il covid.",
-      "link": "https://www.youtube.com/shorts/yINrV-rORuI",
-      "tags": [],
+      "link": "https://www.youtube.com/watch?v=yINrV-rORuI",
+      "tags": [
+        "intervista",
+        "storia",
+        "covid"
+      ],
       "title": "Quando io restavo a casa",
-      "video": ""
+      "video": "https://www.youtube.com/embed/yINrV-rORuI"
     },
     {
       "article": "",
