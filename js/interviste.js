@@ -156,18 +156,24 @@
         tags: it.tags || []
       }));
     }
-    function isVideoPlatform(url){
-      return /youtube\.com|youtu\.be|vimeo\.com/i.test(url||'');
-    }
-    function embedURL(url){
-      // YouTube
-      let m = (url||'').match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/i);
-      if (m) return `https://www.youtube.com/embed/${m[1]}`;
-      // Vimeo
-      m = (url||'').match(/vimeo\.com\/(\d+)/i);
-      if (m) return `https://player.vimeo.com/video/${m[1]}`;
-      return url;
-    }
+		function isVideoPlatform(url){
+	  return /youtube\.com|youtu\.be|vimeo\.com|drive\.google\.com/i.test(url||'');
+	}
+
+	function embedURL(url){
+	  const u = url || '';
+	  // YouTube
+	  let m = u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/i);
+	  if (m) return `https://www.youtube.com/embed/${m[1]}`;
+	  // Vimeo
+	  m = u.match(/vimeo\.com\/(\d+)/i);
+	  if (m) return `https://player.vimeo.com/video/${m[1]}`;
+	  // Google Drive
+	  m = u.match(/drive\.google\.com\/file\/d\/([^/]+)/i);
+	  if (m) return `https://drive.google.com/file/d/${m[1]}/preview`;
+	  return u;
+	}
+
     function resolveAsset(p, basePrefix, folderPrefix){
       if(!p) return p;
       if (/^(https?:)?\/\//.test(p)) return p;
