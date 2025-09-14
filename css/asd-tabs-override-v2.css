@@ -66,4 +66,41 @@ body .content a:hover, body [role="tabpanel"] a:hover, body .content-block a:hov
   display: flex;           /* se vuoi centrare anche eventuali contenuti interni */
   justify-content: center;
 }
+/* --- Centratura solida del layout radiale --- */
+
+/* 1) Il wrapper principale centrato */
+main.container {
+  max-width: 1200px;
+  margin: 0 auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* centra TUTTI i figli orizzontalmente */
+}
+
+/* 2) Il blocco radiale si misura e si centra */
+.radial-zoom,
+.radial-wrap {
+  width: max-content;        /* prende solo la larghezza necessaria */
+  margin: 0 auto !important; /* centro nel container */
+  display: block;            /* evita stretching da flex */
+  left: auto !important;     /* annulla offset precedenti */
+  right: auto !important;
+  transform: none !important;
+}
+
+/* 3) Evita spinte laterali accidentali */
+.radial-zoom,
+.radial-wrap {
+  float: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* (facoltativo) Se dentro usi posizionamenti assoluti,
+   mantieni il contesto di posizionamento senza spostarlo */
+.radial-wrap { position: relative; }
+
 
