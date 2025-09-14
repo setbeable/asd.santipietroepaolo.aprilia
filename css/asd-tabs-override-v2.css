@@ -56,3 +56,14 @@ body .content a:hover, body [role="tabpanel"] a:hover, body .content-block a:hov
 #asd-modal .asd-modal__body { width:100%; height:100%; overflow:auto; }
 #asd-modal .asd-modal__close { position:absolute; top:10px; right:14px; font-size:28px; color:#fff; cursor:pointer; line-height:1; padding:6px 10px; background:rgba(255,255,255,.1); border-radius:8px; }
 #asd-modal .asd-modal__close:hover { background:rgba(255,255,255,.2); }
+/* Centra perfettamente il blocco radiale */
+.radial-zoom,
+.radial-wrap {
+  position: relative;      /* mantiene il posizionamento */
+  left: 50%;               /* sposta il riferimento al centro */
+  transform: translateX(-50%); /* compensa metà della larghezza */
+  margin: 0 auto;          /* aggiuntivo per sicurezza */
+  display: flex;           /* se vuoi centrare anche eventuali contenuti interni */
+  justify-content: center;
+}
+
