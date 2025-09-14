@@ -3,5 +3,8 @@
   "date": "2020-03-26",
   "excerpt": "Quando Paolo vinceva il covid.",
   "author": "Redazione ASD",
-  "link": "https://youtube.com/shorts/yINrV-rORuI?feature=shared"
+  "video": "https://www.youtube.com/embed/yINrV-rORuI",
+  "link": "https://www.youtube.com/watch?v=yINrV-rORuI",
+  "cover": "cover.jpg",
+  "tags": ["intervista", "storia", "covid"]
 }
