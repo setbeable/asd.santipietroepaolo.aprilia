@@ -187,12 +187,28 @@ h1{ font-weight:900; letter-spacing:1.2px; margin:4px 0 8px; text-shadow:0 4px 6
   background:rgba(255,255,255,.08); color:#fff; cursor:pointer;
 }
 
-/* ========== Responsive fallback nav ========== */
-@media (max-width:900px){
-  .radial-zoom,.radial-wrap{ display:none; }
-  .menu{ display:flex; flex-direction:column; gap:12px; }
+/* ========== Responsive: Radiale vs Menu lineare ========== */
+
+/* Mobile / Tablet: SOLO menu lineare */
+@media (max-width: 900px){
+  .radial-zoom,
+  .radial-wrap,
+  .radial-tools{
+    display: none !important;
+  }
+  .menu{
+    display: flex !important;
+    flex-direction: column;
+    gap: 12px;
+  }
 }
-@media (min-width:901px){ .menu{ display:none; } }
+
+/* Desktop: SOLO radiale */
+@media (min-width: 901px){
+  .radial-zoom{ display: block !important; }
+  .radial-tools{ display: flex !important; }
+  .menu{ display: none !important; }
+}
 
 /* ===== FOTO/VIDEO – mobile tweaks ===== */
 @media (max-width: 600px){
@@ -294,7 +310,7 @@ details.staff-bio > div{ margin-top:8px; opacity:.95; }
 a[href^="mailto:"], a[href^="tel:"]{
   color:#ffda7b; font-weight:800;
   text-decoration:underline; text-underline-offset:2px;
-  text-decoration-color:rgba(255,218,123,.8);
+  text-decoration-color:rgba(255,255,255,.8);
 }
 a[href^="mailto:"]:hover, a[href^="tel:"]:hover,
 a[href^="mailto:"]:focus-visible, a[href^="tel:"]:focus-visible{
@@ -334,8 +350,8 @@ a[href^="mailto:"]:focus-visible, a[href^="tel:"]:focus-visible{
   background:rgba(0,0,0,.55);
   border:1px solid rgba(255,255,255,.12);
   display:flex;
-  flex-direction:column;    /* ← sempre colonna anche su desktop */
-  gap:0;                    /* niente spazio verticale extra */
+  flex-direction:column;
+  gap:0;
 }
 
 /* riga con ORARIO + SQUADRA sulla stessa riga */
@@ -362,18 +378,17 @@ a[href^="mailto:"]:focus-visible, a[href^="tel:"]:focus-visible{
 .sched-item__meta .i{ font-size:14px; opacity:.9; }
 .sched-item__notes{ opacity:.9; font-style:italic; }
 
-/* niente layout a “row” su desktop (evita che il blocco meta vada a destra) */
 @media (min-width:900px){
   .sched-grid{ gap:18px; }
 }
 /* ===== ORARI — ritocchi spacing/leggibilità v4.2.1 ===== */
-body.orari .sched-grid{ gap:16px; }              /* distanza tra i blocchi-giorno */
-body.orari .sch-row{ gap:4px; }                  /* riga compatta */
+body.orari .sched-grid{ gap:16px; }
+body.orari .sch-row{ gap:4px; }
 
-body.orari .sch-row .head-inline{ gap:12px; }    /* spazio tra orario e squadra */
+body.orari .sch-row .head-inline{ gap:12px; }
 
 body.orari .sch-row .time-badge{
-  padding:10px 14px;                             /* badge orario più pieno */
+  padding:10px 14px;
   border-radius:12px;
   font-weight:900;
   font-size:15px;
@@ -390,7 +405,7 @@ body.orari .sch-row .team-inline{
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 
-body.orari .sch-row .meta{ margin-top:2px; }     /* metadati il più possibile “su” */
+body.orari .sch-row .meta{ margin-top:2px; }
 body.orari .sch-row .meta .line{ line-height:1.35; }
 body.orari .sch-row .meta .ico{ opacity:.9; }
 /* ===== ORARI — riquadro giallo per l'orario ===== */
@@ -410,10 +425,8 @@ body.orari .sched-item__time{
     inset 0 1px 0 rgba(255,255,255,.5);
 }
 
-/* un filo di spazio tra orario e nome squadra */
 body.orari .head-inline{ gap:12px; }
 
-/* versione compatta per schermi piccoli */
 @media (max-width:680px){
   body.orari .time-badge,
   body.orari .sched-item__time{
@@ -422,28 +435,25 @@ body.orari .head-inline{ gap:12px; }
     font-size:14px;
   }
 }
-/* Spazio tra orario (pill giallo) e nome squadra */
 body.orari .time-badge,
 body.orari .sched-item__time{
-  margin-right: 12px;   /* spazio orizzontale */
+  margin-right: 12px;
 }
 
 @media (max-width: 480px){
   body.orari .time-badge,
   body.orari .sched-item__time{
-    margin-right: 10px; /* un filo meno su schermi piccoli */
+    margin-right: 10px;
   }
 }
-/* Orari: pill giallo più compatto */
 body.orari .time-badge,
 body.orari .sched-item__time{
-  padding: 4px 10px;     /* prima era più alto/largo */
-  font-size: 0.95rem;    /* ~15px se base 16 */
-  line-height: 1;        /* più sottile */
-  border-radius: 10px;   /* meno tondeggiante */
+  padding: 4px 10px;
+  font-size: 0.95rem;
+  line-height: 1;
+  border-radius: 10px;
 }
 
-/* Un filo più piccolo su schermi stretti */
 @media (max-width: 480px){
   body.orari .time-badge,
   body.orari .sched-item__time{
@@ -492,6 +502,7 @@ body.orari .sched-item__time{
   box-shadow:0 6px 16px rgba(0,0,0,.28);
 }
 .spon-card h3{ margin:6px 0 10px; }
+
 /* ===== Hub ===== */
 .hub-toolbar{
   display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:16px;

@@ -1,5 +1,14 @@
-
 (function(){
+
+  // Non attivare il radiale su mobile/tablet
+  if (window.matchMedia('(max-width: 900px)').matches) {
+    const rz = document.getElementById('radial-zoom');
+    const rt = document.querySelector('.radial-tools');
+    if (rz) rz.style.display = 'none';
+    if (rt) rt.style.display = 'none';
+    return; // stop qui su mobile
+  }
+
   const zoomWrap = document.getElementById('radial-zoom');
   const wrap = document.getElementById('radial');
   const container = document.getElementById('radial-nav');
