@@ -528,18 +528,3 @@ body.orari .sched-item__time{
 .hub-body h3{ margin:0 0 4px; font-size:1.1rem; }
 .hub-meta{ display:block; font-size:0.85rem; opacity:.8; margin-bottom:6px; }
 .hub-body p{ margin:0; font-size:0.9rem; opacity:.9; }
-/* == Force perfect centering of radial block == */
-.radial-zoom{
-  width:100%;
-  display:grid;
-  justify-items:center;
-  align-items:center;
-}
-
-.radial-wrap{
-  display:block;
-  margin:24px auto 8px !important;
-  left:auto !important;
-  right:auto !important;
-  transform:none !important;
-}
