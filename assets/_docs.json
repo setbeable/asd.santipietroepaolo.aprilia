@@ -1,6 +1,6 @@
 {
   "count": 9,
-  "generated": "2026-04-09T05:57:53Z",
+  "generated": "2026-04-10T06:08:07Z",
   "items": [
     {
       "attach": "assets/docs/altro/Open_Day.pdf",
@@ -12,8 +12,8 @@
       "title": "Open day"
     },
     {
-      "attach": "assets/docs/regolamenti/2025-iscrizioni.pdf",
-      "category": "regolamenti",
+      "attach": "assets/docs/comunicati/2025-iscrizioni.pdf",
+      "category": "comunicati",
       "date": "",
       "excerpt": "",
       "link": "",
@@ -21,8 +21,8 @@
       "title": "Iscrizioni"
     },
     {
-      "attach": "assets/docs/comunicati/2025-iscrizioni.pdf",
-      "category": "comunicati",
+      "attach": "assets/docs/regolamenti/2025-iscrizioni.pdf",
+      "category": "regolamenti",
       "date": "",
       "excerpt": "",
       "link": "",
